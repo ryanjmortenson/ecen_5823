@@ -44,43 +44,43 @@
 
 bool letimer_init(float period_sec, float duty_cycle)
 {
-	bool valid = true;
-	float max_seconds = ((1<<16) * LETIMER_PRESCALER) / LETIMER_OSC_FREQ;
-	do
-	{
-		if (max_seconds < period_sec)
-		{
-			valid = false;
-			break;
-		}
+  bool valid = true;
+  float max_seconds = ((1<<16) * LETIMER_PRESCALER) / LETIMER_OSC_FREQ;
+  do
+  {
+    if (max_seconds < period_sec)
+    {
+      valid = false;
+      break;
+    }
 
-		if (duty_cycle > 1.0f)
-		{
-			valid = false;
-			break;
-		}
-	} while(0);
+    if (duty_cycle > 1.0f)
+    {
+      valid = false;
+      break;
+    }
+  } while(0);
 
-	if (valid)
-	{
-		uint16_t period_count = (period_sec * LETIMER_OSC_FREQ) * LETIMER_PRESCALER;
-		uint16_t on_count = period_count * duty_cycle;
+  if (valid)
+  {
+    uint16_t period_count = (period_sec * LETIMER_OSC_FREQ) * LETIMER_PRESCALER;
+    uint16_t on_count = period_count * duty_cycle;
 
-		LETIMER_RepeatSet(LETIMER0, 0, 1);
-		LETIMER_RepeatSet(LETIMER0, 1, 1);
+    LETIMER_RepeatSet(LETIMER0, 0, 1);
+    LETIMER_RepeatSet(LETIMER0, 1, 1);
 
-		// Initialize LETIMER
-		LETIMER_Init(LETIMER0, &le_init);
+    // Initialize LETIMER
+    LETIMER_Init(LETIMER0, &le_init);
 
-		// Initialize the compare values
-		LETIMER_CompareSet(LETIMER0, 0, period_count);
-		LETIMER_CompareSet(LETIMER0, 1, on_count);
+    // Initialize the compare values
+    LETIMER_CompareSet(LETIMER0, 0, period_count);
+    LETIMER_CompareSet(LETIMER0, 1, on_count);
 
-		// Enable LETIMER interrupt
-		LETIMER_IntEnable(LETIMER0, LETIMER_INTERRUPTS);
+    // Enable LETIMER interrupt
+    LETIMER_IntEnable(LETIMER0, LETIMER_INTERRUPTS);
 
-		/* Enable LETIMER0 interrupt vector in NVIC*/
-		NVIC_EnableIRQ(LETIMER0_IRQn);
-	}
-	return valid;
+    /* Enable LETIMER0 interrupt vector in NVIC*/
+    NVIC_EnableIRQ(LETIMER0_IRQn);
+  }
+  return valid;
  }

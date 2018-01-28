@@ -57,7 +57,7 @@
 #define PERIOD (1.0f)
 
 // LETIMER Duty Cycle
-#define DUTY_CYCLE (0.025f)
+#define DUTY_CYCLE (0.1f)
 
 // EM Can't enter
 #define EM_CANT_ENTER (EM4)
@@ -75,18 +75,18 @@ int led_state = LED0_default;
 // functions
 //***********************************************************************************
 void LETIMER0_IRQHandler(void) {
-	// Clear interrupt
-	LETIMER_IntClear(LETIMER0, LETIMER_INTERRUPTS);
+  // Clear interrupt
+  LETIMER_IntClear(LETIMER0, LETIMER_INTERRUPTS);
 
-	// Set or clear pin based on led_state
-	if (led_state) {
-		GPIO_PinOutClear(LED0_port, LED0_pin);
-	} else {
-		GPIO_PinOutSet(LED0_port, LED0_pin);
-	}
+  // Set or clear pin based on led_state
+  if (led_state) {
+    GPIO_PinOutClear(LED0_port, LED0_pin);
+  } else {
+    GPIO_PinOutSet(LED0_port, LED0_pin);
+  }
 
-	// Switch led state
-	led_state = led_state ? false : true;
+  // Switch led state
+  led_state = led_state ? false : true;
 }
 
 //***********************************************************************************
@@ -96,27 +96,27 @@ void LETIMER0_IRQHandler(void) {
  * @brief  Main function
  */
 int main(void) {
-	// Initialize device
-	initMcu();
+  // Initialize device
+  initMcu();
 
-	// Initialize board
-	initBoard();
+  // Initialize board
+  initBoard();
 
-	// Initialize GPIO
-	gpio_init();
+  // Initialize GPIO
+  gpio_init();
 
-	// Initialize clocks
-	cmu_init();
+  // Initialize clocks
+  cmu_init();
 
-	// Initialize the LETIMER
-	if (letimer_init(PERIOD, DUTY_CYCLE)) {
-		// Set the lowest EM to EM_CANT_ENTER
-		block_sleep_mode (EM_CANT_ENTER);
-		while (1)
-		{
-			sleep();
-		}
-	}
+  // Initialize the LETIMER
+  if (letimer_init(PERIOD, DUTY_CYCLE)) {
+    // Set the lowest EM to EM_CANT_ENTER
+    block_sleep_mode (EM_CANT_ENTER);
+    while (1)
+    {
+      sleep();
+    }
+  }
 }
 
 /** @} (end addtogroup app) */
