@@ -113,6 +113,7 @@ int main(void)
 
   // Initialize device
   initMcu();
+
   // Initialize board
   initBoard();
 
