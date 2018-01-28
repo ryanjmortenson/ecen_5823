@@ -50,3 +50,23 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Project directories
+.metadata/
+homework/
+outgoing
+project/.settings/*
+
+# VIM swp files
+*.sw*
+
+# VIM Plugin files
+compile_commands.json
+*/tags
+*/*.taghl
+
+# Simplicity Binaries
+*.axf
+*.bin
+*.ld
+*.s37
