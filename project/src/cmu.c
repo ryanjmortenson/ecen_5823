@@ -17,7 +17,16 @@
 // function prototypes
 //***********************************************************************************
 void cmu_init(void){
+	// Select the ULRFCO for the LFA branch
+	CMU_ClockSelectSet(cmuClock_LFA, cmuSelect_ULFRCO);
+
 	// Peripheral clocks enabled
 	CMU_ClockEnable(cmuClock_GPIO, true);
+
+	// Enable clock to the LETIMER
+	CMU_ClockEnable(cmuClock_LETIMER0, true);
+
+	// Enable the COREELE
+	CMU_ClockEnable(cmuClock_CORELE, true);
 }
 
