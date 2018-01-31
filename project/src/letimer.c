@@ -9,78 +9,120 @@
 // defined files
 //***********************************************************************************
 #include "letimer.h"
+#include "main.h"
 
 //***********************************************************************************
 // macros
 //***********************************************************************************
-
-#define LETIMER_OSC_FREQ (1000)
-#define LETIMER_PRESCALER (1)
+#define LETIMER_MAX         (1<<16)
+#define LETIMER_LFXO_FREQ   (32768)
+#define LETIMER_ULFRCO_FREQ (1000)
+#define TWO_TO_THE(x)       (1 << x)
 
 //***********************************************************************************
 // global variables
 //***********************************************************************************
 
 #if 1
-  const LETIMER_Init_TypeDef le_init =
-  {
-  .enable         = true,                   /* Start counting when init completed. */
-  .debugRun       = false,                  /* Counter shall not keep running during debug halt. */
-  .comp0Top       = true,                   /* Load COMP0 register into CNT when counter underflows. COMP0 is used as TOP */
-  .bufTop         = false,                  /* Don't load COMP1 into COMP0 when REP0 reaches 0. */
-  .out0Pol        = 0,                      /* Idle value for output 0. */
-  .out1Pol        = 0,                      /* Idle value for output 1. */
-  .ufoa0          = letimerUFOANone,        /* PWM output on output 0 */
-  .ufoa1          = letimerUFOANone,        /* PWM output on output 1*/
-  .repMode        = letimerRepeatFree    /* Count until stopped */
-  };
+const LETIMER_Init_TypeDef le_init =
+{
+  .enable = true, /* Start counting when init completed. */
+  .debugRun = false, /* Counter shall not keep running during debug halt. */
+  .comp0Top = true, /* Load COMP0 register into CNT when counter underflows. COMP0 is used as TOP */
+  .bufTop = false, /* Don't load COMP1 into COMP0 when REP0 reaches 0. */
+  .out0Pol = 0, /* Idle value for output 0. */
+  .out1Pol = 0, /* Idle value for output 1. */
+  .ufoa0 = letimerUFOANone, /* PWM output on output 0 */
+  .ufoa1 = letimerUFOANone, /* PWM output on output 1*/
+  .repMode = letimerRepeatFree /* Count until stopped */
+};
 #else
-  const LETIMER_Init_TypeDef le_init = LETIMER_INIT_DEFAULT;
+const LETIMER_Init_TypeDef le_init = LETIMER_INIT_DEFAULT;
 #endif
 
 //***********************************************************************************
 // functions
 //***********************************************************************************
 
-bool letimer_init(float period_sec, float duty_cycle)
+bool
+letimer_init (float period_sec, float duty_cycle)
 {
   bool valid = true;
-  float max_seconds = ((1<<16) * LETIMER_PRESCALER) / LETIMER_OSC_FREQ;
+  uint32_t total_cycles = 0;
+  int8_t prescaler = -1;
+  uint32_t osc_freq = 0;
+  uint32_t power_of_two = 0;
+
+  // Validate inputs and that the timer can be achieved
   do
   {
-    if (max_seconds < period_sec)
+    // Select the correct oscillator frequency based on EM
+    if (EM_CANT_ENTER > EM3)
+    {
+      osc_freq = LETIMER_ULFRCO_FREQ;
+    }
+    else
+    {
+      osc_freq = LETIMER_LFXO_FREQ;
+    }
+
+    // Validate the the period is not less than 1 cycle of the oscillator
+    if (period_sec < (float) (1.0f / osc_freq))
     {
       valid = false;
       break;
     }
 
-    if (duty_cycle > 1.0f)
+    // Try to find a pre-scaler that can accommodate period_sec
+    for (uint16_t i = 0; (power_of_two = TWO_TO_THE(i)) < cmuClkDiv_512; i++)
+    {
+      // Calculate total cycles needed at current pre-scaler and frequency then
+      // check to see if that is greater than the 65536 count
+      total_cycles = (period_sec * osc_freq) / power_of_two;
+      if (total_cycles < LETIMER_MAX)
+      {
+        // Success set the pre-scaler and break out of the loop
+        prescaler = power_of_two;
+        break;
+      }
+    }
+
+    // If the pre-scaler wasn't set, fail and bail out
+    if (prescaler == -1)
     {
       valid = false;
       break;
     }
-  } while(0);
+
+    // If the duty cycle is out of range fail and bail out
+    if (duty_cycle > 1.0f || duty_cycle < 0.0f)
+    {
+      valid = false;
+      break;
+    }
+  }
+  while (0);
 
   if (valid)
   {
-    uint16_t period_count = (period_sec * LETIMER_OSC_FREQ) * LETIMER_PRESCALER;
-    uint16_t on_count = period_count * duty_cycle;
+    // Everything is valid, calculate the number of cycles on
+    uint16_t on_cycles = total_cycles * duty_cycle;
 
-    LETIMER_RepeatSet(LETIMER0, 0, 1);
-    LETIMER_RepeatSet(LETIMER0, 1, 1);
+    // Set the pre-scaler
+    CMU_ClockDivSet (cmuClock_LETIMER0, prescaler);
 
     // Initialize LETIMER
-    LETIMER_Init(LETIMER0, &le_init);
+    LETIMER_Init (LETIMER0, &le_init);
 
     // Initialize the compare values
-    LETIMER_CompareSet(LETIMER0, 0, period_count);
-    LETIMER_CompareSet(LETIMER0, 1, on_count);
+    LETIMER_CompareSet (LETIMER0, 0, total_cycles);
+    LETIMER_CompareSet (LETIMER0, 1, on_cycles);
 
     // Enable LETIMER interrupt
-    LETIMER_IntEnable(LETIMER0, LETIMER_INTERRUPTS);
+    LETIMER_IntEnable (LETIMER0, LETIMER_INTERRUPTS);
 
     /* Enable LETIMER0 interrupt vector in NVIC*/
-    NVIC_EnableIRQ(LETIMER0_IRQn);
+    NVIC_EnableIRQ (LETIMER0_IRQn);
   }
   return valid;
- }
+}
