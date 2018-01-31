@@ -21,7 +21,7 @@
 #define EM_CANT_ENTER (EM4)
 
 // LETIMER Period
-#define PERIOD (20.00f)
+#define PERIOD (3.00f)
 
 // LETIMER Duty Cycle
 #define DUTY_CYCLE (0.025f)

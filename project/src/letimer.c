@@ -23,22 +23,17 @@
 // global variables
 //***********************************************************************************
 
-#if 1
 const LETIMER_Init_TypeDef le_init =
-{
-  .enable = true, /* Start counting when init completed. */
-  .debugRun = false, /* Counter shall not keep running during debug halt. */
-  .comp0Top = true, /* Load COMP0 register into CNT when counter underflows. COMP0 is used as TOP */
-  .bufTop = false, /* Don't load COMP1 into COMP0 when REP0 reaches 0. */
-  .out0Pol = 0, /* Idle value for output 0. */
-  .out1Pol = 0, /* Idle value for output 1. */
-  .ufoa0 = letimerUFOANone, /* PWM output on output 0 */
-  .ufoa1 = letimerUFOANone, /* PWM output on output 1*/
-  .repMode = letimerRepeatFree /* Count until stopped */
+{ .enable = true, // Start counting when init completed.
+  .debugRun = false,// Counter shall not keep running during debug halt.
+  .comp0Top = true,// Load COMP0 register into CNT when counter underflows. COMP0 is used as TOP
+  .bufTop = false,// Don't load COMP1 into COMP0 when REP0 reaches 0.
+  .out0Pol = 0,// Leave PWM output 0 at 0
+  .out1Pol = 0,// Leave PWM output 1 at 0
+  .ufoa0 = letimerUFOANone,// No change on timer
+  .ufoa1 = letimerUFOANone,// No change on timer
+  .repMode = letimerRepeatFree// Let run forever
 };
-#else
-const LETIMER_Init_TypeDef le_init = LETIMER_INIT_DEFAULT;
-#endif
 
 //***********************************************************************************
 // functions

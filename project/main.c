@@ -105,12 +105,16 @@ main (void)
   // Initialize the LETIMER
   if (letimer_init (PERIOD, DUTY_CYCLE))
   {
-    // Set the lowest EM to EM_CANT_ENTER
+    // For this assignment test block_sleep_mode by calling here
     block_sleep_mode (EM_CANT_ENTER);
+
     while (1)
     {
       sleep ();
     }
+
+    // Will never be called, but unblock sleep mode here
+    unblock_sleep_mode (EM_CANT_ENTER);
   }
 }
 
