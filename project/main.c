@@ -45,6 +45,8 @@
 #include "em_gpio.h"
 #include "em_letimer.h"
 
+#include "i2c.h"
+
 //***********************************************************************************
 // defined files
 //***********************************************************************************
@@ -101,6 +103,9 @@ main (void)
 
   // Initialize clocks
   cmu_init ();
+
+  // Initialize I2C
+  I2C_Tempsens_Init ();
 
   // Initialize the LETIMER
   if (letimer_init (PERIOD, DUTY_CYCLE))
