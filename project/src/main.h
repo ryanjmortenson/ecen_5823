@@ -18,7 +18,7 @@
 //***********************************************************************************
 
 // EM Can't enter
-#define EM_CANT_ENTER (EM4)
+#define EM_CANT_ENTER (EM3)
 
 // LETIMER Period
 #define PERIOD (3.00f)

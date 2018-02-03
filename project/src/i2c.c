@@ -96,8 +96,8 @@ I2C_Tempsens_Init (void)
   /* Use location 3: SDA - Pin D14, SCL - Pin D15 */
   /* Output value must be set to 1 to not drive lines low... We set */
   /* SCL first, to ensure it is high before changing SDA. */
-  GPIO_PinModeSet (gpioPortD, 15, gpioModeWiredAnd, 1);
-  GPIO_PinModeSet (gpioPortD, 14, gpioModeWiredAnd, 1);
+  GPIO_PinModeSet (gpioPortC, 10, gpioModeWiredAnd, 1);
+  GPIO_PinModeSet (gpioPortC, 11, gpioModeWiredAnd, 1);
 
   /* In some situations (after a reset during an I2C transfer), the slave */
   /* device may be left in an unknown state. Send 9 clock pulses just in case. */
@@ -109,16 +109,13 @@ I2C_Tempsens_Init (void)
      * but DVK only has fast mode devices. Need however to add some time
      * measurement in order to not be dependable on frequency and code executed.
      */
-    GPIO_PinModeSet (gpioPortD, 15, gpioModeWiredAnd, 0);
-    GPIO_PinModeSet (gpioPortD, 15, gpioModeWiredAnd, 1);
+    GPIO_PinModeSet (gpioPortC, 10, gpioModeWiredAnd, 0);
+    GPIO_PinModeSet (gpioPortC, 10, gpioModeWiredAnd, 1);
   }
 
-#if 0
-  /* Enable pins at location 3 (which is used on the DVK) */
-  I2C0->ROUTE = I2C_ROUTE_SDAPEN |
-  I2C_ROUTE_SCLPEN |
-  (3 << _I2C_ROUTE_LOCATION_SHIFT);
-#endif
+  // Enable route pin and set correct route location
+  I2C0->ROUTEPEN = I2C_ROUTEPEN_SDAPEN | I2C_ROUTEPEN_SCLPEN;
+  I2C0->ROUTELOC0 = I2C_ROUTELOC0_SCLLOC_LOC14 | I2C_ROUTELOC0_SDALOC_LOC16;
 
   I2C_Init (I2C0, &i2cInit);
 
@@ -188,22 +185,11 @@ TEMPSENS_RegisterGet (I2C_TypeDef *i2c, uint8_t addr,
   seq.addr = addr;
   seq.flags = I2C_FLAG_WRITE_READ;
   /* Select register to be read */
-  regid[0] = ((uint8_t) reg) & 0x3;
+  regid[0] = ((uint8_t) reg);
   seq.buf[0].data = regid;
   seq.buf[0].len = 1;
-  /* Select location/length to place register */
-  if (reg == tempsensRegConfig)
-  {
-    /* Only 1 byte reg, clear upper 8 bits */
-    data[0] = 0;
-    seq.buf[1].data = data + 1;
-    seq.buf[1].len = 1;
-  }
-  else
-  {
-    seq.buf[1].data = data;
-    seq.buf[1].len = 2;
-  }
+  seq.buf[1].data = data;
+  seq.buf[1].len = 2;
 
   /* Do a polled transfer */
   I2C_Status = I2C_TransferInit (i2c, &seq);
@@ -325,7 +311,7 @@ TEMPSENS_TemperatureGet (I2C_TypeDef *i2c, uint8_t addr,
   uint32_t tmp;
   uint16_t val = 0;
 
-  ret = TEMPSENS_RegisterGet (i2c, addr, tempsensRegTemp, &val);
+  ret = TEMPSENS_RegisterGet (i2c, addr, 0xe3, &val);
   if (ret < 0)
   {
     return (ret);

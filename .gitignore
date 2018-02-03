@@ -54,6 +54,8 @@ dkms.conf
 # Project directories
 .metadata/
 homework/
+documentation/
+.externalFiles/
 outgoing
 project/.settings/*
 
@@ -70,3 +72,4 @@ compile_commands.json
 *.bin
 *.ld
 *.s37
+

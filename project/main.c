@@ -92,6 +92,8 @@ LETIMER0_IRQHandler (void)
 int
 main (void)
 {
+  TEMPSENS_Temp_TypeDef temp;
+
   // Initialize device
   initMcu ();
 
@@ -115,6 +117,7 @@ main (void)
 
     while (1)
     {
+      TEMPSENS_TemperatureGet (I2C0, TEMPSENS_DVK_ADDR, &temp);
       sleep ();
     }
 
