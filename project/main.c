@@ -44,6 +44,7 @@
 
 #include "em_gpio.h"
 #include "em_letimer.h"
+#include "em_core.h"
 
 #include "i2c.h"
 
@@ -54,7 +55,8 @@
 //***********************************************************************************
 // global variables
 //***********************************************************************************
-int led_state = LED0_default;
+int32_t led_state = LED0_default;
+uint8_t events = 0;
 
 //***********************************************************************************
 // function prototypes
@@ -66,9 +68,12 @@ int led_state = LED0_default;
 void
 LETIMER0_IRQHandler (void)
 {
+  CORE_ATOMIC_IRQ_DISABLE ();
+
   // Clear interrupt
   LETIMER_IntClear (LETIMER0, LETIMER_INTERRUPTS);
 
+#if LIGHT_LED_ON_TEMP_READ
   // Set or clear pin based on led_state
   if (led_state)
   {
@@ -81,6 +86,19 @@ LETIMER0_IRQHandler (void)
 
   // Switch led state
   led_state = led_state ? false : true;
+#endif
+
+  if (events & CREATE_EVENT (START_TEMP_SENSOR))
+  {
+    SET_EVENT (events, READ_TEMPERATURE);
+  }
+
+  if (!events)
+  {
+    SET_EVENT (events, START_TEMP_SENSOR);
+  }
+
+  CORE_ATOMIC_IRQ_ENABLE ();
 }
 
 //***********************************************************************************
@@ -106,23 +124,35 @@ main (void)
   // Initialize clocks
   cmu_init ();
 
-  // Initialize I2C
-  I2C_Tempsens_Init ();
-
   // Initialize the LETIMER
-  if (letimer_init (PERIOD, DUTY_CYCLE))
+  if (letimer_init (2.0, .875))
   {
-    // For this assignment test block_sleep_mode by calling here
-    block_sleep_mode (EM_CANT_ENTER);
-
     while (1)
     {
-      TEMPSENS_TemperatureGet (I2C0, TEMPSENS_DVK_ADDR, &temp);
+      // Sleep until an event occurs
       sleep ();
-    }
 
-    // Will never be called, but unblock sleep mode here
-    unblock_sleep_mode (EM_CANT_ENTER);
+      if ((events & CREATE_EVENT (START_TEMP_SENSOR))
+          && !(events & CREATE_EVENT (READ_TEMPERATURE)))
+      {
+        // Initialize I2C
+        I2C_Tempsens_Init ();
+      }
+
+      if (events & CREATE_EVENT (READ_TEMPERATURE))
+      {
+
+        // Read temperature
+        TEMPSENS_TemperatureGet (I2C0, TEMPSENS_DVK_ADDR, &temp);
+
+        // Clear temperature event
+        events &= ~(CREATE_EVENT (READ_TEMPERATURE));
+        events &= ~(CREATE_EVENT (START_TEMP_SENSOR));
+
+        // Shutdown I2C temp sensor
+        I2C_Tempsens_Dest ();
+      }
+    }
   }
 }
 

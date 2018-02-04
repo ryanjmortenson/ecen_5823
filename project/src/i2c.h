@@ -80,6 +80,8 @@ typedef struct
 void
 I2C_Tempsens_Init (void);
 void
+I2C_Tempsens_Dest (void);
+void
 TEMPSENS_Celsius2Fahrenheit (TEMPSENS_Temp_TypeDef *temp);
 int
 TEMPSENS_RegisterGet (I2C_TypeDef *i2c, uint8_t addr,

@@ -38,6 +38,7 @@
 #include "em_gpio.h"
 #include "bsp.h"
 #include "i2c.h"
+#include "sleep_mode.h"
 
 /*******************************************************************************
  **************************   GLOBAL VARIABLES   *******************************
@@ -83,12 +84,9 @@ I2C_Tempsens_Init (void)
   /* prototype board, we use standard mode. */
   I2C_Init_TypeDef i2cInit = I2C_INIT_DEFAULT;
 
-#if 0
-  /* Initialize DVK board register access */
-  BSP_Init(BSP_INIT_DEFAULT);
-
-  BSP_PeripheralAccess(BSP_I2C, true);
-#endif
+  // Turn on I2C device
+  GPIO_DriveStrengthSet (gpioPortD, gpioDriveStrengthWeakAlternateWeak);
+  GPIO_PinModeSet (gpioPortD, 9, gpioModePushPull, true);
 
   CMU_ClockEnable (cmuClock_HFPER, true);
   CMU_ClockEnable (cmuClock_I2C0, true);
@@ -113,6 +111,11 @@ I2C_Tempsens_Init (void)
     GPIO_PinModeSet (gpioPortC, 10, gpioModeWiredAnd, 1);
   }
 
+#if 0
+  letimer_init (.250, 0);
+  sleep ();
+#endif
+
   // Enable route pin and set correct route location
   I2C0->ROUTEPEN = I2C_ROUTEPEN_SDAPEN | I2C_ROUTEPEN_SCLPEN;
   I2C0->ROUTELOC0 = I2C_ROUTELOC0_SCLLOC_LOC14 | I2C_ROUTELOC0_SDALOC_LOC16;
@@ -122,6 +125,29 @@ I2C_Tempsens_Init (void)
   /* Clear and enable interrupt from I2C module */
   NVIC_ClearPendingIRQ (I2C0_IRQn);
   NVIC_EnableIRQ (I2C0_IRQn);
+
+  // For this assignment test block_sleep_mode by calling here
+  block_sleep_mode (EM4);
+}
+
+void
+I2C_Tempsens_Dest (void)
+{
+  // Unblock the sleep mode
+  unblock_sleep_mode (EM4);
+
+  /* Clear and enable interrupt from I2C module */
+  NVIC_ClearPendingIRQ (I2C0_IRQn);
+  NVIC_DisableIRQ (I2C0_IRQn);
+
+  GPIO_PinModeSet (gpioPortC, 10, gpioModeDisabled, 0);
+  GPIO_PinModeSet (gpioPortC, 11, gpioModeDisabled, 0);
+
+  // Turn off I2C device
+  GPIO_PinModeSet (gpioPortD, 9, gpioModePushPull, false);
+
+  CMU_ClockEnable (cmuClock_HFPER, false);
+  CMU_ClockEnable (cmuClock_I2C0, false);
 }
 
 /***************************************************************************//**
@@ -311,7 +337,7 @@ TEMPSENS_TemperatureGet (I2C_TypeDef *i2c, uint8_t addr,
   uint32_t tmp;
   uint16_t val = 0;
 
-  ret = TEMPSENS_RegisterGet (i2c, addr, 0xe3, &val);
+  ret = TEMPSENS_RegisterGet (i2c, addr, 0xf3, &val);
   if (ret < 0)
   {
     return (ret);
