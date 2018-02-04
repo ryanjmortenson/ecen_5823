@@ -40,6 +40,9 @@
 #include "i2c.h"
 #include "sleep_mode.h"
 
+#define LOWEST_ENERGY_STATE_TRANSMISSION (EM2)
+#define LOWEST_ENERGY_STATE_I2C (EM4)
+
 /*******************************************************************************
  **************************   GLOBAL VARIABLES   *******************************
  ******************************************************************************/
@@ -111,11 +114,6 @@ I2C_Tempsens_Init (void)
     GPIO_PinModeSet (gpioPortC, 10, gpioModeWiredAnd, 1);
   }
 
-#if 0
-  letimer_init (.250, 0);
-  sleep ();
-#endif
-
   // Enable route pin and set correct route location
   I2C0->ROUTEPEN = I2C_ROUTEPEN_SDAPEN | I2C_ROUTEPEN_SCLPEN;
   I2C0->ROUTELOC0 = I2C_ROUTELOC0_SCLLOC_LOC14 | I2C_ROUTELOC0_SDALOC_LOC16;
@@ -127,14 +125,14 @@ I2C_Tempsens_Init (void)
   NVIC_EnableIRQ (I2C0_IRQn);
 
   // For this assignment test block_sleep_mode by calling here
-  block_sleep_mode (EM4);
+  block_sleep_mode (LOWEST_ENERGY_STATE_I2C);
 }
 
 void
 I2C_Tempsens_Dest (void)
 {
   // Unblock the sleep mode
-  unblock_sleep_mode (EM4);
+  unblock_sleep_mode (LOWEST_ENERGY_STATE_I2C);
 
   /* Clear and enable interrupt from I2C module */
   NVIC_ClearPendingIRQ (I2C0_IRQn);
@@ -217,7 +215,7 @@ TEMPSENS_RegisterGet (I2C_TypeDef *i2c, uint8_t addr,
   seq.buf[1].data = data;
   seq.buf[1].len = 2;
 
-  block_sleep_mode (EM2);
+  block_sleep_mode (LOWEST_ENERGY_STATE_TRANSMISSION);
   /* Do a polled transfer */
   I2C_Status = I2C_TransferInit (i2c, &seq);
   while (I2C_Status == i2cTransferInProgress)
@@ -227,7 +225,7 @@ TEMPSENS_RegisterGet (I2C_TypeDef *i2c, uint8_t addr,
     /* Could do a timeout function here. */
   }
 
-  unblock_sleep_mode (EM2);
+  unblock_sleep_mode (LOWEST_ENERGY_STATE_TRANSMISSION);
   if (I2C_Status != i2cTransferDone)
   {
     return ((int) I2C_Status);

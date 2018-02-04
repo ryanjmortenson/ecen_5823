@@ -48,6 +48,10 @@
 
 #include "i2c.h"
 
+#define SAMPLE_PERIOD (2.0f)
+#define SENSOR_INIT_TIME (.080f)
+#define CALCULATE_INIT_DUTY_CYCLE(init_time) ((SAMPLE_PERIOD - init_time) / SAMPLE_PERIOD)
+
 //***********************************************************************************
 // defined files
 //***********************************************************************************
@@ -124,14 +128,15 @@ main (void)
   // Initialize clocks
   cmu_init ();
 
-  // Initialize the LETIMER
-  if (letimer_init (2.0, .875))
+  // Initialize the
+  if (letimer_init (SAMPLE_PERIOD, CALCULATE_INIT_DUTY_CYCLE(SENSOR_INIT_TIME)))
   {
     while (1)
     {
       // Sleep until an event occurs
       sleep ();
 
+      // Handle the device init
       if ((events & CREATE_EVENT (START_TEMP_SENSOR))
           && !(events & CREATE_EVENT (READ_TEMPERATURE)))
       {
@@ -141,7 +146,6 @@ main (void)
 
       if (events & CREATE_EVENT (READ_TEMPERATURE))
       {
-
         // Read temperature
         TEMPSENS_TemperatureGet (I2C0, TEMPSENS_DVK_ADDR, &temp);
 
