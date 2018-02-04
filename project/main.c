@@ -51,6 +51,7 @@
 #define SAMPLE_PERIOD (2.0f)
 #define SENSOR_INIT_TIME (.080f)
 #define CALCULATE_INIT_DUTY_CYCLE(init_time) ((SAMPLE_PERIOD - init_time) / SAMPLE_PERIOD)
+#define MINIMUM_TEMP (15.0f)
 
 //***********************************************************************************
 // defined files
@@ -152,6 +153,15 @@ main (void)
         // Clear temperature event
         events &= ~(CREATE_EVENT (READ_TEMPERATURE));
         events &= ~(CREATE_EVENT (START_TEMP_SENSOR));
+
+        if (temp < MINIMUM_TEMP)
+        {
+          GPIO_PinModeSet (LED0_port, LED0_pin, gpioModePushPull, true);
+        }
+        else
+        {
+          GPIO_PinModeSet (LED0_port, LED0_pin, gpioModePushPull, false);
+        }
 
         // Shutdown I2C temp sensor
         I2C_Tempsens_Dest ();
