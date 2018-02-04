@@ -220,9 +220,8 @@ TEMPSENS_RegisterGet (I2C_TypeDef *i2c, uint8_t addr,
   I2C_Status = I2C_TransferInit (i2c, &seq);
   while (I2C_Status == i2cTransferInProgress)
   {
-    /* Enter EM1 while waiting for I2C interrupt */
+    // Sleep while waiting for an interrupt
     sleep ();
-    /* Could do a timeout function here. */
   }
 
   unblock_sleep_mode (LOWEST_ENERGY_STATE_TRANSMISSION);
