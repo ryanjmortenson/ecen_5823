@@ -90,7 +90,6 @@ int
 TEMPSENS_RegisterSet (I2C_TypeDef *i2c, uint8_t addr,
                       TEMPSENS_Register_TypeDef reg, uint16_t val);
 int
-TEMPSENS_TemperatureGet (I2C_TypeDef *i2c, uint8_t addr,
-                         TEMPSENS_Temp_TypeDef *temp);
+TEMPSENS_TemperatureGet (I2C_TypeDef *i2c, uint8_t addr, float* temp);
 
 #endif /* I2C_H_ */

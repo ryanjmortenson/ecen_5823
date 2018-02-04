@@ -209,7 +209,7 @@ TEMPSENS_RegisterGet (I2C_TypeDef *i2c, uint8_t addr,
   uint8_t data[2];
 
   seq.addr = addr;
-  seq.flags = I2C_FLAG_WRITE_READ;
+  seq.flags = I2C_FLAG_WRITE_READ | I2C_FLAG_MASTER_RELEASE;
   /* Select register to be read */
   regid[0] = ((uint8_t) reg);
   seq.buf[0].data = regid;
@@ -217,15 +217,17 @@ TEMPSENS_RegisterGet (I2C_TypeDef *i2c, uint8_t addr,
   seq.buf[1].data = data;
   seq.buf[1].len = 2;
 
+  block_sleep_mode (EM2);
   /* Do a polled transfer */
   I2C_Status = I2C_TransferInit (i2c, &seq);
   while (I2C_Status == i2cTransferInProgress)
   {
     /* Enter EM1 while waiting for I2C interrupt */
-    EMU_EnterEM1 ();
+    sleep ();
     /* Could do a timeout function here. */
   }
 
+  unblock_sleep_mode (EM2);
   if (I2C_Status != i2cTransferDone)
   {
     return ((int) I2C_Status);
@@ -330,11 +332,9 @@ TEMPSENS_RegisterSet (I2C_TypeDef *i2c, uint8_t addr,
  *   Returns 0 if temperature read, <0 if unable to read temperature.
  ******************************************************************************/
 int
-TEMPSENS_TemperatureGet (I2C_TypeDef *i2c, uint8_t addr,
-                         TEMPSENS_Temp_TypeDef *temp)
+TEMPSENS_TemperatureGet (I2C_TypeDef *i2c, uint8_t addr, float *temp)
 {
   int ret;
-  uint32_t tmp;
   uint16_t val = 0;
 
   ret = TEMPSENS_RegisterGet (i2c, addr, 0xf3, &val);
@@ -343,21 +343,7 @@ TEMPSENS_TemperatureGet (I2C_TypeDef *i2c, uint8_t addr,
     return (ret);
   }
 
-  /* Get all 12 bits potentially used */
-  tmp = (uint32_t) (val >> 4);
-
-  /* If negative number, convert using 2s complement */
-  if (tmp & 0x800)
-  {
-    tmp = (~tmp + 1) & 0xfff;
-    temp->i = -(int16_t) (tmp >> 4);
-    temp->f = -(int16_t) ((tmp & 0xf) * 625);
-  }
-  else
-  {
-    temp->i = (int16_t) (tmp >> 4);
-    temp->f = (int16_t) ((tmp & 0xf) * 625);
-  }
+  *temp = ((175.72f * val) / 65536) - 46.85;
 
   return (0);
 }

@@ -110,7 +110,7 @@ LETIMER0_IRQHandler (void)
 int
 main (void)
 {
-  TEMPSENS_Temp_TypeDef temp;
+  float temp;
 
   // Initialize device
   initMcu ();

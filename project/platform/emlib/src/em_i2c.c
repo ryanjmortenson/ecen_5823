@@ -621,10 +621,18 @@ I2C_TransferReturn_TypeDef I2C_Transfer(I2C_TypeDef *i2c)
       if (pending & I2C_IF_NACK)
       {
         i2c->IFC = I2C_IFC_NACK;
-        transfer->result = i2cTransferInProgress;
-        transfer->state = i2cStateRStartAddrSend;
-        continue;
-        // i2c->CMD = I2C_CMD_START;
+        if (seq->flags & I2C_FLAG_MASTER_RELEASE)
+        {
+          transfer->result = i2cTransferInProgress;
+          transfer->state = i2cStateRStartAddrSend;
+          continue;
+        }
+        else
+        {
+          transfer->result = i2cTransferNack;
+          transfer->state = i2cStateWFStopSent;
+          i2c->CMD = I2C_CMD_STOP;
+        }
       }
       else if (pending & I2C_IF_ACK)
       {
