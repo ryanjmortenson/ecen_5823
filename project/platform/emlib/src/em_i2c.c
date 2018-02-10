@@ -614,6 +614,7 @@ I2C_TransferReturn_TypeDef I2C_Transfer(I2C_TypeDef *i2c)
       i2c->TXDATA = tmp;
       goto done;
 
+      // CHANGED FROM ORIGINAL SOURCE!!!!!!!!!!!!
       /**********************************************************************/
       /* Wait for ACK/NACK on repeated start+address (first byte if 10 bit) */
       /**********************************************************************/

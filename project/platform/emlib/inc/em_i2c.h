@@ -160,6 +160,7 @@ extern "C"
   /** Use 10 bit address. */
 #define I2C_FLAG_10BIT_ADDR     0x0010
 
+  // CHANGED FROM ORIGINAL SOURCE!!!!!!!!!!!!
   /** Device will release master until data is ready **/
 #define I2C_FLAG_MASTER_RELEASE    0x0020
 

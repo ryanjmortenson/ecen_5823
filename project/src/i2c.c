@@ -1,3 +1,5 @@
+// Document has been changed from original
+
 /***************************************************************************//**
  * @file i2c_tempsens.c
  * @brief Temperature sensor driver for DS75 temperature sensor compatible
@@ -40,6 +42,7 @@
 #include "i2c.h"
 #include "sleep_mode.h"
 
+// ADDED TO ORIGINAL SOURCE!!!!!!!!!!!!!
 #define LOWEST_ENERGY_STATE_TRANSMISSION (EM2)
 #define LOWEST_ENERGY_STATE_I2C (EM4)
 
@@ -64,6 +67,7 @@ I2C0_IRQHandler (void)
   I2C_Status = I2C_Transfer (I2C0);
 }
 
+// CHANGED FROM ORIGINAL SOURCE!!!!!!!!!!!!
 /***************************************************************************//**
  * @brief
  *   Initalize basic I2C master mode driver for use on the DVK.
@@ -91,12 +95,11 @@ I2C_Tempsens_Init (void)
   GPIO_DriveStrengthSet (gpioPortD, gpioDriveStrengthWeakAlternateWeak);
   GPIO_PinModeSet (gpioPortD, 9, gpioModePushPull, true);
 
+  // Turn on clock for I2C0
   CMU_ClockEnable (cmuClock_HFPER, true);
   CMU_ClockEnable (cmuClock_I2C0, true);
 
-  /* Use location 3: SDA - Pin D14, SCL - Pin D15 */
-  /* Output value must be set to 1 to not drive lines low... We set */
-  /* SCL first, to ensure it is high before changing SDA. */
+  // Turn on SDA and SCL
   GPIO_PinModeSet (gpioPortC, 10, gpioModeWiredAnd, 1);
   GPIO_PinModeSet (gpioPortC, 11, gpioModeWiredAnd, 1);
 
@@ -128,6 +131,15 @@ I2C_Tempsens_Init (void)
   block_sleep_mode (LOWEST_ENERGY_STATE_I2C);
 }
 
+// CHANGED FROM ORIGINAL SOURCE!!!!!!!!!!!!
+/***************************************************************************//**
+ * @brief
+ *   Destroy I2C
+ *
+ * @details
+ *   Tears down I2C
+ *
+ ******************************************************************************/
 void
 I2C_Tempsens_Dest (void)
 {
@@ -138,12 +150,15 @@ I2C_Tempsens_Dest (void)
   NVIC_ClearPendingIRQ (I2C0_IRQn);
   NVIC_DisableIRQ (I2C0_IRQn);
 
-  GPIO_PinModeSet (gpioPortC, 10, gpioModeDisabled, 0);
-  GPIO_PinModeSet (gpioPortC, 11, gpioModeDisabled, 0);
+  // Turn off SDL and SCA
+  GPIO_PinModeSet (gpioPortC, 10, gpioModeDisabled, false);
+  GPIO_PinModeSet (gpioPortC, 11, gpioModeDisabled, false);
 
   // Turn off I2C device
   GPIO_PinModeSet (gpioPortD, 9, gpioModePushPull, false);
+  GPIO_PinModeSet (gpioPortD, 9, gpioModeDisabled, false);
 
+  // Turn off clocks
   CMU_ClockEnable (cmuClock_HFPER, false);
   CMU_ClockEnable (cmuClock_I2C0, false);
 }
@@ -171,6 +186,7 @@ TEMPSENS_Celsius2Fahrenheit (TEMPSENS_Temp_TypeDef *temp)
   temp->f = (int16_t) (convert % 10000);
 }
 
+// CHANGED FROM ORIGINAL SOURCE!!!!!!!!!!!!
 /***************************************************************************//**
  * @brief
  *   Read sensor register content.
@@ -297,6 +313,7 @@ TEMPSENS_RegisterSet (I2C_TypeDef *i2c, uint8_t addr,
   return (I2C_Status);
 }
 
+// CHANGED FROM ORIGINAL SOURCE!!!!!!!!!!!!
 /***************************************************************************//**
  * @brief
  *   Fetch current temperature from temperature sensor (in Celsius).
