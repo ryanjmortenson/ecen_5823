@@ -30,6 +30,7 @@
 #include "em_cmu.h"
 #include "em_letimer.h"
 #include "em_core.h"
+#include "infrastructure.h"
 
 /* Device initialization header */
 #include "hal-config.h"
@@ -58,10 +59,14 @@ uint8_t events = 0;
  * @{
  **************************************************************************************************/
 
-#define SAMPLE_PERIOD (2.0f)
+#define SAMPLE_PERIOD (4.0f)
 #define SENSOR_INIT_TIME (.080f)
 #define CALCULATE_INIT_DUTY_CYCLE(init_time) ((SAMPLE_PERIOD - init_time) / SAMPLE_PERIOD)
 #define MINIMUM_TEMP (15.0f)
+#define ADV_INT (539)
+#define CONN_INTERVAL (60) // 75 / 1.25
+#define SLAVE_LATENCY (5)  // 5 * 75 + 75 = 450
+#define TIMEOUT (1000)
 
 #ifndef MAX_CONNECTIONS
 #define MAX_CONNECTIONS 4
@@ -154,13 +159,16 @@ main (void)
 
   if (letimer_init (PERIOD, DUTY_CYCLE))
   {
+    // Hold current temperature reading
+    float temp = 0.0f;
+    uint32_t utemp = 0;
+    uint8_t buffer[5];
+
     while (1)
     {
-      float temp = 0.0f;
-      /* Unique device ID */
-
       /* Event pointer for handling events */
       struct gecko_cmd_packet* evt;
+      uint8_t * buf_start = buffer;
 
       /* Check for stack event. */
       evt = gecko_wait_event ();
@@ -175,12 +183,19 @@ main (void)
           /* Set advertising parameters. 100ms advertisement interval. All channels used.
            * The first two parameters are minimum and maximum advertising interval, both in
            * units of (milliseconds * 1.6). The third parameter '7' sets advertising on all channels. */
-          gecko_cmd_le_gap_set_adv_parameters (160, 160, 7);
+          gecko_cmd_le_gap_set_adv_parameters (ADV_INT, ADV_INT, 7);
 
           /* Start general advertising and enable connections. */
           gecko_cmd_le_gap_set_mode (le_gap_general_discoverable,
                                      le_gap_undirected_connectable);
 
+          break;
+
+        case gecko_evt_le_connection_opened_id:
+          gecko_cmd_le_connection_set_parameters (
+              evt->data.evt_le_connection_opened.connection, CONN_INTERVAL,
+              CONN_INTERVAL,
+              SLAVE_LATENCY, TIMEOUT);
           break;
 
         case gecko_evt_le_connection_closed_id:
@@ -222,16 +237,6 @@ main (void)
           }
           break;
 
-        case gecko_evt_gatt_server_characteristic_status_id:
-          if ((gattdb_temperature_measurement
-              == evt->data.evt_gatt_server_attribute_value.attribute)
-              && (evt->data.evt_gatt_server_characteristic_status.status_flags
-                  == 0x01))
-          {
-            TEMPSENS_TemperatureGet (I2C0, TEMPSENS_DVK_ADDR, &temp);
-          }
-
-          break;
         case gecko_evt_system_external_signal_id:
           // Handle the device init
           if ((events & CREATE_EVENT (START_TEMP_SENSOR))
@@ -246,6 +251,9 @@ main (void)
             // Read temperature
             TEMPSENS_TemperatureGet (I2C0, TEMPSENS_DVK_ADDR, &temp);
 
+            // Shutdown I2C temp sensor
+            I2C_Tempsens_Dest ();
+
             // Clear temperature event
             events &= ~(CREATE_EVENT (READ_TEMPERATURE));
             events &= ~(CREATE_EVENT (START_TEMP_SENSOR));
@@ -259,8 +267,13 @@ main (void)
               GPIO_PinModeSet (LED0_port, LED0_pin, gpioModePushPull, false);
             }
 
-            // Shutdown I2C temp sensor
-            I2C_Tempsens_Dest ();
+            // Convert temp to a bitstream and sned
+            utemp = FLT_TO_UINT32 ((uint32_t) (temp * 1000), -3);
+            UINT8_TO_BITSTREAM (buf_start, 0);
+            UINT32_TO_BITSTREAM (buf_start, utemp);
+
+            gecko_cmd_gatt_server_send_characteristic_notification (
+                0xFF, gattdb_temp_measurement, 5, buffer);
           }
           break;
 
