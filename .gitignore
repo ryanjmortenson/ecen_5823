@@ -59,6 +59,7 @@ documentation/
 outgoing
 project/.settings/*
 reading_material/
+project/GNU ARM v4.9.3 - Default/
 
 # VIM swp files
 *.sw*
@@ -73,4 +74,3 @@ compile_commands.json
 *.bin
 *.ld
 *.s37
-
