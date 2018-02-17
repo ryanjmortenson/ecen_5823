@@ -34,7 +34,7 @@ typedef enum events
 #define SET_EVENT(event, event_to_set) (event |= CREATE_EVENT(event_to_set))
 
 // EM Can't enter
-#define EM_CANT_ENTER (EM4)
+#define EM_CANT_ENTER (EM3)
 
 // LETIMER Period
 #define PERIOD (3.00f)
