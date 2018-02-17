@@ -43,6 +43,7 @@
 #include "src/gpio.h"
 #include "src/letimer.h"
 #include "src/cmu.h"
+#include "src/i2c.h"
 
 int led_state = LED0_default;
 uint8_t events = 0;
@@ -115,11 +116,13 @@ LETIMER0_IRQHandler (void)
   if (events & CREATE_EVENT (START_TEMP_SENSOR))
   {
     SET_EVENT (events, READ_TEMPERATURE);
+    gecko_external_signal (events);
   }
 
   if (!events)
   {
     SET_EVENT (events, START_TEMP_SENSOR);
+    gecko_external_signal (events);
   }
 
   CORE_ATOMIC_IRQ_ENABLE ();
@@ -153,6 +156,9 @@ main (void)
   {
     while (1)
     {
+      float temp = 0.0f;
+      /* Unique device ID */
+
       /* Event pointer for handling events */
       struct gecko_cmd_packet* evt;
 
@@ -166,7 +172,6 @@ main (void)
          * Do not call any stack commands before receiving the boot event.
          * Here the system is set to start advertising immediately after boot procedure. */
         case gecko_evt_system_boot_id:
-
           /* Set advertising parameters. 100ms advertisement interval. All channels used.
            * The first two parameters are minimum and maximum advertising interval, both in
            * units of (milliseconds * 1.6). The third parameter '7' sets advertising on all channels. */
@@ -175,6 +180,7 @@ main (void)
           /* Start general advertising and enable connections. */
           gecko_cmd_le_gap_set_mode (le_gap_general_discoverable,
                                      le_gap_undirected_connectable);
+
           break;
 
         case gecko_evt_le_connection_closed_id:
@@ -213,6 +219,48 @@ main (void)
             /* Close connection to enter to DFU OTA mode */
             gecko_cmd_endpoint_close (
                 evt->data.evt_gatt_server_user_write_request.connection);
+          }
+          break;
+
+        case gecko_evt_gatt_server_characteristic_status_id:
+          if ((gattdb_temperature_measurement
+              == evt->data.evt_gatt_server_attribute_value.attribute)
+              && (evt->data.evt_gatt_server_characteristic_status.status_flags
+                  == 0x01))
+          {
+            TEMPSENS_TemperatureGet (I2C0, TEMPSENS_DVK_ADDR, &temp);
+          }
+
+          break;
+        case gecko_evt_system_external_signal_id:
+          // Handle the device init
+          if ((events & CREATE_EVENT (START_TEMP_SENSOR))
+              && !(events & CREATE_EVENT (READ_TEMPERATURE)))
+          {
+            // Initialize I2C
+            I2C_Tempsens_Init ();
+          }
+
+          if (events & CREATE_EVENT (READ_TEMPERATURE))
+          {
+            // Read temperature
+            TEMPSENS_TemperatureGet (I2C0, TEMPSENS_DVK_ADDR, &temp);
+
+            // Clear temperature event
+            events &= ~(CREATE_EVENT (READ_TEMPERATURE));
+            events &= ~(CREATE_EVENT (START_TEMP_SENSOR));
+
+            if (temp < MINIMUM_TEMP)
+            {
+              GPIO_PinModeSet (LED0_port, LED0_pin, gpioModePushPull, true);
+            }
+            else
+            {
+              GPIO_PinModeSet (LED0_port, LED0_pin, gpioModePushPull, false);
+            }
+
+            // Shutdown I2C temp sensor
+            I2C_Tempsens_Dest ();
           }
           break;
 
