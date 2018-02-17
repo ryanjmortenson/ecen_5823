@@ -58,6 +58,7 @@ documentation/
 .externalFiles/
 outgoing
 project/.settings/*
+reading_material/
 
 # VIM swp files
 *.sw*
