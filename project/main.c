@@ -163,12 +163,15 @@ main (void)
     float temp = 0.0f;
     uint32_t utemp = 0;
     uint8_t buffer[5];
+    uint8_t conn;
+    int16_t power;
 
     while (1)
     {
       /* Event pointer for handling events */
       struct gecko_cmd_packet* evt;
       uint8_t * buf_start = buffer;
+      int8_t rssi = 0;
 
       /* Check for stack event. */
       evt = gecko_wait_event ();
@@ -189,6 +192,8 @@ main (void)
           gecko_cmd_le_gap_set_mode (le_gap_general_discoverable,
                                      le_gap_undirected_connectable);
 
+          gecko_cmd_system_set_tx_power (0);
+
           break;
 
         case gecko_evt_le_connection_opened_id:
@@ -196,9 +201,14 @@ main (void)
               evt->data.evt_le_connection_opened.connection, CONN_INTERVAL,
               CONN_INTERVAL,
               SLAVE_LATENCY, TIMEOUT);
+
+          conn = evt->data.evt_le_connection_opened.connection;
           break;
 
         case gecko_evt_le_connection_closed_id:
+          // Reset the connection
+          conn = 0;
+          gecko_cmd_system_set_tx_power (0);
 
           /* Check if need to boot to dfu mode */
           if (boot_to_dfu)
@@ -238,6 +248,11 @@ main (void)
           break;
 
         case gecko_evt_system_external_signal_id:
+          if (conn)
+          {
+            gecko_cmd_le_connection_get_rssi (conn);
+          }
+
           // Handle the device init
           if ((events & CREATE_EVENT (START_TEMP_SENSOR))
               && !(events & CREATE_EVENT (READ_TEMPERATURE)))
@@ -271,10 +286,43 @@ main (void)
             utemp = FLT_TO_UINT32 ((uint32_t) (temp * 1000), -3);
             UINT8_TO_BITSTREAM (buf_start, 0);
             UINT32_TO_BITSTREAM (buf_start, utemp);
-
             gecko_cmd_gatt_server_send_characteristic_notification (
                 0xFF, gattdb_temp_measurement, 5, buffer);
           }
+          break;
+
+        case gecko_evt_le_connection_rssi_id:
+          rssi = evt->data.evt_le_connection_rssi.rssi;
+
+          if (rssi > -35)
+          {
+            power = -250;
+          }
+          else if (rssi <= -35 && rssi > -45)
+          {
+            power = -200;
+          }
+          else if (rssi <= -45 && rssi > -55)
+          {
+            power = -150;
+          }
+          else if (rssi <= -55 && rssi > -65)
+          {
+            power = -50;
+          }
+          else if (rssi <= -65 && rssi > -75)
+          {
+            power = 0;
+          }
+          else if (rssi <= -75 && rssi > -85)
+          {
+            power = 5;
+          }
+          else
+          {
+            power = 10;
+          }
+          gecko_cmd_system_set_tx_power (power);
           break;
 
         default:
