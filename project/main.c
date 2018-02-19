@@ -45,6 +45,7 @@
 #include "src/letimer.h"
 #include "src/cmu.h"
 #include "src/i2c.h"
+#include "src/power_level.h"
 
 int led_state = LED0_default;
 uint8_t events = 0;
@@ -292,37 +293,9 @@ main (void)
           break;
 
         case gecko_evt_le_connection_rssi_id:
-          rssi = evt->data.evt_le_connection_rssi.rssi;
-
-          if (rssi > -35)
-          {
-            power = -26;
-          }
-          else if (rssi <= -35 && rssi > -45)
-          {
-            power = -20;
-          }
-          else if (rssi <= -45 && rssi > -55)
-          {
-            power = -15;
-          }
-          else if (rssi <= -55 && rssi > -65)
-          {
-            power = -5;
-          }
-          else if (rssi <= -65 && rssi > -75)
-          {
-            power = 0;
-          }
-          else if (rssi <= -75 && rssi > -85)
-          {
-            power = 50;
-          }
-          else
-          {
-            power = 80;
-          }
-          gecko_cmd_system_set_tx_power (power * 10);
+          // Set the power level based on RSSI
+          gecko_cmd_system_set_tx_power (
+              get_power_level (evt->data.evt_le_connection_rssi.rssi));
           break;
 
         default:
