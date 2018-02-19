@@ -46,6 +46,7 @@
 #include "src/cmu.h"
 #include "src/i2c.h"
 #include "src/power_level.h"
+#include "src/events.h"
 
 int led_state = LED0_default;
 uint8_t events = 0;
@@ -63,7 +64,6 @@ uint8_t events = 0;
 #define SAMPLE_PERIOD (4.0f)
 #define SENSOR_INIT_TIME (.080f)
 #define CALCULATE_INIT_DUTY_CYCLE(init_time) ((SAMPLE_PERIOD - init_time) / SAMPLE_PERIOD)
-#define MINIMUM_TEMP (15.0f)
 #define ADV_INT (539)
 #define CONN_INTERVAL (60) // 75 / 1.25
 #define SLAVE_LATENCY (5)  // 5 * 75 + 75 = 450
@@ -119,17 +119,8 @@ LETIMER0_IRQHandler (void)
   led_state = led_state ? false : true;
 #endif
 
-  if (events & CREATE_EVENT (START_TEMP_SENSOR))
-  {
-    SET_EVENT (events, READ_TEMPERATURE);
-    gecko_external_signal (events);
-  }
-
-  if (!events)
-  {
-    SET_EVENT (events, START_TEMP_SENSOR);
-    gecko_external_signal (events);
-  }
+  // Set the events
+  set_events (&events);
 
   CORE_ATOMIC_IRQ_ENABLE ();
 }
@@ -161,18 +152,12 @@ main (void)
   if (letimer_init (PERIOD, DUTY_CYCLE))
   {
     // Hold current temperature reading
-    float temp = 0.0f;
-    uint32_t utemp = 0;
-    uint8_t buffer[5];
     uint8_t conn;
-    int16_t power;
 
     while (1)
     {
       /* Event pointer for handling events */
       struct gecko_cmd_packet* evt;
-      uint8_t * buf_start = buffer;
-      int8_t rssi = 0;
 
       /* Check for stack event. */
       evt = gecko_wait_event ();
@@ -249,47 +234,15 @@ main (void)
           break;
 
         case gecko_evt_system_external_signal_id:
+          // If connection is active set rssi
           if (conn)
           {
             gecko_cmd_le_connection_get_rssi (conn);
           }
 
-          // Handle the device init
-          if ((events & CREATE_EVENT (START_TEMP_SENSOR))
-              && !(events & CREATE_EVENT (READ_TEMPERATURE)))
-          {
-            // Initialize I2C
-            I2C_Tempsens_Init ();
-          }
+          // Handle set of events
+          handle_events (&events);
 
-          if (events & CREATE_EVENT (READ_TEMPERATURE))
-          {
-            // Read temperature
-            TEMPSENS_TemperatureGet (I2C0, TEMPSENS_DVK_ADDR, &temp);
-
-            // Shutdown I2C temp sensor
-            I2C_Tempsens_Dest ();
-
-            // Clear temperature event
-            events &= ~(CREATE_EVENT (READ_TEMPERATURE));
-            events &= ~(CREATE_EVENT (START_TEMP_SENSOR));
-
-            if (temp < MINIMUM_TEMP)
-            {
-              GPIO_PinModeSet (LED0_port, LED0_pin, gpioModePushPull, true);
-            }
-            else
-            {
-              GPIO_PinModeSet (LED0_port, LED0_pin, gpioModePushPull, false);
-            }
-
-            // Convert temp to a bitstream and sned
-            utemp = FLT_TO_UINT32 ((uint32_t) (temp * 1000), -3);
-            UINT8_TO_BITSTREAM (buf_start, 0);
-            UINT32_TO_BITSTREAM (buf_start, utemp);
-            gecko_cmd_gatt_server_send_characteristic_notification (
-                0xFF, gattdb_temp_measurement, 5, buffer);
-          }
           break;
 
         case gecko_evt_le_connection_rssi_id:
