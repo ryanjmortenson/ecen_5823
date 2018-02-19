@@ -27,11 +27,11 @@ get_power_level (int8_t rssi)
   }
   else if (rssi <= -75 && rssi > -85)
   {
-    power = 50;
+    power = 5;
   }
   else
   {
-    power = 80;
+    power = 10;
   }
 
   return (power * 10);
