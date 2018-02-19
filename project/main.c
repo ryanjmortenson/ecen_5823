@@ -296,19 +296,19 @@ main (void)
 
           if (rssi > -35)
           {
-            power = -250;
+            power = -26;
           }
           else if (rssi <= -35 && rssi > -45)
           {
-            power = -200;
+            power = -20;
           }
           else if (rssi <= -45 && rssi > -55)
           {
-            power = -150;
+            power = -15;
           }
           else if (rssi <= -55 && rssi > -65)
           {
-            power = -50;
+            power = -5;
           }
           else if (rssi <= -65 && rssi > -75)
           {
@@ -316,13 +316,13 @@ main (void)
           }
           else if (rssi <= -75 && rssi > -85)
           {
-            power = 5;
+            power = 50;
           }
           else
           {
-            power = 10;
+            power = 80;
           }
-          gecko_cmd_system_set_tx_power (power);
+          gecko_cmd_system_set_tx_power (power * 10);
           break;
 
         default:
