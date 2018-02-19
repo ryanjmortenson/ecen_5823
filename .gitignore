@@ -64,6 +64,8 @@ project/.settings/*
 reading_material/
 project/GNU ARM v4.9.3 - Default/
 project/BgBuild_Log.txt
+bootloader/
+dfuapplication/
 
 # VIM swp files
 *.sw*
