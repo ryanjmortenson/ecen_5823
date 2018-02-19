@@ -122,6 +122,9 @@ LETIMER0_IRQHandler (void)
   // Set the events
   set_events (&events);
 
+  // Signal events with gecko system
+  gecko_external_signal (events);
+
   CORE_ATOMIC_IRQ_ENABLE ();
 }
 

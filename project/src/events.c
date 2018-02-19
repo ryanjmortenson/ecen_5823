@@ -65,12 +65,10 @@ set_events (uint8_t* events)
   if (*events & CREATE_EVENT (START_TEMP_SENSOR))
   {
     SET_EVENT (*events, READ_TEMPERATURE);
-    gecko_external_signal (*events);
   }
 
   if (!*events)
   {
     SET_EVENT (*events, START_TEMP_SENSOR);
-    gecko_external_signal (*events);
   }
 }
