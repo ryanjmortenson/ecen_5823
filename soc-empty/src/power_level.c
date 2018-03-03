@@ -1,7 +1,6 @@
 #include <stdint.h>
 
-int16_t
-get_power_level (int8_t rssi)
+int16_t get_power_level (int8_t rssi)
 {
   int16_t power;
 
@@ -36,4 +35,3 @@ get_power_level (int8_t rssi)
 
   return (power * 10);
 }
-

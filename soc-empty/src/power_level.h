@@ -13,7 +13,6 @@
  * @param rssi RSSI level
  * @return power level
  */
-int16_t
-get_power_level (int8_t rssi);
+int16_t get_power_level (int8_t rssi);
 
 #endif /* SRC_POWER_LEVEL_H_ */

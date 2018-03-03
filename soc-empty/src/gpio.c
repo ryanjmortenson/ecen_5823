@@ -18,8 +18,7 @@
 //***********************************************************************************
 // functions
 //***********************************************************************************
-void
-gpio_init (void)
+void gpio_init (void)
 {
   // Set LED ports to be standard output drive with default off (cleared)
   GPIO_DriveStrengthSet (LED0_port, gpioDriveStrengthWeakAlternateWeak);

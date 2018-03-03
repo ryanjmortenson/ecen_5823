@@ -1,6 +1,6 @@
 // Document has been changed from original
 
-/***************************************************************************//**
+/***************************************************************************
  * @file i2c_tempsens.c
  * @brief Temperature sensor driver for DS75 temperature sensor compatible
  *   device on the DVK.
@@ -55,20 +55,20 @@ I2C_TransferReturn_TypeDef I2C_Status;
  **************************   GLOBAL FUNCTIONS   *******************************
  ******************************************************************************/
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief I2C Interrupt Handler.
  *        The interrupt table is in assembly startup file startup_efm32.s
  *****************************************************************************/
-void
-I2C0_IRQHandler (void)
+void I2C0_IRQHandler (void)
 {
-  /* Just run the I2C_Transfer function that checks interrupts flags and returns */
+  /* Just run the I2C_Transfer function that checks interrupts flags and
+   * returns */
   /* the appropriate status */
   I2C_Status = I2C_Transfer (I2C0);
 }
 
 // CHANGED FROM ORIGINAL SOURCE!!!!!!!!!!!!
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Initalize basic I2C master mode driver for use on the DVK.
  *
@@ -80,8 +80,7 @@ I2C0_IRQHandler (void)
  * @param[in] init
  *   Pointer to I2C initialization structure.
  ******************************************************************************/
-void
-I2C_Tempsens_Init (void)
+void I2C_Tempsens_Init (void)
 {
   int i;
 
@@ -132,7 +131,7 @@ I2C_Tempsens_Init (void)
 }
 
 // CHANGED FROM ORIGINAL SOURCE!!!!!!!!!!!!
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Destroy I2C
  *
@@ -140,8 +139,7 @@ I2C_Tempsens_Init (void)
  *   Tears down I2C
  *
  ******************************************************************************/
-void
-I2C_Tempsens_Dest (void)
+void I2C_Tempsens_Dest (void)
 {
   // Unblock the sleep mode
   unblock_sleep_mode (LOWEST_ENERGY_STATE_I2C);
@@ -163,7 +161,7 @@ I2C_Tempsens_Dest (void)
   CMU_ClockEnable (cmuClock_I2C0, false);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Convert temperature from Celsius to Fahrenheit.
  *
@@ -171,8 +169,7 @@ I2C_Tempsens_Dest (void)
  *   Reference to structure to holding temperature in Celsius to convert. Upon
  *   return, it has been changed to Fahrenheit.
  ******************************************************************************/
-void
-TEMPSENS_Celsius2Fahrenheit (TEMPSENS_Temp_TypeDef *temp)
+void TEMPSENS_Celsius2Fahrenheit (TEMPSENS_Temp_TypeDef * temp)
 {
   int32_t convert;
 
@@ -187,7 +184,7 @@ TEMPSENS_Celsius2Fahrenheit (TEMPSENS_Temp_TypeDef *temp)
 }
 
 // CHANGED FROM ORIGINAL SOURCE!!!!!!!!!!!!
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Read sensor register content.
  *
@@ -215,8 +212,8 @@ TEMPSENS_Celsius2Fahrenheit (TEMPSENS_Temp_TypeDef *temp)
  *   Returns 0 if register read, <0 if unable to read register.
  ******************************************************************************/
 int
-TEMPSENS_RegisterGet (I2C_TypeDef *i2c, uint8_t addr,
-                      TEMPSENS_Register_TypeDef reg, uint16_t *val)
+TEMPSENS_RegisterGet (I2C_TypeDef * i2c, uint8_t addr,
+                      TEMPSENS_Register_TypeDef reg, uint16_t * val)
 {
   I2C_TransferSeq_TypeDef seq;
   uint8_t regid[1];
@@ -251,7 +248,7 @@ TEMPSENS_RegisterGet (I2C_TypeDef *i2c, uint8_t addr,
   return (0);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Write to sensor register.
  *
@@ -272,7 +269,7 @@ TEMPSENS_RegisterGet (I2C_TypeDef *i2c, uint8_t addr,
  *   Returns 0 if register written, <0 if unable to write to register.
  ******************************************************************************/
 int
-TEMPSENS_RegisterSet (I2C_TypeDef *i2c, uint8_t addr,
+TEMPSENS_RegisterSet (I2C_TypeDef * i2c, uint8_t addr,
                       TEMPSENS_Register_TypeDef reg, uint16_t val)
 {
   I2C_TransferSeq_TypeDef seq;
@@ -314,7 +311,7 @@ TEMPSENS_RegisterSet (I2C_TypeDef *i2c, uint8_t addr,
 }
 
 // CHANGED FROM ORIGINAL SOURCE!!!!!!!!!!!!
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Fetch current temperature from temperature sensor (in Celsius).
  *
@@ -345,8 +342,7 @@ TEMPSENS_RegisterSet (I2C_TypeDef *i2c, uint8_t addr,
  * @return
  *   Returns 0 if temperature read, <0 if unable to read temperature.
  ******************************************************************************/
-int
-TEMPSENS_TemperatureGet (I2C_TypeDef *i2c, uint8_t addr, float *temp)
+int TEMPSENS_TemperatureGet (I2C_TypeDef * i2c, uint8_t addr, float *temp)
 {
   int ret;
   uint16_t val = 0;

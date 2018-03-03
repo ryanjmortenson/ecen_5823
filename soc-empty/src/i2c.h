@@ -1,6 +1,6 @@
 #ifndef I2C_H_
 #define I2C_H_
-/***************************************************************************//**
+/***************************************************************************
  * @file i2c_tempsens.h
  * @brief Temperature sensor driver for DS75 temperature sensor compatible
  *   device on the DVK.
@@ -77,19 +77,15 @@ typedef struct
  *****************************   PROTOTYPES   **********************************
  ******************************************************************************/
 
-void
-I2C_Tempsens_Init (void);
-void
-I2C_Tempsens_Dest (void);
-void
-TEMPSENS_Celsius2Fahrenheit (TEMPSENS_Temp_TypeDef *temp);
+void I2C_Tempsens_Init (void);
+void I2C_Tempsens_Dest (void);
+void TEMPSENS_Celsius2Fahrenheit (TEMPSENS_Temp_TypeDef * temp);
 int
-TEMPSENS_RegisterGet (I2C_TypeDef *i2c, uint8_t addr,
-                      TEMPSENS_Register_TypeDef reg, uint16_t *val);
+TEMPSENS_RegisterGet (I2C_TypeDef * i2c, uint8_t addr,
+                      TEMPSENS_Register_TypeDef reg, uint16_t * val);
 int
-TEMPSENS_RegisterSet (I2C_TypeDef *i2c, uint8_t addr,
+TEMPSENS_RegisterSet (I2C_TypeDef * i2c, uint8_t addr,
                       TEMPSENS_Register_TypeDef reg, uint16_t val);
-int
-TEMPSENS_TemperatureGet (I2C_TypeDef *i2c, uint8_t addr, float* temp);
+int TEMPSENS_TemperatureGet (I2C_TypeDef * i2c, uint8_t addr, float *temp);
 
 #endif /* I2C_H_ */

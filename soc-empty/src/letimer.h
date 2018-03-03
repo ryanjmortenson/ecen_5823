@@ -30,7 +30,6 @@
  * @param duty_cycle as a fraction .10 => 10%
  * @return pass/fail based on period_sec and duty_cycle being valid
  */
-bool
-letimer_init (float period_sec, float duty_cycle);
+bool letimer_init (float period_sec, float duty_cycle);
 
 #endif /* LETIMER_H_ */

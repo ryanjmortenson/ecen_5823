@@ -13,13 +13,12 @@
 #include "src/i2c.h"
 #include "src/gpio.h"
 
-void
-handle_events (uint8_t* events)
+void handle_events (uint8_t * events)
 {
   float temp = 0.0f;
   uint32_t utemp = 0;
   uint8_t buffer[5] = { 0 };
-  uint8_t* buf_start = buffer;
+  uint8_t *buf_start = buffer;
 
   // Handle the device init
   if ((*events & CREATE_EVENT (START_TEMP_SENSOR))
@@ -54,13 +53,13 @@ handle_events (uint8_t* events)
     utemp = FLT_TO_UINT32 ((uint32_t) (temp * 1000), -3);
     UINT8_TO_BITSTREAM (buf_start, 0);
     UINT32_TO_BITSTREAM (buf_start, utemp);
-    gecko_cmd_gatt_server_send_characteristic_notification (
-        0xFF, gattdb_temp_measurement, 5, buffer);
+    gecko_cmd_gatt_server_send_characteristic_notification (0xFF,
+                                                            gattdb_temp_measurement,
+                                                            5, buffer);
   }
 }
 
-void
-set_events (uint8_t* events)
+void set_events (uint8_t * events)
 {
   if (*events & CREATE_EVENT (START_TEMP_SENSOR))
   {

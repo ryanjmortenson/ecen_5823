@@ -28,16 +28,14 @@ static uint8_t sleep_block_counter[MAX_SLEEP_STATE] = { 0 };
 //***********************************************************************************
 
 // Public Functions see .h for description
-void
-block_sleep_mode (sleepstate_enum minimumMode)
+void block_sleep_mode (sleepstate_enum minimumMode)
 {
   CORE_ATOMIC_IRQ_DISABLE ();
   sleep_block_counter[minimumMode]++;
   CORE_ATOMIC_IRQ_ENABLE ();
 }
 
-void
-unblock_sleep_mode (sleepstate_enum minimumMode)
+void unblock_sleep_mode (sleepstate_enum minimumMode)
 {
   CORE_ATOMIC_IRQ_DISABLE ();
   if (sleep_block_counter[minimumMode] > 0)
@@ -47,8 +45,7 @@ unblock_sleep_mode (sleepstate_enum minimumMode)
   CORE_ATOMIC_IRQ_ENABLE ();
 }
 
-void
-sleep (void)
+void sleep (void)
 {
   if (sleep_block_counter[EM0] > 0)
   {
