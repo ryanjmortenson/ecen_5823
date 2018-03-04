@@ -18,5 +18,6 @@ extern const struct bg_gattdb_def bg_gattdb_data;
 #define gattdb_ota_control                     19
 #define gattdb_temp_measurement                22
 #define gattdb_tx_power_level                  26
+#define gattdb_soil_moisture_measurement         29
 
 #endif
