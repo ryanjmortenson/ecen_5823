@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file tempdrv.c
  * @brief TEMPDRV API implementation.
  * @version 5.4.0
@@ -77,7 +77,7 @@ static uint8_t fallbackEMU = 0x90;
 static uint8_t fallbackTEMP = 25;
 
 #if (EMU_CUSTOM_IRQ_HANDLER == false)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   EMU Interrupt Handler
  *
@@ -93,7 +93,7 @@ void EMU_IRQHandler(void)
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   TEMPDRV Interrupt Handler
  *
@@ -148,7 +148,7 @@ static void errataStateUpdate(int8_t temp);
 static TEMPDRV_CallbackSet_t errataLowTemp[3];  // Temperature decrease thresholds
 static TEMPDRV_CallbackSet_t errataHighTemp[3]; // Temperature increase thresholds
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Errata Callback
  *
@@ -162,7 +162,7 @@ static void errataCallback(int8_t temp, TEMPDRV_LimitType_t limit)
   errataStateUpdate(temp);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Errata State Update
  *
@@ -208,7 +208,7 @@ static void errataStateUpdate(int8_t temp)
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Errata Initialization
  *
@@ -254,7 +254,7 @@ static void errataInit(void)
 #endif // TEMPDRV_ERRATA_FIX
 
 /* Internal Functions */
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Find an empty spot for callback in set
  *
@@ -276,7 +276,7 @@ static int8_t findCallbackSpace(TEMPDRV_CallbackSet_t *set)
   return -1;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Attempt to add a callback to a set
  *
@@ -308,7 +308,7 @@ static Ecode_t addCallback(TEMPDRV_CallbackSet_t *set,
   return ECODE_EMDRV_TEMPDRV_OK;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Remove a callback from the set
  *
@@ -337,7 +337,7 @@ static bool removeCallback(TEMPDRV_CallbackSet_t *set,
   return found;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Check if another callback has registered the same temperature
  *
@@ -367,7 +367,7 @@ static bool checkForDuplicates(TEMPDRV_CallbackSet_t *set, int8_t temp)
   return false;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Convert EMU value to degrees Celsius
  *
@@ -390,7 +390,7 @@ static int8_t convertToTemp(uint8_t emu)
   return (int8_t) res;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Convert a temperature in &deg;C to an EMU sensor value
  *
@@ -412,7 +412,7 @@ static uint8_t convertToEmu(int8_t temp)
   return (uint8_t) res;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Turn off and clear EMU temperature related interrupts
  ******************************************************************************/
@@ -422,7 +422,7 @@ static void disableInterrupts(void)
   EMU_IntDisable(EMU_IFC_TEMPLOW | EMU_IFC_TEMPHIGH);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Update interrupts based on active callbacks
  *
@@ -484,7 +484,7 @@ static void updateInterrupts(void)
 }
 
 /* Official API */
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Initialize the TEMP driver.
  *
@@ -534,7 +534,7 @@ Ecode_t TEMPDRV_Init(void)
   return ECODE_EMDRV_TEMPDRV_OK;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *    De-initialize the TEMP driver.
  *
@@ -556,7 +556,7 @@ Ecode_t TEMPDRV_DeInit(void)
   return ECODE_EMDRV_TEMPDRV_OK;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable or disable the TEMP driver.
  *
@@ -579,7 +579,7 @@ Ecode_t TEMPDRV_Enable(bool enable)
   return ECODE_EMDRV_TEMPDRV_OK;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the number of active callbacks for a limit.
  *
@@ -613,7 +613,7 @@ uint8_t TEMPDRV_GetActiveCallbacks(TEMPDRV_LimitType_t limit)
   return count;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *    Get the current temperature.
  *
@@ -625,7 +625,7 @@ int8_t TEMPDRV_GetTemp(void)
   return convertToTemp(EMU->TEMP);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Register a callback in the TEMP driver
  *
@@ -726,7 +726,7 @@ Ecode_t TEMPDRV_RegisterCallback(int8_t temp,
   return addCallback(set, temp, callback);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Unregister a callback in the TEMP driver.
  *
@@ -754,7 +754,7 @@ Ecode_t TEMPDRV_UnregisterCallback(TEMPDRV_Callback_t callback)
 }
 
 /* *INDENT-OFF* */
-/******** THE REST OF THE FILE IS DOCUMENTATION ONLY !**********************//**
+/******** THE REST OF THE FILE IS DOCUMENTATION ONLY !**********************
  * @addtogroup emdrv
  * @{
  * @addtogroup TEMPDRV

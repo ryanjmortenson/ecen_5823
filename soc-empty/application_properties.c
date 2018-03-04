@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file application_properties.c
  * @brief Template for Application Properties
  * @author Silicon Labs

@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file em_msc.c
  * @brief Flash controller (MSC) Peripheral API
  * @version 5.4.0
@@ -161,7 +161,7 @@ MSC_LoadVerifyAddress(uint32_t* address);
 
 MSC_RAMFUNC_DECLARATOR void mscRfAssertEFM(const char *file, int line);
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Local ramfunc assertEFM.
  *
@@ -201,12 +201,12 @@ MSC_RAMFUNC_DEFINITION_END
 
 /** @endcond */
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emlib
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup MSC
  * @{
  ******************************************************************************/
@@ -215,7 +215,7 @@ MSC_RAMFUNC_DEFINITION_END
  **************************   GLOBAL FUNCTIONS   *******************************
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enables the flash controller for writing.
  * @note
@@ -269,7 +269,7 @@ void MSC_Init(void)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Disables the flash controller for writing.
  ******************************************************************************/
@@ -281,7 +281,7 @@ void MSC_Deinit(void)
   MSC->LOCK = 0;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set MSC code execution configuration
  *
@@ -353,7 +353,7 @@ void MSC_ExecConfigSet(MSC_ExecConfig_TypeDef *execConfig)
 
 #if defined(_MSC_ECCCTRL_MASK)
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *    DMA read and write existing values (for ECC initializaion).
  *
@@ -458,7 +458,7 @@ static void mscEccReadWriteExistingDma(uint32_t start,
   CMU_ClockEnable(cmuClock_LDMA, false);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *    Initialize ECC for a given memory bank.
  *
@@ -502,7 +502,7 @@ static void mscEccBankInit(const MSC_EccBank_Typedef *eccBank,
   CORE_EXIT_CRITICAL();
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *    Disable ECC for a given memory bank.
  *
@@ -520,7 +520,7 @@ static void mscEccBankDisable(const MSC_EccBank_Typedef *eccBank)
   *eccBank->ctrlReg &= ~((1 << eccBank->writeEnBit) | (1 << eccBank->checkEnBit));
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Configure Error Correcting Code (ECC)
  *
@@ -575,7 +575,7 @@ void MSC_EccConfigSet(MSC_EccConfig_TypeDef *eccConfig)
 
 /** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Perform address phase of Flash write cycle.
  * @details
@@ -627,7 +627,7 @@ MSC_Status_TypeDef MSC_LoadVerifyAddress(uint32_t* address)
 }
 MSC_RAMFUNC_DEFINITION_END
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Perform a Flash data write phase.
  * @details
@@ -842,7 +842,7 @@ MSC_Status_TypeDef MSC_LoadWriteData(uint32_t* data,
 }
 MSC_RAMFUNC_DEFINITION_END
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Internal flash write function with select write strategy parameter
  * @param[in] address
@@ -946,7 +946,7 @@ MSC_RAMFUNC_DEFINITION_END
 
 /** @endcond */
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Erases a page in flash memory.
  * @note
@@ -1021,7 +1021,7 @@ MSC_Status_TypeDef MSC_ErasePage(uint32_t *startAddress)
 }
 MSC_RAMFUNC_DEFINITION_END
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Writes data to flash memory. This function is interrupt safe, but slower than
  *   MSC_WriteWordFast(), which writes to flash with interrupts disabled.
@@ -1067,7 +1067,7 @@ MSC_Status_TypeDef MSC_WriteWord(uint32_t *address,
 MSC_RAMFUNC_DEFINITION_END
 
 #if !defined(_EFM32_GECKO_FAMILY)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Writes data to flash memory. This function is faster than MSC_WriteWord(),
  *   but it disables interrupts. Write data must be aligned to words and contain
@@ -1113,7 +1113,7 @@ MSC_RAMFUNC_DEFINITION_END
 #endif
 
 #if defined(_MSC_MASSLOCK_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Erase entire flash in one operation
  *

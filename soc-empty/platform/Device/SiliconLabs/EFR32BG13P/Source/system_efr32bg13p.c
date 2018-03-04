@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file system_efr32bg13p.c
  * @brief CMSIS Cortex-M3/M4 System Layer for EFR32 devices.
  * @version 5.4.0
@@ -118,7 +118,7 @@ uint32_t SystemHfrcoFreq = EFR32_HFRCO_STARTUP_FREQ;
  **************************   GLOBAL FUNCTIONS   *******************************
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the current core clock frequency.
  *
@@ -151,7 +151,7 @@ uint32_t SystemCoreClockGet(void)
   return ret;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the maximum core clock frequency.
  *
@@ -170,7 +170,7 @@ uint32_t SystemMaxCoreClockGet(void)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the current HFCLK frequency.
  *
@@ -218,7 +218,7 @@ uint32_t SystemHFClockGet(void)
                       >> _CMU_HFPRESC_PRESC_SHIFT));
 }
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Get high frequency crystal oscillator clock frequency for target system.
  *
@@ -238,7 +238,7 @@ uint32_t SystemHFXOClockGet(void)
 #endif
 }
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Set high frequency crystal oscillator clock frequency for target system.
  *
@@ -270,7 +270,7 @@ void SystemHFXOClockSet(uint32_t freq)
 #endif
 }
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Initialize the system.
  *
@@ -291,7 +291,7 @@ void SystemInit(void)
 #endif
 }
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Get low frequency RC oscillator clock frequency for target system.
  *
@@ -309,7 +309,7 @@ uint32_t SystemLFRCOClockGet(void)
   return EFR32_LFRCO_FREQ;
 }
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Get ultra low frequency RC oscillator clock frequency for target system.
  *
@@ -325,7 +325,7 @@ uint32_t SystemULFRCOClockGet(void)
   return EFR32_ULFRCO_FREQ;
 }
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Get low frequency crystal oscillator clock frequency for target system.
  *
@@ -345,7 +345,7 @@ uint32_t SystemLFXOClockGet(void)
 #endif
 }
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Set low frequency crystal oscillator clock frequency for target system.
  *

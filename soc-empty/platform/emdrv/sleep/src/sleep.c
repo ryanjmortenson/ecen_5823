@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file sleep.c
  * @brief Energy Modes management driver.
  * @version 5.4.0
@@ -42,12 +42,12 @@
 /* stdlib is needed for NULL definition */
 #include <stdlib.h>
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emdrv
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup SLEEP
  * @brief Energy Modes Management Driver
  * @details
@@ -121,7 +121,7 @@ static SLEEP_EnergyMode_t enterEMx(SLEEP_EnergyMode_t eMode);
  ***************************   GLOBAL FUNCTIONS   ******************************
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Initialize the Sleep module.
  *
@@ -173,7 +173,7 @@ void SLEEP_Init(SLEEP_CbFuncPtr_t pSleepCb, SLEEP_CbFuncPtr_t pWakeUpCb)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Initialize the Sleep module.
  *
@@ -192,7 +192,7 @@ void SLEEP_InitEx(const SLEEP_Init_t * init)
   sleepContext.wakeupCallback  = init->wakeupCallback;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Sets the system to sleep into the lowest possible energy mode.
  *
@@ -245,7 +245,7 @@ SLEEP_EnergyMode_t SLEEP_Sleep(void)
   return modeEntered;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Force the device to go to EM4 without doing any checks.
  *
@@ -269,7 +269,7 @@ void SLEEP_ForceSleepInEM4(void)
   enterEMx(sleepEM4);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Begin sleep block in the requested energy mode.
  *
@@ -311,7 +311,7 @@ void SLEEP_SleepBlockBegin(SLEEP_EnergyMode_t eMode)
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   End sleep block in the requested energy mode.
  *
@@ -356,7 +356,7 @@ void SLEEP_SleepBlockEnd(SLEEP_EnergyMode_t eMode)
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Gets the lowest energy mode that the system is allowed to be set to.
  *
@@ -392,7 +392,7 @@ SLEEP_EnergyMode_t SLEEP_LowestEnergyModeGet(void)
 
 /** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Call the callbacks and enter the requested energy mode.
  *

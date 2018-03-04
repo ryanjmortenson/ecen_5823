@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file
  * @brief General Purpose Cyclic Redundancy Check (GPCRC) API.
  * @version 5.4.0
@@ -44,12 +44,12 @@
 extern "C" {
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emlib
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup GPCRC
  * @brief General Purpose Cyclic Redundancy Check (GPCRC) API.
  *
@@ -176,7 +176,7 @@ typedef struct {
 void GPCRC_Init(GPCRC_TypeDef * gpcrc, const GPCRC_Init_TypeDef * init);
 void GPCRC_Reset(GPCRC_TypeDef * gpcrc);
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable/disable GPCRC.
  *
@@ -191,7 +191,7 @@ __STATIC_INLINE void GPCRC_Enable(GPCRC_TypeDef * gpcrc, bool enable)
   BUS_RegBitWrite(&gpcrc->CTRL, _GPCRC_CTRL_EN_SHIFT, enable);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Issues a command to initialize the CRC calculation.
  *
@@ -207,7 +207,7 @@ __STATIC_INLINE void GPCRC_Start(GPCRC_TypeDef * gpcrc)
   gpcrc->CMD = GPCRC_CMD_INIT;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set the initialization value of the CRC.
  *
@@ -223,7 +223,7 @@ __STATIC_INLINE void GPCRC_InitValueSet(GPCRC_TypeDef * gpcrc, uint32_t initValu
   gpcrc->INIT = initValue;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Writes a 32 bit value to the input data register of the CRC.
  *
@@ -243,7 +243,7 @@ __STATIC_INLINE void GPCRC_InputU32(GPCRC_TypeDef * gpcrc, uint32_t data)
   gpcrc->INPUTDATA = data;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Writes a 16 bit value to the input data register of the CRC.
  *
@@ -263,7 +263,7 @@ __STATIC_INLINE void GPCRC_InputU16(GPCRC_TypeDef * gpcrc, uint16_t data)
   gpcrc->INPUTDATAHWORD = data;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Writes an 8 bit value to the input data register of the CRC.
  *
@@ -283,7 +283,7 @@ __STATIC_INLINE void GPCRC_InputU8(GPCRC_TypeDef * gpcrc, uint8_t data)
   gpcrc->INPUTDATABYTE = data;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Reads the data register of the CRC.
  *
@@ -301,7 +301,7 @@ __STATIC_INLINE uint32_t GPCRC_DataRead(GPCRC_TypeDef * gpcrc)
   return gpcrc->DATA;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Reads the data register of the CRC bit reversed.
  *
@@ -321,7 +321,7 @@ __STATIC_INLINE uint32_t GPCRC_DataReadBitReversed(GPCRC_TypeDef * gpcrc)
   return gpcrc->DATAREV;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Reads the data register of the CRC byte reversed.
  *

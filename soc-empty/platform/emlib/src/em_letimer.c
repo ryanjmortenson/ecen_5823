@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file em_letimer.c
  * @brief Low Energy Timer (LETIMER) Peripheral API
  * @version 5.3.5
@@ -35,12 +35,12 @@
 #include "em_cmu.h"
 #include "em_assert.h"
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emlib
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup LETIMER
  * @brief Low Energy Timer (LETIMER) Peripheral API
  * @details
@@ -80,7 +80,7 @@
 /** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
 
 #if defined(_EFM32_GECKO_FAMILY)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Wait for ongoing sync of register(s) to low frequency domain to complete.
  *
@@ -119,7 +119,7 @@ __STATIC_INLINE void regSync(LETIMER_TypeDef *letimer, uint32_t mask)
  **************************   GLOBAL FUNCTIONS   *******************************
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get LETIMER compare register value.
  *
@@ -157,7 +157,7 @@ uint32_t LETIMER_CompareGet(LETIMER_TypeDef *letimer, unsigned int comp)
   return(ret);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set LETIMER compare register value.
  *
@@ -212,7 +212,7 @@ void LETIMER_CompareSet(LETIMER_TypeDef *letimer,
   *compReg = value;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Start/stop LETIMER.
  *
@@ -247,7 +247,7 @@ void LETIMER_Enable(LETIMER_TypeDef *letimer, bool enable)
 }
 
 #if defined(_LETIMER_FREEZE_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   LETIMER register synchronization freeze control.
  *
@@ -296,7 +296,7 @@ void LETIMER_FreezeEnable(LETIMER_TypeDef *letimer, bool enable)
 }
 #endif /* defined(_LETIMER_FREEZE_MASK) */
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Initialize LETIMER.
  *
@@ -387,7 +387,7 @@ void LETIMER_Init(LETIMER_TypeDef *letimer, const LETIMER_Init_TypeDef *init)
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get LETIMER repeat register value.
  *
@@ -425,7 +425,7 @@ uint32_t LETIMER_RepeatGet(LETIMER_TypeDef *letimer, unsigned int rep)
   return(ret);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set LETIMER repeat counter register value.
  *
@@ -488,7 +488,7 @@ void LETIMER_RepeatSet(LETIMER_TypeDef *letimer,
   *repReg = value;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Reset LETIMER to same state as after a HW reset.
  *

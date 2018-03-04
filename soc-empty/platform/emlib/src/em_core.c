@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file em_core.c
  * @brief Core interrupt handling API
  * @version 5.4.0
@@ -36,13 +36,13 @@
 #include "emlib_config.h"
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emlib
  * @{
  ******************************************************************************/
 
 /* *INDENT-OFF* */
-/***************************************************************************//**
+/***************************************************************************
   @addtogroup CORE
   @brief Core interrupt handling API
 
@@ -301,7 +301,7 @@
  ******************************   FUNCTIONS   **********************************
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Disable interrupts.
  *
@@ -313,7 +313,7 @@ SL_WEAK void CORE_CriticalDisableIrq(void)
   __disable_irq();
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable interrupts.
  *
@@ -324,7 +324,7 @@ SL_WEAK void CORE_CriticalEnableIrq(void)
   __enable_irq();
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enter a CRITICAL section.
  *
@@ -341,7 +341,7 @@ SL_WEAK CORE_irqState_t CORE_EnterCritical(void)
   return irqState;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Exit a CRITICAL section.
  *
@@ -357,7 +357,7 @@ SL_WEAK void CORE_ExitCritical(CORE_irqState_t irqState)
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Brief interrupt enable/disable sequence to allow handling of
  *   pending interrupts.
@@ -373,7 +373,7 @@ SL_WEAK void CORE_YieldCritical(void)
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Disable interrupts.
  *
@@ -394,7 +394,7 @@ SL_WEAK void CORE_AtomicDisableIrq(void)
 #endif // (CORE_ATOMIC_METHOD == CORE_ATOMIC_METHOD_BASEPRI)
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable interrupts.
  *
@@ -418,7 +418,7 @@ SL_WEAK void CORE_AtomicEnableIrq(void)
 #endif // (CORE_ATOMIC_METHOD == CORE_ATOMIC_METHOD_BASEPRI)
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enter an ATOMIC section.
  *
@@ -445,7 +445,7 @@ SL_WEAK CORE_irqState_t CORE_EnterAtomic(void)
 #endif // (CORE_ATOMIC_METHOD == CORE_ATOMIC_METHOD_BASEPRI)
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Exit an ATOMIC section.
  *
@@ -469,7 +469,7 @@ SL_WEAK void CORE_ExitAtomic(CORE_irqState_t irqState)
 #endif // (CORE_ATOMIC_METHOD == CORE_ATOMIC_METHOD_BASEPRI)
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Brief interrupt enable/disable sequence to allow handling of
  *   pending interrupts.
@@ -497,7 +497,7 @@ SL_WEAK void CORE_YieldAtomic(void)
 #endif // (CORE_ATOMIC_METHOD == CORE_ATOMIC_METHOD_BASEPRI)
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enter a NVIC mask section.
  *
@@ -519,7 +519,7 @@ void CORE_EnterNvicMask(CORE_nvicMask_t *nvicState,
     )
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Disable NVIC interrupts.
  *
@@ -533,7 +533,7 @@ void CORE_NvicDisableMask(const CORE_nvicMask_t *disable)
     )
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set current NVIC interrupt enable mask.
  *
@@ -547,7 +547,7 @@ void CORE_NvicEnableMask(const CORE_nvicMask_t *enable)
     )
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Brief NVIC interrupt enable/disable sequence to allow handling of
  *   pending interrupts.
@@ -600,7 +600,7 @@ void CORE_YieldNvicMask(const CORE_nvicMask_t *enable)
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Utility function to set an IRQn bit in a NVIC enable/disable mask.
  *
@@ -616,7 +616,7 @@ void CORE_NvicMaskSetIRQ(IRQn_Type irqN, CORE_nvicMask_t *mask)
   mask->a[(unsigned)irqN >> 5] |= 1UL << ((unsigned)irqN & 0x1FUL);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Utility function to clear an IRQn bit in a NVIC enable/disable mask.
  *
@@ -632,7 +632,7 @@ void CORE_NvicMaskClearIRQ(IRQn_Type irqN, CORE_nvicMask_t *mask)
   mask->a[(unsigned)irqN >> 5] &= ~(1UL << ((unsigned)irqN & 0x1FUL));
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Check if current cpu operation mode is handler mode.
  *
@@ -645,7 +645,7 @@ SL_WEAK bool CORE_InIrqContext(void)
   return (SCB->ICSR & SCB_ICSR_VECTACTIVE_Msk) != 0U;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Check if a specific interrupt is disabled or blocked.
  *
@@ -697,7 +697,7 @@ SL_WEAK bool CORE_IrqIsBlocked(IRQn_Type irqN)
   return false;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Check if interrupts are disabled.
  *
@@ -716,7 +716,7 @@ SL_WEAK bool CORE_IrqIsDisabled(void)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get current NVIC enable mask state.
  *
@@ -730,7 +730,7 @@ void CORE_GetNvicEnabledMask(CORE_nvicMask_t *mask)
     )
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get NVIC disable state for a given mask.
  *
@@ -762,7 +762,7 @@ bool CORE_GetNvicMaskDisableState(const CORE_nvicMask_t *mask)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Check if a NVIC interrupt is disabled.
  *
@@ -782,7 +782,7 @@ bool CORE_NvicIRQDisabled(IRQn_Type irqN)
          == 0UL;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Utility function to get the handler for a specific interrupt.
  *
@@ -801,7 +801,7 @@ void *CORE_GetNvicRamTableHandler(IRQn_Type irqN)
   return (void*)((uint32_t*)(((uint32_t*)SCB->VTOR)[(int)irqN + 16]));
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Utility function to set the handler for a specific interrupt.
  *
@@ -820,7 +820,7 @@ void CORE_SetNvicRamTableHandler(IRQn_Type irqN, void *handler)
   ((uint32_t*)SCB->VTOR)[(int)irqN + 16] = (uint32_t)((uint32_t*)handler);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Initialize an interrupt vector table by copying table entries from a
  *   source to a target table.

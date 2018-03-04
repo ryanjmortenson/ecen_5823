@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file em_bus.h
  * @brief RAM and peripheral bit-field set and clear API
  * @version 5.4.0
@@ -39,12 +39,12 @@
 extern "C" {
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emlib
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup BUS
  * @brief BUS register and RAM bit/field read/write API
  * @details
@@ -52,7 +52,7 @@ extern "C" {
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Perform a single-bit write operation on a 32-bit word in RAM
  *
@@ -89,7 +89,7 @@ __STATIC_INLINE void BUS_RamBitWrite(volatile uint32_t *addr,
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Perform a single-bit read operation on a 32-bit word in RAM
  *
@@ -123,7 +123,7 @@ __STATIC_INLINE unsigned int BUS_RamBitRead(volatile const uint32_t *addr,
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Perform a single-bit write operation on a peripheral register
  *
@@ -160,7 +160,7 @@ __STATIC_INLINE void BUS_RegBitWrite(volatile uint32_t *addr,
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Perform a single-bit read operation on a peripheral register
  *
@@ -194,7 +194,7 @@ __STATIC_INLINE unsigned int BUS_RegBitRead(volatile const uint32_t *addr,
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Perform a masked set operation on peripheral register address.
  *
@@ -225,7 +225,7 @@ __STATIC_INLINE void BUS_RegMaskedSet(volatile uint32_t *addr,
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Perform a masked clear operation on peripheral register address.
  *
@@ -256,7 +256,7 @@ __STATIC_INLINE void BUS_RegMaskedClear(volatile uint32_t *addr,
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Perform peripheral register masked clear and value write.
  *
@@ -291,7 +291,7 @@ __STATIC_INLINE void BUS_RegMaskedWrite(volatile uint32_t *addr,
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Perform a peripheral register masked read
  *

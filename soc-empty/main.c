@@ -1,4 +1,4 @@
-/***********************************************************************************************//**
+/***********************************************************************************************
  * \file   main.c
  * \brief  Silicon Labs Empty Example Project
  *
@@ -47,26 +47,27 @@
 #include "src/i2c.h"
 #include "src/power_level.h"
 #include "src/events.h"
+#include "src/soil_moisture.h"
 
 int led_state = LED0_default;
 uint8_t events = 0;
 
-/***********************************************************************************************//**
+/***********************************************************************************************
  * @addtogroup Application
  * @{
  **************************************************************************************************/
 
-/***********************************************************************************************//**
+/***********************************************************************************************
  * @addtogroup app
  * @{
  **************************************************************************************************/
 
-#define SAMPLE_PERIOD (4.0f)
+#define SAMPLE_PERIOD (120.0f)
 #define SENSOR_INIT_TIME (.080f)
 #define CALCULATE_INIT_DUTY_CYCLE(init_time) ((SAMPLE_PERIOD - init_time) / SAMPLE_PERIOD)
-#define ADV_INT (539)
-#define CONN_INTERVAL (60) // 75 / 1.25
-#define SLAVE_LATENCY (5)  // 5 * 75 + 75 = 450
+#define ADV_INT (2000)
+#define CONN_INTERVAL (60)  // 75 / 1.25
+#define SLAVE_LATENCY (10) // 5 * 75 + 75 = 450
 #define TIMEOUT (1000)
 
 #ifndef MAX_CONNECTIONS
@@ -75,29 +76,27 @@ uint8_t events = 0;
 uint8_t bluetooth_stack_heap[DEFAULT_BLUETOOTH_HEAP (MAX_CONNECTIONS)];
 
 // Gecko configuration parameters (see gecko_configuration.h)
-static const gecko_configuration_t config =
-{
+static const gecko_configuration_t config = {
   .config_flags = 0,
   .sleep.flags = SLEEP_FLAGS_DEEP_SLEEP_ENABLE,
   .bluetooth.max_connections = MAX_CONNECTIONS,
   .bluetooth.heap = bluetooth_stack_heap,
-  .bluetooth.heap_size = sizeof(bluetooth_stack_heap),
-  .bluetooth.sleep_clock_accuracy = 100, // ppm
+  .bluetooth.heap_size = sizeof (bluetooth_stack_heap),
+  .bluetooth.sleep_clock_accuracy = 100,  // ppm
   .gattdb = &bg_gattdb_data,
   .ota.flags = 0,
   .ota.device_name_len = 3,
   .ota.device_name_ptr = "OTA",
 #if (HAL_PA_ENABLE) && defined(FEATURE_PA_HIGH_POWER)
-  .pa.config_enable = 1, // Enable high power PA
-  .pa.input = GECKO_RADIO_PA_INPUT_VBAT,// Configure PA input to VBAT
+  .pa.config_enable = 1,  // Enable high power PA
+  .pa.input = GECKO_RADIO_PA_INPUT_VBAT,  // Configure PA input to VBAT
 #endif // (HAL_PA_ENABLE) && defined(FEATURE_PA_HIGH_POWER)
 };
 
 // Flag for indicating DFU Reset must be performed
 uint8_t boot_to_dfu = 0;
 
-void
-LETIMER0_IRQHandler (void)
+void LETIMER0_IRQHandler (void)
 {
   CORE_ATOMIC_IRQ_DISABLE ();
 
@@ -131,8 +130,7 @@ LETIMER0_IRQHandler (void)
 /**
  * @brief  Main function
  */
-int
-main (void)
+int main (void)
 {
   // Initialize device
   initMcu ();
@@ -152,7 +150,7 @@ main (void)
   // Initialize stack
   gecko_init (&config);
 
-  if (letimer_init (PERIOD, DUTY_CYCLE))
+  if (letimer_init (SAMPLE_PERIOD, DUTY_CYCLE))
   {
     // Hold current temperature reading
     uint8_t conn;
@@ -160,7 +158,7 @@ main (void)
     while (1)
     {
       /* Event pointer for handling events */
-      struct gecko_cmd_packet* evt;
+      struct gecko_cmd_packet *evt;
 
       /* Check for stack event. */
       evt = gecko_wait_event ();
@@ -169,93 +167,101 @@ main (void)
       switch (BGLIB_MSG_ID (evt->header))
       {
         /* This boot event is generated when the system boots up after reset.
-         * Do not call any stack commands before receiving the boot event.
-         * Here the system is set to start advertising immediately after boot procedure. */
-        case gecko_evt_system_boot_id:
-          /* Set advertising parameters. 100ms advertisement interval. All channels used.
-           * The first two parameters are minimum and maximum advertising interval, both in
-           * units of (milliseconds * 1.6). The third parameter '7' sets advertising on all channels. */
-          gecko_cmd_le_gap_set_adv_parameters (ADV_INT, ADV_INT, 7);
+         * Do not call any stack commands before receiving the boot event. Here 
+         * the system is set to start advertising immediately after boot
+         * procedure. */
+      case gecko_evt_system_boot_id:
+        /* Set advertising parameters. 100ms advertisement interval. All
+         * channels used. The first two parameters are minimum and maximum
+         * advertising interval, both in units of (milliseconds * 1.6). The
+         * third parameter '7' sets advertising on all channels. */
+        gecko_cmd_le_gap_set_adv_parameters (ADV_INT, ADV_INT, 7);
 
-          /* Start general advertising and enable connections. */
+        /* Start general advertising and enable connections. */
+        gecko_cmd_le_gap_set_mode (le_gap_general_discoverable,
+                                   le_gap_undirected_connectable);
+
+        gecko_cmd_system_set_tx_power (0);
+
+        break;
+
+      case gecko_evt_le_connection_opened_id:
+        gecko_cmd_le_connection_set_parameters (evt->data.
+                                                evt_le_connection_opened.
+                                                connection, CONN_INTERVAL,
+                                                CONN_INTERVAL, SLAVE_LATENCY,
+                                                TIMEOUT);
+
+        conn = evt->data.evt_le_connection_opened.connection;
+        break;
+
+      case gecko_evt_le_connection_closed_id:
+        // Reset the connection
+        conn = 0;
+        gecko_cmd_system_set_tx_power (0);
+
+        /* Check if need to boot to dfu mode */
+        if (boot_to_dfu)
+        {
+          /* Enter to DFU OTA mode */
+          gecko_cmd_system_reset (2);
+        }
+        else
+        {
+          /* Restart advertising after client has disconnected */
           gecko_cmd_le_gap_set_mode (le_gap_general_discoverable,
                                      le_gap_undirected_connectable);
+        }
+        break;
 
-          gecko_cmd_system_set_tx_power (0);
+        /* Events related to OTA upgrading
+         * ----------------------------------------------------------------------------- 
+         */
 
-          break;
+        /* Check if the user-type OTA Control Characteristic was written. If
+         * ota_control was written, boot the device into Device Firmware
+         * Upgrade (DFU) mode. */
+      case gecko_evt_gatt_server_user_write_request_id:
 
-        case gecko_evt_le_connection_opened_id:
-          gecko_cmd_le_connection_set_parameters (
-              evt->data.evt_le_connection_opened.connection, CONN_INTERVAL,
-              CONN_INTERVAL,
-              SLAVE_LATENCY, TIMEOUT);
+        if (evt->data.evt_gatt_server_user_write_request.characteristic
+            == gattdb_ota_control)
+        {
+          /* Set flag to enter to OTA mode */
+          boot_to_dfu = 1;
+          /* Send response to Write Request */
+          gecko_cmd_gatt_server_send_user_write_response (evt->data.
+                                                          evt_gatt_server_user_write_request.
+                                                          connection,
+                                                          gattdb_ota_control,
+                                                          bg_err_success);
 
-          conn = evt->data.evt_le_connection_opened.connection;
-          break;
+          /* Close connection to enter to DFU OTA mode */
+          gecko_cmd_endpoint_close (evt->data.
+                                    evt_gatt_server_user_write_request.
+                                    connection);
+        }
+        break;
 
-        case gecko_evt_le_connection_closed_id:
-          // Reset the connection
-          conn = 0;
-          gecko_cmd_system_set_tx_power (0);
+      case gecko_evt_system_external_signal_id:
+        // If connection is active set rssi
+        if (conn)
+        {
+          gecko_cmd_le_connection_get_rssi (conn);
+        }
 
-          /* Check if need to boot to dfu mode */
-          if (boot_to_dfu)
-          {
-            /* Enter to DFU OTA mode */
-            gecko_cmd_system_reset (2);
-          }
-          else
-          {
-            /* Restart advertising after client has disconnected */
-            gecko_cmd_le_gap_set_mode (le_gap_general_discoverable,
-                                       le_gap_undirected_connectable);
-          }
-          break;
+        // Handle set of events
+        handle_events (&events);
 
-          /* Events related to OTA upgrading
-           ----------------------------------------------------------------------------- */
+        break;
 
-          /* Check if the user-type OTA Control Characteristic was written.
-           * If ota_control was written, boot the device into Device Firmware Upgrade (DFU) mode. */
-        case gecko_evt_gatt_server_user_write_request_id:
+      case gecko_evt_le_connection_rssi_id:
+        // Set the power level based on RSSI
+        gecko_cmd_system_set_tx_power (get_power_level
+                                       (evt->data.evt_le_connection_rssi.rssi));
+        break;
 
-          if (evt->data.evt_gatt_server_user_write_request.characteristic
-              == gattdb_ota_control)
-          {
-            /* Set flag to enter to OTA mode */
-            boot_to_dfu = 1;
-            /* Send response to Write Request */
-            gecko_cmd_gatt_server_send_user_write_response (
-                evt->data.evt_gatt_server_user_write_request.connection,
-                gattdb_ota_control, bg_err_success);
-
-            /* Close connection to enter to DFU OTA mode */
-            gecko_cmd_endpoint_close (
-                evt->data.evt_gatt_server_user_write_request.connection);
-          }
-          break;
-
-        case gecko_evt_system_external_signal_id:
-          // If connection is active set rssi
-          if (conn)
-          {
-            gecko_cmd_le_connection_get_rssi (conn);
-          }
-
-          // Handle set of events
-          handle_events (&events);
-
-          break;
-
-        case gecko_evt_le_connection_rssi_id:
-          // Set the power level based on RSSI
-          gecko_cmd_system_set_tx_power (
-              get_power_level (evt->data.evt_le_connection_rssi.rssi));
-          break;
-
-        default:
-          break;
+      default:
+        break;
       }
     }
   }

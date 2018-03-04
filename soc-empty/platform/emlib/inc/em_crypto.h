@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file em_crypto.h
  * @brief Cryptography accelerator peripheral API
  * @version 5.4.0
@@ -43,12 +43,12 @@
 extern "C" {
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emlib
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup CRYPTO
  *
  * @brief Cryptography accelerator peripheral API
@@ -585,7 +585,7 @@ typedef void (*CRYPTO_AES_CtrFuncPtr_TypeDef)(uint8_t * ctr);
  *****************************   PROTOTYPES   **********************************
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set the modulus type used for wide arithmetic operations.
  *
@@ -602,7 +602,7 @@ typedef void (*CRYPTO_AES_CtrFuncPtr_TypeDef)(uint8_t * ctr);
 void CRYPTO_ModulusSet(CRYPTO_TypeDef *          crypto,
                        CRYPTO_ModulusId_TypeDef  modType);
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set the number of bits in the operands of the MUL instruction.
  *
@@ -624,7 +624,7 @@ void CRYPTO_MulOperandWidthSet(CRYPTO_TypeDef *crypto,
   crypto->WAC = temp | (uint32_t)mulOperandWidth;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set the width of the results of the non-modulus instructions.
  *
@@ -645,7 +645,7 @@ void CRYPTO_ResultWidthSet(CRYPTO_TypeDef *crypto,
   crypto->WAC = temp | (uint32_t)resultWidth;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set the width of the DATA1 increment instruction DATA1INC.
  *
@@ -666,7 +666,7 @@ __STATIC_INLINE void CRYPTO_IncWidthSet(CRYPTO_TypeDef *crypto,
   crypto->CTRL = temp | (uint32_t)incWidth;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Write a 128 bit value into a crypto register.
  *
@@ -698,7 +698,7 @@ __STATIC_INLINE void CRYPTO_BurstToCrypto(volatile uint32_t * reg,
   *reg = v3;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Read a 128 bit value from a crypto register.
  *
@@ -729,7 +729,7 @@ __STATIC_INLINE void CRYPTO_BurstFromCrypto(volatile uint32_t * reg, uint32_t * 
   val[3] = v3;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Write 128 bits of data to a DATAX register in the CRYPTO module.
  *
@@ -747,7 +747,7 @@ __STATIC_INLINE void CRYPTO_DataWrite(CRYPTO_DataReg_TypeDef dataReg,
   CRYPTO_BurstToCrypto(dataReg, val);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Read 128 bits of data from a DATAX register in the CRYPTO module.
  *
@@ -765,7 +765,7 @@ __STATIC_INLINE void CRYPTO_DataRead(CRYPTO_DataReg_TypeDef  dataReg,
   CRYPTO_BurstFromCrypto(dataReg, val);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Write 256 bits of data to a DDATAX register in the CRYPTO module.
  *
@@ -784,7 +784,7 @@ __STATIC_INLINE void CRYPTO_DDataWrite(CRYPTO_DDataReg_TypeDef ddataReg,
   CRYPTO_BurstToCrypto(ddataReg, &val[4]);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Read 256 bits of data from a DDATAX register in the CRYPTO module.
  *
@@ -803,7 +803,7 @@ __STATIC_INLINE void CRYPTO_DDataRead(CRYPTO_DDataReg_TypeDef  ddataReg,
   CRYPTO_BurstFromCrypto(ddataReg, &val[4]);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Write 512 bits of data to a QDATAX register in the CRYPTO module.
  *
@@ -824,7 +824,7 @@ __STATIC_INLINE void CRYPTO_QDataWrite(CRYPTO_QDataReg_TypeDef qdataReg,
   CRYPTO_BurstToCrypto(qdataReg, &val[12]);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Read 512 bits of data from a QDATAX register in the CRYPTO module.
  *
@@ -845,7 +845,7 @@ __STATIC_INLINE void CRYPTO_QDataRead(CRYPTO_QDataReg_TypeDef qdataReg,
   CRYPTO_BurstFromCrypto(qdataReg, &val[12]);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set the key value to be used by the CRYPTO module.
  *
@@ -881,7 +881,7 @@ void CRYPTO_KeyRead(CRYPTO_TypeDef *crypto,
                     CRYPTO_KeyBuf_TypeDef   val,
                     CRYPTO_KeyWidth_TypeDef keyWidth);
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Quick write 128 bit key to the CRYPTO module.
  *
@@ -900,7 +900,7 @@ __STATIC_INLINE void CRYPTO_KeyBuf128Write(CRYPTO_TypeDef *crypto,
   CRYPTO_BurstToCrypto(&crypto->KEYBUF, val);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Quick read access of the Carry bit from arithmetic operations.
  *
@@ -919,7 +919,7 @@ __STATIC_INLINE bool CRYPTO_CarryIsSet(CRYPTO_TypeDef *crypto)
           >> _CRYPTO_DSTATUS_CARRY_SHIFT) != 0UL;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Quick read access of the 4 LSbits of the DDATA0 register.
  *
@@ -939,7 +939,7 @@ __STATIC_INLINE uint8_t CRYPTO_DData0_4LSBitsRead(CRYPTO_TypeDef *crypto)
                    >> _CRYPTO_DSTATUS_DDATA0LSBS_SHIFT);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Read 260 bits from the DDATA0 register.
  *
@@ -963,7 +963,7 @@ __STATIC_INLINE void CRYPTO_DData0Read260(CRYPTO_TypeDef *crypto,
            >> _CRYPTO_DSTATUS_DDATA0MSBS_SHIFT;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Write 260 bits to the DDATA0 register.
  *
@@ -986,7 +986,7 @@ __STATIC_INLINE void CRYPTO_DData0Write260(CRYPTO_TypeDef *crypto,
   crypto->DDATA0BYTE32 = val[8] & _CRYPTO_DDATA0BYTE32_DDATA0BYTE32_MASK;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Quick read the MSbit of the DDATA1 register.
  *
@@ -1008,7 +1008,7 @@ __STATIC_INLINE bool CRYPTO_DData1_MSBitRead(CRYPTO_TypeDef *crypto)
           >> _CRYPTO_DSTATUS_DDATA1MSB_SHIFT) != 0UL;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Load a sequence of instructions to be executed on the current values in
  *   the data registers.
@@ -1037,7 +1037,7 @@ void CRYPTO_InstructionSequenceLoad(CRYPTO_TypeDef *crypto,
   crypto->SEQ4 = pas[4];
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Execute the current programmed instruction sequence.
  *
@@ -1054,7 +1054,7 @@ __STATIC_INLINE void CRYPTO_InstructionSequenceExecute(CRYPTO_TypeDef *crypto)
   crypto->CMD = CRYPTO_CMD_SEQSTART;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Check whether the execution of an instruction sequence has completed.
  *
@@ -1074,7 +1074,7 @@ __STATIC_INLINE bool CRYPTO_InstructionSequenceDone(CRYPTO_TypeDef *crypto)
           & (CRYPTO_STATUS_INSTRRUNNING | CRYPTO_STATUS_SEQRUNNING)) == 0UL;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Wait for completion of the current sequence of instructions.
  *
@@ -1091,7 +1091,7 @@ __STATIC_INLINE void CRYPTO_InstructionSequenceWait(CRYPTO_TypeDef *crypto)
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Wait for completion of the current command.
  *
@@ -1205,7 +1205,7 @@ void CRYPTO_AES_OFB256(CRYPTO_TypeDef *crypto,
                        const uint8_t * key,
                        const uint8_t * iv);
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Clear one or more pending CRYPTO interrupts.
  *
@@ -1221,7 +1221,7 @@ __STATIC_INLINE void CRYPTO_IntClear(CRYPTO_TypeDef *crypto, uint32_t flags)
   crypto->IFC = flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Disable one or more CRYPTO interrupts.
  *
@@ -1237,7 +1237,7 @@ __STATIC_INLINE void CRYPTO_IntDisable(CRYPTO_TypeDef *crypto, uint32_t flags)
   crypto->IEN &= ~(flags);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable one or more CRYPTO interrupts.
  *
@@ -1258,7 +1258,7 @@ __STATIC_INLINE void CRYPTO_IntEnable(CRYPTO_TypeDef *crypto, uint32_t flags)
   crypto->IEN |= flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get pending CRYPTO interrupt flags.
  *
@@ -1277,7 +1277,7 @@ __STATIC_INLINE uint32_t CRYPTO_IntGet(CRYPTO_TypeDef *crypto)
   return crypto->IF;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get enabled and pending CRYPTO interrupt flags.
  *   Useful for handling more interrupt sources in the same interrupt handler.
@@ -1306,7 +1306,7 @@ __STATIC_INLINE uint32_t CRYPTO_IntGetEnabled(CRYPTO_TypeDef *crypto)
   return crypto->IF & tmp;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set one or more pending CRYPTO interrupts from SW.
  *
@@ -1327,7 +1327,7 @@ __STATIC_INLINE void CRYPTO_IntSet(CRYPTO_TypeDef *crypto, uint32_t flags)
  *****    preserve backwards compatibility with AES module API functions.  *****
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Cipher-block chaining (CBC) cipher mode encryption/decryption,
  *   128 bit key.
@@ -1346,7 +1346,7 @@ __STATIC_INLINE void AES_CBC128(uint8_t * out,
   CRYPTO_AES_CBC128(DEFAULT_CRYPTO, out, in, len, key, iv, encrypt);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Cipher-block chaining (CBC) cipher mode encryption/decryption, 256 bit
  *   key.
@@ -1365,7 +1365,7 @@ __STATIC_INLINE void AES_CBC256(uint8_t * out,
   CRYPTO_AES_CBC256(DEFAULT_CRYPTO, out, in, len, key, iv, encrypt);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Cipher feedback (CFB) cipher mode encryption/decryption, 128 bit key.
  *
@@ -1383,7 +1383,7 @@ __STATIC_INLINE void AES_CFB128(uint8_t * out,
   CRYPTO_AES_CFB128(DEFAULT_CRYPTO, out, in, len, key, iv, encrypt);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Cipher feedback (CFB) cipher mode encryption/decryption, 256 bit key.
  *
@@ -1401,7 +1401,7 @@ __STATIC_INLINE void AES_CFB256(uint8_t * out,
   CRYPTO_AES_CFB256(DEFAULT_CRYPTO, out, in, len, key, iv, encrypt);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Counter (CTR) cipher mode encryption/decryption, 128 bit key.
  *
@@ -1419,7 +1419,7 @@ __STATIC_INLINE void AES_CTR128(uint8_t * out,
   CRYPTO_AES_CTR128(DEFAULT_CRYPTO, out, in, len, key, ctr, ctrFunc);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Counter (CTR) cipher mode encryption/decryption, 256 bit key.
  *
@@ -1437,7 +1437,7 @@ __STATIC_INLINE void AES_CTR256(uint8_t * out,
   CRYPTO_AES_CTR256(DEFAULT_CRYPTO, out, in, len, key, ctr, ctrFunc);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Update last 32 bits of 128 bit counter, by incrementing with 1.
  *
@@ -1450,7 +1450,7 @@ __STATIC_INLINE void AES_CTRUpdate32Bit(uint8_t * ctr)
   CRYPTO_AES_CTRUpdate32Bit(ctr);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Generate 128 bit AES decryption key from 128 bit encryption key. The
  *   decryption key is used for some cipher modes when decrypting.
@@ -1464,7 +1464,7 @@ __STATIC_INLINE void AES_DecryptKey128(uint8_t * out, const uint8_t * in)
   CRYPTO_AES_DecryptKey128(DEFAULT_CRYPTO, out, in);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Generate 256 bit AES decryption key from 256 bit encryption key. The
  *   decryption key is used for some cipher modes when decrypting.
@@ -1478,7 +1478,7 @@ __STATIC_INLINE void AES_DecryptKey256(uint8_t * out, const uint8_t * in)
   CRYPTO_AES_DecryptKey256(DEFAULT_CRYPTO, out, in);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Electronic Codebook (ECB) cipher mode encryption/decryption,
  *   128 bit key.
@@ -1496,7 +1496,7 @@ __STATIC_INLINE void AES_ECB128(uint8_t * out,
   CRYPTO_AES_ECB128(DEFAULT_CRYPTO, out, in, len, key, encrypt);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Electronic Codebook (ECB) cipher mode encryption/decryption,
  *   256 bit key.
@@ -1514,7 +1514,7 @@ __STATIC_INLINE void AES_ECB256(uint8_t * out,
   CRYPTO_AES_ECB256(DEFAULT_CRYPTO, out, in, len, key, encrypt);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Output feedback (OFB) cipher mode encryption/decryption, 128 bit key.
  *
@@ -1531,7 +1531,7 @@ __STATIC_INLINE void AES_OFB128(uint8_t * out,
   CRYPTO_AES_OFB128(DEFAULT_CRYPTO, out, in, len, key, iv);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Output feedback (OFB) cipher mode encryption/decryption, 256 bit key.
  *

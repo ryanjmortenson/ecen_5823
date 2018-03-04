@@ -1,4 +1,4 @@
-/**************************************************************************//**
+/**************************************************************************
  * @file efr32bg13p_romtable.h
  * @brief EFR32BG13P_ROMTABLE register and bit field definitions
  * @version 5.4.0
@@ -36,11 +36,11 @@
 #pragma clang system_header  /* Treat file as system include file. */
 #endif
 
-/**************************************************************************//**
+/**************************************************************************
 * @addtogroup Parts
 * @{
 ******************************************************************************/
-/**************************************************************************//**
+/**************************************************************************
  * @defgroup EFR32BG13P_ROMTABLE ROM Table, Chip Revision Information
  * @{
  * @brief Chip Information, Revision numbers
@@ -58,7 +58,7 @@ typedef struct {
   __IM uint32_t CID0; /**< Unused */
 } ROMTABLE_TypeDef;   /** @} */
 
-/**************************************************************************//**
+/**************************************************************************
  * @addtogroup EFR32BG13P_ROMTABLE
  * @{
  * @defgroup EFR32BG13P_ROMTABLE_BitFields ROM Table Bit Field definitions

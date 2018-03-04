@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file em_cmu.h
  * @brief Clock management unit (CMU) API
  * @version 5.4.0
@@ -43,12 +43,12 @@
 extern "C" {
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emlib
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup CMU
  * @{
  ******************************************************************************/
@@ -1652,7 +1652,7 @@ void                      CMU_USHFRCOBandSet(CMU_USHFRCOBand_TypeDef band);
 void                  CMU_UpdateWaitStates(uint32_t freq, int vscale);
 
 #if defined(CMU_CALCTRL_CONT)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Configures continuous calibration mode
  * @param[in] enable
@@ -1665,7 +1665,7 @@ __STATIC_INLINE void CMU_CalibrateCont(bool enable)
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Starts calibration
  * @note
@@ -1678,7 +1678,7 @@ __STATIC_INLINE void CMU_CalibrateStart(void)
 }
 
 #if defined(CMU_CMD_CALSTOP)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Stop the calibration counters
  ******************************************************************************/
@@ -1688,7 +1688,7 @@ __STATIC_INLINE void CMU_CalibrateStop(void)
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Convert dividend to logarithmic value. Only works for even
  *   numbers equal to 2^n.
@@ -1713,7 +1713,7 @@ __STATIC_INLINE uint32_t CMU_DivToLog2(CMU_ClkDiv_TypeDef div)
 }
 
 #if defined(CMU_OSCENCMD_DPLLEN)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Unlock the DPLL.
  * @note
@@ -1725,7 +1725,7 @@ __STATIC_INLINE void CMU_DPLLUnlock(void)
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Clear one or more pending CMU interrupts.
  *
@@ -1737,7 +1737,7 @@ __STATIC_INLINE void CMU_IntClear(uint32_t flags)
   CMU->IFC = flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Disable one or more CMU interrupts.
  *
@@ -1749,7 +1749,7 @@ __STATIC_INLINE void CMU_IntDisable(uint32_t flags)
   CMU->IEN &= ~flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable one or more CMU interrupts.
  *
@@ -1766,7 +1766,7 @@ __STATIC_INLINE void CMU_IntEnable(uint32_t flags)
   CMU->IEN |= flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get pending CMU interrupts.
  *
@@ -1778,7 +1778,7 @@ __STATIC_INLINE uint32_t CMU_IntGet(void)
   return CMU->IF;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get enabled and pending CMU interrupt flags.
  *
@@ -1802,7 +1802,7 @@ __STATIC_INLINE uint32_t CMU_IntGetEnabled(void)
   return CMU->IF & ien;
 }
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Set one or more pending CMU interrupts.
  *
@@ -1814,7 +1814,7 @@ __STATIC_INLINE void CMU_IntSet(uint32_t flags)
   CMU->IFS = flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Lock the CMU in order to protect some of its registers against unintended
  *   modification.
@@ -1832,7 +1832,7 @@ __STATIC_INLINE void CMU_Lock(void)
   CMU->LOCK = CMU_LOCK_LOCKKEY_LOCK;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Convert logarithm of 2 prescaler to division factor.
  *
@@ -1849,7 +1849,7 @@ __STATIC_INLINE uint32_t CMU_Log2ToDiv(uint32_t log2)
 }
 
 #if defined(_SILICON_LABS_32B_SERIES_1)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Convert prescaler dividend to logarithmic value. Only works for even
  *   numbers equal to 2^n.
@@ -1877,7 +1877,7 @@ __STATIC_INLINE uint32_t CMU_PrescToLog2(CMU_ClkPresc_TypeDef presc)
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Unlock the CMU so that writing to locked registers again is possible.
  ******************************************************************************/
@@ -1887,7 +1887,7 @@ __STATIC_INLINE void CMU_Unlock(void)
 }
 
 #if defined(_CMU_HFRCOCTRL_FREQRANGE_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get current HFRCO frequency.
  *
@@ -1902,7 +1902,7 @@ __STATIC_INLINE CMU_HFRCOFreq_TypeDef CMU_HFRCOFreqGet(void)
   return CMU_HFRCOBandGet();
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set HFRCO calibration for the selected target frequency
  *
@@ -1919,7 +1919,7 @@ __STATIC_INLINE void CMU_HFRCOFreqSet(CMU_HFRCOFreq_TypeDef setFreq)
 #endif
 
 #if defined(_CMU_AUXHFRCOCTRL_FREQRANGE_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get current AUXHFRCO frequency.
  *
@@ -1934,7 +1934,7 @@ __STATIC_INLINE CMU_AUXHFRCOFreq_TypeDef CMU_AUXHFRCOFreqGet(void)
   return CMU_AUXHFRCOBandGet();
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set AUXHFRCO calibration for the selected target frequency
  *

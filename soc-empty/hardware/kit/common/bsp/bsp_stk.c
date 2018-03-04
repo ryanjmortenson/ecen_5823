@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file
  * @brief Board support package API implementation STK's.
  * @version 5.4.0
@@ -27,18 +27,18 @@
 
 #if defined(BSP_STK)
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup BSP
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup BSP_STK API for STK's and WSTK's
  * @{
  ******************************************************************************/
 
 /** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
-/**************************************************************************//**
+/**************************************************************************
  * @brief Deinitialize board support package functionality.
  *        Reverse actions performed by @ref BSP_Init().
  *
@@ -59,7 +59,7 @@ int BSP_Disable(void)
 }
 /** @endcond */
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief Initialize the EBI interface for accessing the onboard nandflash.
  *
  * @note This function is not relevant for Gxxx_STK's.
@@ -150,7 +150,7 @@ int BSP_EbiInit(void)
 #endif
 }
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief Deinitialize the EBI interface for accessing the onboard nandflash.
  *
  * @note This function is not relevant for Gxxx_STK's.
@@ -169,7 +169,7 @@ int BSP_EbiDeInit(void)
 #endif
 }
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief Get IO Expander Device id.
  *
  * @return
@@ -186,7 +186,7 @@ uint32_t BSP_IOExpGetDeviceId(void)
 }
 
 /** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
-/**************************************************************************//**
+/**************************************************************************
  * @brief Initialize board support package functionality.
  *
  * @param[in] flags Initialization mask, use 0 or @ref BSP_INIT_BCC.
@@ -221,7 +221,7 @@ int BSP_Init(uint32_t flags)
 /** @endcond */
 
 /** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
-/**************************************************************************//**
+/**************************************************************************
  * @brief STK Peripheral Access Control
  *    Enable or disable access to on-board peripherals using the IO-expander.
  *
@@ -299,7 +299,7 @@ int BSP_PeripheralAccess(BSP_Peripheral_TypeDef perf, bool enable)
 }
 /** @endcond */
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief Request AEM (Advanced Energy Monitoring) current from board controller.
  *
  * @note Assumes that BSP_Init() has been called with @ref BSP_INIT_BCC
@@ -334,7 +334,7 @@ float BSP_CurrentGet(void)
 #endif
 }
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief Request AEM (Advanced Energy Monitoring) voltage from board controller.
  *
  * @note Assumes that BSP_Init() has been called with @ref BSP_INIT_BCC

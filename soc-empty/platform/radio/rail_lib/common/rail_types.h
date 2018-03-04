@@ -1,4 +1,4 @@
-/**************************************************************************//**
+/**************************************************************************
  * @file rail_types.h
  * @brief This file contains the type definitions for RAIL structures, enums,
  *        and other types.

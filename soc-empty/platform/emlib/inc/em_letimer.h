@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file em_letimer.h
  * @brief Low Energy Timer (LETIMER) peripheral API
  * @version 5.3.5
@@ -41,12 +41,12 @@
 extern "C" {
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emlib
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup LETIMER
  * @{
  ******************************************************************************/
@@ -146,7 +146,7 @@ void LETIMER_CompareSet(LETIMER_TypeDef *letimer,
                         unsigned int comp,
                         uint32_t value);
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get LETIMER counter value.
  *
@@ -167,7 +167,7 @@ void LETIMER_FreezeEnable(LETIMER_TypeDef *letimer, bool enable);
 #endif
 void LETIMER_Init(LETIMER_TypeDef *letimer, const LETIMER_Init_TypeDef *init);
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Clear one or more pending LETIMER interrupts.
  *
@@ -184,7 +184,7 @@ __STATIC_INLINE void LETIMER_IntClear(LETIMER_TypeDef *letimer, uint32_t flags)
   letimer->IFC = flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Disable one or more LETIMER interrupts.
  *
@@ -200,7 +200,7 @@ __STATIC_INLINE void LETIMER_IntDisable(LETIMER_TypeDef *letimer, uint32_t flags
   letimer->IEN &= ~flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable one or more LETIMER interrupts.
  *
@@ -221,7 +221,7 @@ __STATIC_INLINE void LETIMER_IntEnable(LETIMER_TypeDef *letimer, uint32_t flags)
   letimer->IEN |= flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get pending LETIMER interrupt flags.
  *
@@ -240,7 +240,7 @@ __STATIC_INLINE uint32_t LETIMER_IntGet(LETIMER_TypeDef *letimer)
   return letimer->IF;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get enabled and pending LETIMER interrupt flags.
  *
@@ -273,7 +273,7 @@ __STATIC_INLINE uint32_t LETIMER_IntGetEnabled(LETIMER_TypeDef *letimer)
   return letimer->IF & ien;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set one or more pending LETIMER interrupts from SW.
  *

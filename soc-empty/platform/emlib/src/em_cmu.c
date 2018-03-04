@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file em_cmu.c
  * @brief Clock management unit (CMU) Peripheral API
  * @version 5.4.0
@@ -42,12 +42,12 @@
 #include "em_system.h"
 #include "em_common.h"
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emlib
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup CMU
  * @brief Clock management unit (CMU) Peripheral API
  * @details
@@ -283,7 +283,7 @@ static uint32_t CMU_USHFRCODevinfoGet(CMU_USHFRCOFreq_TypeDef freq);
 #if defined(_SILICON_LABS_32B_SERIES_0) \
   && (defined(_EFM32_GIANT_FAMILY)      \
   || defined(_EZR32_LEOPARD_FAMILY))
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Return max allowed frequency for low energy peripherals.
  ******************************************************************************/
@@ -338,7 +338,7 @@ static uint32_t maxFreqHfle(void)
 #define _GENERIC_HFLE_PRESC_SHIFT       _CMU_HFPRESC_HFCLKLEPRESC_SHIFT
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set HFLE wait-states and HFCLKLE prescaler.
  *
@@ -373,7 +373,7 @@ static void setHfLeConfig(uint32_t hfFreq)
 }
 
 #if defined(_CMU_CTRL_HFLE_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get HFLE wait-state configuration.
  *
@@ -388,7 +388,7 @@ static uint32_t getHfLeConfig(void)
 #endif
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the AUX clock frequency. Used by MSC flash programming and LESENSE,
  *   by default also as debug clock.
@@ -457,7 +457,7 @@ static uint32_t auxClkGet(void)
 
 #if defined (_CMU_ADCCTRL_ADC0CLKSEL_HFSRCCLK) \
   || defined (_CMU_ADCCTRL_ADC1CLKSEL_HFSRCCLK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the HFSRCCLK frequency.
  *
@@ -474,7 +474,7 @@ static uint32_t hfSrcClkGet(void)
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the Debug Trace clock frequency
  *
@@ -507,7 +507,7 @@ static uint32_t dbgClkGet(void)
 }
 
 #if defined(_CMU_ADCCTRL_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the ADC n asynchronous clock frequency
  *
@@ -563,7 +563,7 @@ static uint32_t adcAsyncClkGet(uint32_t adc)
 #endif
 
 #if defined(_CMU_SDIOCTRL_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the SDIO reference clock frequency
  *
@@ -605,7 +605,7 @@ static uint32_t sdioRefClkGet(void)
 #endif
 
 #if defined(_CMU_QSPICTRL_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the QSPI n reference clock frequency
  *
@@ -655,7 +655,7 @@ static uint32_t qspiRefClkGet(uint32_t qspi)
 #endif
 
 #if defined(USBR_CLOCK_PRESENT)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the USB rate clock frequency
  *
@@ -703,7 +703,7 @@ static uint32_t usbRateClkGet(void)
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Configure flash access wait states in order to support given core clock
  *   frequency.
@@ -818,7 +818,7 @@ static void flashWaitStateControl(uint32_t coreFreq, int vscale)
   MSC->READCTRL = (MSC->READCTRL & ~_MSC_READCTRL_MODE_MASK) | mode;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Configure flash access wait states to most conservative setting for
  *   this target. Retain SCBTP (Suppressed Conditional Branch Target Prefetch)
@@ -838,7 +838,7 @@ static void flashWaitStateMax(void)
 }
 
 #if defined(_MSC_RAMCTRL_RAMWSEN_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Configure RAM access wait states in order to support given core clock
  *   frequency.
@@ -869,7 +869,7 @@ static void setRamWaitState(uint32_t coreFreq, int vscale)
 #endif
 
 #if defined(_MSC_CTRL_WAITMODE_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Configure wait state for peripheral accesses over the bus to support
  *   given bus clock frequency.
@@ -894,7 +894,7 @@ static void setBusWaitState(uint32_t busFreq, int vscale)
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Configure various wait states necessary to switch to a certain frequency
  *   and a certain voltage scale.
@@ -938,7 +938,7 @@ void CMU_UpdateWaitStates(uint32_t freq, int vscale)
 }
 
 #if defined(_CMU_HFXOSTEADYSTATECTRL_REGISHUPPER_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Return upper value for CMU_HFXOSTEADYSTATECTRL_REGISH
  ******************************************************************************/
@@ -955,7 +955,7 @@ static uint32_t getRegIshUpperVal(uint32_t steadyStateRegIsh)
 #endif
 
 #if defined(_CMU_HFXOCTRL_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the HFXO tuning mode
  *
@@ -973,7 +973,7 @@ __STATIC_INLINE uint32_t getHfxoTuningMode(void)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set the HFXO tuning mode
  *
@@ -993,7 +993,7 @@ __STATIC_INLINE void setHfxoTuningMode(uint32_t mode)
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the LFnCLK frequency based on current configuration.
  *
@@ -1164,7 +1164,7 @@ static uint32_t lfClkGet(CMU_Clock_TypeDef lfClkBranch)
   return ret;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Wait for ongoing sync of register(s) to low frequency domain to complete.
  *
@@ -1187,7 +1187,7 @@ __STATIC_INLINE void syncReg(uint32_t mask)
 }
 
 #if defined(USBC_CLOCK_PRESENT)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the USBC frequency
  *
@@ -1233,7 +1233,7 @@ static uint32_t usbCClkGet(void)
  ******************************************************************************/
 
 #if defined(_CMU_AUXHFRCOCTRL_BAND_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get AUXHFRCO band in use.
  *
@@ -1249,7 +1249,7 @@ CMU_AUXHFRCOBand_TypeDef CMU_AUXHFRCOBandGet(void)
 #endif /* _CMU_AUXHFRCOCTRL_BAND_MASK */
 
 #if defined(_CMU_AUXHFRCOCTRL_BAND_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set AUXHFRCO band and the tuning value based on the value in the
  *   calibration table made during production.
@@ -1310,7 +1310,7 @@ void CMU_AUXHFRCOBandSet(CMU_AUXHFRCOBand_TypeDef band)
 #endif /* _CMU_AUXHFRCOCTRL_BAND_MASK */
 
 #if defined(_CMU_AUXHFRCOCTRL_FREQRANGE_MASK)
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Get the AUXHFRCO frequency calibration word in DEVINFO
  *
@@ -1366,7 +1366,7 @@ static uint32_t CMU_AUXHFRCODevinfoGet(CMU_AUXHFRCOFreq_TypeDef freq)
 #endif /* _CMU_AUXHFRCOCTRL_FREQRANGE_MASK */
 
 #if defined(_CMU_AUXHFRCOCTRL_FREQRANGE_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get current AUXHFRCO frequency.
  *
@@ -1380,7 +1380,7 @@ CMU_AUXHFRCOFreq_TypeDef CMU_AUXHFRCOBandGet(void)
 #endif /* _CMU_AUXHFRCOCTRL_FREQRANGE_MASK */
 
 #if defined(_CMU_AUXHFRCOCTRL_FREQRANGE_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set AUXHFRCO calibration for the selected target frequency.
  *
@@ -1426,7 +1426,7 @@ void CMU_AUXHFRCOBandSet(CMU_AUXHFRCOFreq_TypeDef setFreq)
 }
 #endif /* _CMU_AUXHFRCOCTRL_FREQRANGE_MASK */
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Calibrate clock.
  *
@@ -1505,7 +1505,7 @@ uint32_t CMU_Calibrate(uint32_t HFCycles, CMU_Osc_TypeDef reference)
 }
 
 #if defined(_CMU_CALCTRL_UPSEL_MASK) && defined(_CMU_CALCTRL_DOWNSEL_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Configure clock calibration
  *
@@ -1614,7 +1614,7 @@ void CMU_CalibrateConfig(uint32_t downCycles, CMU_Osc_TypeDef downSel,
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *    Get calibration count register
  * @note
@@ -1650,7 +1650,7 @@ uint32_t CMU_CalibrateCountGet(void)
   return CMU->CALCNT;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get clock divisor/prescaler.
  *
@@ -1771,7 +1771,7 @@ CMU_ClkDiv_TypeDef CMU_ClockDivGet(CMU_Clock_TypeDef clock)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set clock divisor/prescaler.
  *
@@ -1968,7 +1968,7 @@ void CMU_ClockDivSet(CMU_Clock_TypeDef clock, CMU_ClkDiv_TypeDef div)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable/disable a clock.
  *
@@ -2104,7 +2104,7 @@ void CMU_ClockEnable(CMU_Clock_TypeDef clock, bool enable)
   BUS_RegBitWrite(reg, bit, (uint32_t)enable);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get clock frequency for a clock point.
  *
@@ -2341,7 +2341,7 @@ uint32_t CMU_ClockFreqGet(CMU_Clock_TypeDef clock)
 }
 
 #if defined(_SILICON_LABS_32B_SERIES_1)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get clock prescaler.
  *
@@ -2527,7 +2527,7 @@ uint32_t CMU_ClockPrescGet(CMU_Clock_TypeDef clock)
 #endif
 
 #if defined(_SILICON_LABS_32B_SERIES_1)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set clock prescaler.
  *
@@ -2819,7 +2819,7 @@ void CMU_ClockPrescSet(CMU_Clock_TypeDef clock, CMU_ClkPresc_TypeDef presc)
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get currently selected reference clock used for a clock branch.
  *
@@ -3285,7 +3285,7 @@ CMU_Select_TypeDef CMU_ClockSelectGet(CMU_Clock_TypeDef clock)
   return ret;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Select reference clock/oscillator used for a clock branch.
  *
@@ -3983,7 +3983,7 @@ void CMU_ClockSelectSet(CMU_Clock_TypeDef clock, CMU_Select_TypeDef ref)
 }
 
 #if defined(CMU_OSCENCMD_DPLLEN)
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Lock the DPLL to a given frequency.
  *
@@ -4128,7 +4128,7 @@ bool CMU_DPLLLock(CMU_DPLLInit_TypeDef *init)
 }
 #endif // CMU_OSCENCMD_DPLLEN
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   CMU low frequency register synchronization freeze control.
  *
@@ -4177,7 +4177,7 @@ void CMU_FreezeEnable(bool enable)
 }
 
 #if defined(_CMU_HFRCOCTRL_BAND_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get HFRCO band in use.
  *
@@ -4192,7 +4192,7 @@ CMU_HFRCOBand_TypeDef CMU_HFRCOBandGet(void)
 #endif /* _CMU_HFRCOCTRL_BAND_MASK */
 
 #if defined(_CMU_HFRCOCTRL_BAND_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set HFRCO band and the tuning value based on the value in the calibration
  *   table made during production.
@@ -4273,7 +4273,7 @@ void CMU_HFRCOBandSet(CMU_HFRCOBand_TypeDef band)
 #endif /* _CMU_HFRCOCTRL_BAND_MASK */
 
 #if defined(_CMU_HFRCOCTRL_FREQRANGE_MASK)
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Get the HFRCO frequency calibration word in DEVINFO
  *
@@ -4338,7 +4338,7 @@ static uint32_t CMU_HFRCODevinfoGet(CMU_HFRCOFreq_TypeDef freq)
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get current HFRCO frequency.
  *
@@ -4350,7 +4350,7 @@ CMU_HFRCOFreq_TypeDef CMU_HFRCOBandGet(void)
   return (CMU_HFRCOFreq_TypeDef)SystemHfrcoFreq;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set HFRCO calibration for the selected target frequency.
  *
@@ -4443,7 +4443,7 @@ void CMU_HFRCOBandSet(CMU_HFRCOFreq_TypeDef setFreq)
 #endif /* _CMU_HFRCOCTRL_FREQRANGE_MASK */
 
 #if defined(_CMU_HFRCOCTRL_SUDELAY_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the HFRCO startup delay.
  *
@@ -4459,7 +4459,7 @@ uint32_t CMU_HFRCOStartupDelayGet(void)
          >> _CMU_HFRCOCTRL_SUDELAY_SHIFT;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set the HFRCO startup delay.
  *
@@ -4480,7 +4480,7 @@ void CMU_HFRCOStartupDelaySet(uint32_t delay)
 #endif
 
 #if defined(_CMU_USHFRCOCTRL_FREQRANGE_MASK)
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Get the USHFRCO frequency calibration word in DEVINFO
  *
@@ -4510,7 +4510,7 @@ static uint32_t CMU_USHFRCODevinfoGet(CMU_USHFRCOFreq_TypeDef freq)
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get current USHFRCO frequency.
  *
@@ -4522,7 +4522,7 @@ CMU_USHFRCOFreq_TypeDef CMU_USHFRCOBandGet(void)
   return (CMU_USHFRCOFreq_TypeDef) ushfrcoFreq;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set USHFRCO calibration for the selected target frequency.
  *
@@ -4547,7 +4547,7 @@ void CMU_USHFRCOBandSet(CMU_USHFRCOFreq_TypeDef setFreq)
 #endif /* _CMU_USHFRCOCTRL_FREQRANGE_MASK  */
 
 #if defined(_CMU_HFXOCTRL_AUTOSTARTEM0EM1_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable or disable HFXO autostart
  *
@@ -4601,7 +4601,7 @@ void CMU_HFXOAutostartEnable(uint32_t userSel,
 }
 #endif
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Set HFXO control registers
  *
@@ -4744,7 +4744,7 @@ void CMU_HFXOInit(const CMU_HFXOInit_TypeDef *hfxoInit)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the LCD framerate divisor (FDIV) setting.
  *
@@ -4760,7 +4760,7 @@ uint32_t CMU_LCDClkFDIVGet(void)
 #endif /* defined(LCD_PRESENT) */
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set the LCD framerate divisor (FDIV) setting.
  *
@@ -4791,7 +4791,7 @@ void CMU_LCDClkFDIVSet(uint32_t div)
 #endif /* defined(LCD_PRESENT) */
 }
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Set LFXO control registers
  *
@@ -4840,7 +4840,7 @@ void CMU_LFXOInit(const CMU_LFXOInit_TypeDef *lfxoInit)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable/disable oscillator.
  *
@@ -5026,7 +5026,7 @@ void CMU_OscillatorEnable(CMU_Osc_TypeDef osc, bool enable, bool wait)
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get oscillator frequency tuning setting.
  *
@@ -5088,7 +5088,7 @@ uint32_t CMU_OscillatorTuningGet(CMU_Osc_TypeDef osc)
   return ret;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set the oscillator frequency tuning control.
  *
@@ -5206,7 +5206,7 @@ void CMU_OscillatorTuningSet(CMU_Osc_TypeDef osc, uint32_t val)
 }
 
 #if defined(_CMU_HFXOCTRL_PEAKDETSHUNTOPTMODE_MASK) || defined(_CMU_HFXOCTRL_PEAKDETMODE_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Wait for oscillator tuning optimization.
  *
@@ -5267,7 +5267,7 @@ bool CMU_OscillatorTuningWait(CMU_Osc_TypeDef osc,
   return true;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Start and optionally wait for oscillator tuning optimization.
  *
@@ -5312,7 +5312,7 @@ bool CMU_OscillatorTuningOptimize(CMU_Osc_TypeDef osc,
 }
 #endif
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Determine if currently selected PCNTn clock used is external or LFBCLK.
  *
@@ -5353,7 +5353,7 @@ bool CMU_PCNTClockExternalGet(unsigned int instance)
   return setting > 0UL ? true : false;
 }
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Select PCNTn clock.
  *
@@ -5383,7 +5383,7 @@ void CMU_PCNTClockExternalSet(unsigned int instance, bool external)
 }
 
 #if defined(_CMU_USHFRCOCONF_BAND_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get USHFRCO band in use.
  *
@@ -5399,7 +5399,7 @@ CMU_USHFRCOBand_TypeDef CMU_USHFRCOBandGet(void)
 #endif
 
 #if defined(_CMU_USHFRCOCONF_BAND_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set USHFRCO band to use.
  *

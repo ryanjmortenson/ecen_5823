@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file em_system.h
  * @brief System API
  * @version 5.4.0
@@ -40,12 +40,12 @@
 extern "C" {
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emlib
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup SYSTEM
  * @brief System API
  * @details
@@ -286,7 +286,7 @@ void SYSTEM_ChipRevisionGet(SYSTEM_ChipRevision_TypeDef *rev);
 bool SYSTEM_GetCalibrationValue(volatile uint32_t *regAddress);
 
 #if defined(__FPU_PRESENT) && (__FPU_PRESENT == 1)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set floating point coprocessor (FPU) access mode.
  *
@@ -300,7 +300,7 @@ __STATIC_INLINE void SYSTEM_FpuAccessModeSet(SYSTEM_FpuAccess_TypeDef accessMode
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the unique number for this device.
  *
@@ -313,7 +313,7 @@ __STATIC_INLINE uint64_t SYSTEM_GetUnique(void)
   return (uint64_t)((uint64_t)DEVINFO->UNIQUEH << 32) | tmp;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the production revision for this part.
  *
@@ -326,7 +326,7 @@ __STATIC_INLINE uint8_t SYSTEM_GetProdRev(void)
                    >> _DEVINFO_PART_PROD_REV_SHIFT);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the SRAM size (in KB).
  *
@@ -360,7 +360,7 @@ __STATIC_INLINE uint16_t SYSTEM_GetSRAMSize(void)
   return sizekb;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the flash size (in KB).
  *
@@ -385,7 +385,7 @@ __STATIC_INLINE uint16_t SYSTEM_GetFlashSize(void)
                     >> _DEVINFO_MSIZE_FLASH_SHIFT);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the flash page size in bytes.
  *
@@ -422,7 +422,7 @@ __STATIC_INLINE uint32_t SYSTEM_GetFlashPageSize(void)
 }
 
 #if defined(_DEVINFO_DEVINFOREV_DEVINFOREV_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get DEVINFO revision.
  *
@@ -436,7 +436,7 @@ __STATIC_INLINE uint8_t SYSTEM_GetDevinfoRev(void)
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get part number of the MCU.
  *
@@ -449,7 +449,7 @@ __STATIC_INLINE uint16_t SYSTEM_GetPartNumber(void)
                     >> _DEVINFO_PART_DEVICE_NUMBER_SHIFT);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get family identifier of the MCU.
  *
@@ -470,7 +470,7 @@ __STATIC_INLINE SYSTEM_PartFamily_TypeDef SYSTEM_GetFamily(void)
                                        >> _DEVINFO_PART_DEVICE_FAMILY_SHIFT));
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the calibration temperature (in degrees Celsius).
  *

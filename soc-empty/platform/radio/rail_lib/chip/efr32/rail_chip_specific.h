@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file rail_chip_specific.h
  * @brief This file contains the type definitions for EFR32 chip specific
  *        aspects of RAIL.

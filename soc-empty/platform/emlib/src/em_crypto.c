@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file em_crypto.c
  * @brief Cryptography accelerator peripheral API
  * @version 5.4.0
@@ -36,12 +36,12 @@
 #include "em_crypto.h"
 #include "em_assert.h"
 #include <stddef.h>
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emlib
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup CRYPTO
  * @{
  ******************************************************************************/
@@ -132,7 +132,7 @@ static void CRYPTO_AES_OFBx(CRYPTO_TypeDef *crypto,
                             CRYPTO_KeyWidth_TypeDef keyWidth);
 
 #ifdef USE_VARIABLE_SIZED_DATA_LOADS
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Write variable sized 32 bit data array (max 128 bits) to a DATAX register
  *
@@ -172,7 +172,7 @@ void CRYPTO_DataWriteVariableSize(CRYPTO_DataReg_TypeDef    dataReg,
  **************************   GLOBAL FUNCTIONS   *******************************
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set the modulus used for wide modular operations.
  *
@@ -224,7 +224,7 @@ void CRYPTO_ModulusSet(CRYPTO_TypeDef *          crypto,
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Read the key value currently used by the CRYPTO module.
  *
@@ -252,7 +252,7 @@ void CRYPTO_KeyRead(CRYPTO_TypeDef *         crypto,
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Perform a SHA-1 hash operation on a message.
  *
@@ -386,7 +386,7 @@ void CRYPTO_SHA_1(CRYPTO_TypeDef *             crypto,
   crypto->DDATA0BIG;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Perform a SHA-256 hash operation on a message.
  *
@@ -515,7 +515,7 @@ void CRYPTO_SHA_256(CRYPTO_TypeDef *             crypto,
   CRYPTO_DDataRead(&crypto->DDATA0BIG, (uint32_t *)msgDigest);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set 32bit word array to zero.
  *
@@ -531,7 +531,7 @@ __STATIC_INLINE void cryptoBigintZeroize(uint32_t * words32bits,
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Increment value of 32bit word array by one.
  *
@@ -550,7 +550,7 @@ __STATIC_INLINE void cryptoBigintIncrement(uint32_t * words32bits,
   return;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Multiply two big integers.
  *
@@ -745,7 +745,7 @@ void CRYPTO_Mul(CRYPTO_TypeDef * crypto,
   } /* for (i=0; i<numPartialOperandsA; i++) */
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Cipher-block chaining (CBC) cipher mode encryption/decryption, 128 bit key.
  *
@@ -822,7 +822,7 @@ void CRYPTO_AES_CBC128(CRYPTO_TypeDef *  crypto,
   CRYPTO_AES_CBCx(crypto, out, in, len, key, iv, encrypt, cryptoKey128Bits);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Cipher-block chaining (CBC) cipher mode encryption/decryption, 256 bit
  *   key.
@@ -868,7 +868,7 @@ void CRYPTO_AES_CBC256(CRYPTO_TypeDef *  crypto,
   CRYPTO_AES_CBCx(crypto, out, in, len, key, iv, encrypt, cryptoKey256Bits);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Cipher feedback (CFB) cipher mode encryption/decryption, 128 bit key.
  *
@@ -941,7 +941,7 @@ void CRYPTO_AES_CFB128(CRYPTO_TypeDef *  crypto,
   CRYPTO_AES_CFBx(crypto, out, in, len, key, iv, encrypt, cryptoKey128Bits);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Cipher feedback (CFB) cipher mode encryption/decryption, 256 bit key.
  *
@@ -984,7 +984,7 @@ void CRYPTO_AES_CFB256(CRYPTO_TypeDef *  crypto,
   CRYPTO_AES_CFBx(crypto, out, in, len, key, iv, encrypt, cryptoKey256Bits);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Counter (CTR) cipher mode encryption/decryption, 128 bit key.
  *
@@ -1060,7 +1060,7 @@ void CRYPTO_AES_CTR128(CRYPTO_TypeDef *  crypto,
   CRYPTO_AES_CTRx(crypto, out, in, len, key, ctr, ctrFunc, cryptoKey128Bits);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Counter (CTR) cipher mode encryption/decryption, 256 bit key.
  *
@@ -1106,7 +1106,7 @@ void CRYPTO_AES_CTR256(CRYPTO_TypeDef *  crypto,
   CRYPTO_AES_CTRx(crypto, out, in, len, key, ctr, ctrFunc, cryptoKey256Bits);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Update last 32 bits of 128 bit counter, by incrementing with 1.
  *
@@ -1127,7 +1127,7 @@ void CRYPTO_AES_CTRUpdate32Bit(uint8_t * ctr)
   _ctr[3] = __REV(__REV(_ctr[3]) + 1U);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Generate 128 bit AES decryption key from 128 bit encryption key. The
  *   decryption key is used for some cipher modes when decrypting.
@@ -1165,7 +1165,7 @@ void CRYPTO_AES_DecryptKey128(CRYPTO_TypeDef *  crypto,
   CRYPTO_BurstFromCrypto(&crypto->KEY, &_out[0]);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Generate 256 bit AES decryption key from 256 bit encryption key. The
  *   decryption key is used for some cipher modes when decrypting.
@@ -1205,7 +1205,7 @@ void CRYPTO_AES_DecryptKey256(CRYPTO_TypeDef *  crypto,
   CRYPTO_BurstFromCrypto(&crypto->KEY, &_out[4]);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Electronic Codebook (ECB) cipher mode encryption/decryption,
  *   128 bit key.
@@ -1271,7 +1271,7 @@ void CRYPTO_AES_ECB128(CRYPTO_TypeDef *  crypto,
   CRYPTO_AES_ECBx(crypto, out, in, len, key, encrypt, cryptoKey128Bits);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Electronic Codebook (ECB) cipher mode encryption/decryption,
  *   256 bit key.
@@ -1313,7 +1313,7 @@ void CRYPTO_AES_ECB256(CRYPTO_TypeDef *  crypto,
   CRYPTO_AES_ECBx(crypto, out, in, len, key, encrypt, cryptoKey256Bits);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Output feedback (OFB) cipher mode encryption/decryption, 128 bit key.
  *
@@ -1384,7 +1384,7 @@ void CRYPTO_AES_OFB128(CRYPTO_TypeDef *  crypto,
   CRYPTO_AES_OFBx(crypto, out, in, len, key, iv, cryptoKey128Bits);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   AES Output feedback (OFB) cipher mode encryption/decryption, 256 bit key.
  *
@@ -1427,7 +1427,7 @@ void CRYPTO_AES_OFB256(CRYPTO_TypeDef *  crypto,
  **************************   LOCAL FUNCTIONS   *******************************
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Cipher-block chaining (CBC) cipher mode encryption/decryption, 128/256 bit key.
  *
@@ -1508,7 +1508,7 @@ static void CRYPTO_AES_CBCx(CRYPTO_TypeDef *  crypto,
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Cipher feedback (CFB) cipher mode encryption/decryption, 128/256 bit key.
  *
@@ -1588,7 +1588,7 @@ static void CRYPTO_AES_CFBx(CRYPTO_TypeDef *  crypto,
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Counter (CTR) cipher mode encryption/decryption, 128/256 bit key.
  *
@@ -1660,7 +1660,7 @@ static void CRYPTO_AES_CTRx(CRYPTO_TypeDef *  crypto,
   CRYPTO_DataRead(&crypto->DATA1, (uint32_t *) ctr);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Electronic Codebook (ECB) cipher mode encryption/decryption, 128/256 bit key.
  *
@@ -1720,7 +1720,7 @@ static void CRYPTO_AES_ECBx(CRYPTO_TypeDef *  crypto,
                          &crypto->DATA1, (uint32_t *) out);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Output feedback (OFB) cipher mode encryption/decryption, 128/256 bit key.
  *
@@ -1779,7 +1779,7 @@ static void CRYPTO_AES_OFBx(CRYPTO_TypeDef *  crypto,
                          &crypto->DATA1, (uint32_t *) out);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Function performs generic AES loop.
  *

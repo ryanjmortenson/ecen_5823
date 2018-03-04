@@ -8,10 +8,13 @@
 #include "infrastructure.h"
 #include "gatt_db.h"
 #include "native_gecko.h"
+#include "em_adc.h"
 
 #include "src/main.h"
 #include "src/i2c.h"
 #include "src/gpio.h"
+#include "src/soil_moisture.h"
+
 
 void handle_events (uint8_t * events)
 {
@@ -26,6 +29,9 @@ void handle_events (uint8_t * events)
   {
     // Initialize I2C
     I2C_Tempsens_Init ();
+
+    // Initialize soil moisture sensor
+    soil_moisture_init ();
   }
 
   if (*events & CREATE_EVENT (READ_TEMPERATURE))

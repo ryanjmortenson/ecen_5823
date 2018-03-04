@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file em_emu.h
  * @brief Energy management unit (EMU) peripheral API
  * @version 5.4.0
@@ -43,12 +43,12 @@
 extern "C" {
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emlib
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup EMU
  * @{
  ******************************************************************************/
@@ -756,7 +756,7 @@ void EMU_VmonEnable(EMU_VmonChannel_TypeDef channel, bool enable);
 bool EMU_VmonChannelStatusGet(EMU_VmonChannel_TypeDef channel);
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enter energy mode 1 (EM1).
  ******************************************************************************/
@@ -768,7 +768,7 @@ __STATIC_INLINE void EMU_EnterEM1(void)
 }
 
 #if defined(_EMU_STATUS_VSCALE_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Wait for voltage scaling to complete
  ******************************************************************************/
@@ -780,7 +780,7 @@ __STATIC_INLINE void EMU_VScaleWait(void)
 #endif
 
 #if defined(_EMU_STATUS_VSCALE_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get current voltage scaling level
  *
@@ -797,7 +797,7 @@ __STATIC_INLINE EMU_VScaleEM01_TypeDef EMU_VScaleGet(void)
 #endif
 
 #if defined(_EMU_STATUS_VMONRDY_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the status of the voltage monitor (VMON).
  *
@@ -812,7 +812,7 @@ __STATIC_INLINE bool EMU_VmonStatusGet(void)
 #endif /* _EMU_STATUS_VMONRDY_MASK */
 
 #if defined(_EMU_IF_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Clear one or more pending EMU interrupts.
  *
@@ -825,7 +825,7 @@ __STATIC_INLINE void EMU_IntClear(uint32_t flags)
   EMU->IFC = flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Disable one or more EMU interrupts.
  *
@@ -838,7 +838,7 @@ __STATIC_INLINE void EMU_IntDisable(uint32_t flags)
   EMU->IEN &= ~flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable one or more EMU interrupts.
  *
@@ -856,7 +856,7 @@ __STATIC_INLINE void EMU_IntEnable(uint32_t flags)
   EMU->IEN |= flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get pending EMU interrupt flags.
  *
@@ -872,7 +872,7 @@ __STATIC_INLINE uint32_t EMU_IntGet(void)
   return EMU->IF;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get enabled and pending EMU interrupt flags.
  *   Useful for handling more interrupt sources in the same interrupt handler.
@@ -894,7 +894,7 @@ __STATIC_INLINE uint32_t EMU_IntGetEnabled(void)
   return EMU->IF & ien;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set one or more pending EMU interrupts
  *
@@ -909,7 +909,7 @@ __STATIC_INLINE void EMU_IntSet(uint32_t flags)
 #endif /* _EMU_IF_MASK */
 
 #if defined(_EMU_EM4CONF_LOCKCONF_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable or disable EM4 lock configuration
  * @param[in] enable
@@ -922,7 +922,7 @@ __STATIC_INLINE void EMU_EM4Lock(bool enable)
 #endif
 
 #if defined(_EMU_STATUS_BURDY_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Halts until backup power functionality is ready
  ******************************************************************************/
@@ -934,7 +934,7 @@ __STATIC_INLINE void EMU_BUReady(void)
 #endif
 
 #if defined(_EMU_ROUTE_BUVINPEN_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Disable BU_VIN support
  * @param[in] enable
@@ -946,7 +946,7 @@ __STATIC_INLINE void EMU_BUPinEnable(bool enable)
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Lock the EMU in order to protect its registers against unintended
  *   modification.
@@ -963,7 +963,7 @@ __STATIC_INLINE void EMU_Lock(void)
   EMU->LOCK = EMU_LOCK_LOCKKEY_LOCK;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Unlock the EMU so that writing to locked registers again is possible.
  ******************************************************************************/
@@ -973,7 +973,7 @@ __STATIC_INLINE void EMU_Unlock(void)
 }
 
 #if defined(_EMU_PWRLOCK_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Lock the EMU regulator control registers in order to protect against
  *   unintended modification.
@@ -983,7 +983,7 @@ __STATIC_INLINE void EMU_PowerLock(void)
   EMU->PWRLOCK = EMU_PWRLOCK_LOCKKEY_LOCK;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Unlock the EMU power control registers so that writing to
  *   locked registers again is possible.
@@ -994,7 +994,7 @@ __STATIC_INLINE void EMU_PowerUnlock(void)
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Block entering EM2 or higher number energy modes.
  ******************************************************************************/
@@ -1003,7 +1003,7 @@ __STATIC_INLINE void EMU_EM2Block(void)
   BUS_RegBitWrite(&(EMU->CTRL), _EMU_CTRL_EM2BLOCK_SHIFT, 1U);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Unblock entering EM2 or higher number energy modes.
  ******************************************************************************/
@@ -1013,7 +1013,7 @@ __STATIC_INLINE void EMU_EM2UnBlock(void)
 }
 
 #if defined(_EMU_EM4CTRL_EM4IORETMODE_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   When EM4 pin retention is set to emuPinRetentionLatch, then pins are retained
  *   through EM4 entry and wakeup. The pin state is released by calling this function.

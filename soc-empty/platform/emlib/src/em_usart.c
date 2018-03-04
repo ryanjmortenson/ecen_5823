@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file em_usart.c
  * @brief Universal synchronous/asynchronous receiver/transmitter (USART/UART)
  *   Peripheral API
@@ -38,12 +38,12 @@
 #include "em_bus.h"
 #include "em_assert.h"
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emlib
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup USART
  * @{
  ******************************************************************************/
@@ -164,7 +164,7 @@
  **************************   GLOBAL FUNCTIONS   *******************************
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Configure USART/UART operating in asynchronous mode to use a given
  *   baudrate (or as close as possible to specified baudrate).
@@ -286,7 +286,7 @@ void USART_BaudrateAsyncSet(USART_TypeDef *usart,
   usart->CLKDIV = clkdiv;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Calculate baudrate for USART/UART given reference frequency, clock division
  *   and oversampling rate (if async mode).
@@ -431,7 +431,7 @@ uint32_t USART_BaudrateCalc(uint32_t refFreq,
   return br;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get current baudrate for USART/UART.
  *
@@ -463,7 +463,7 @@ uint32_t USART_BaudrateGet(USART_TypeDef *usart)
   return USART_BaudrateCalc(freq, usart->CLKDIV, syncmode, ovs);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Configure USART operating in synchronous mode to use a given baudrate
  *   (or as close as possible to specified baudrate).
@@ -517,7 +517,7 @@ void USART_BaudrateSyncSet(USART_TypeDef *usart, uint32_t refFreq, uint32_t baud
   usart->CLKDIV = clkdiv;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable/disable USART/UART receiver and/or transmitter.
  *
@@ -550,7 +550,7 @@ void USART_Enable(USART_TypeDef *usart, USART_Enable_TypeDef enable)
   usart->CMD = (uint32_t) (enable);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Init USART/UART for normal asynchronous mode.
  *
@@ -622,7 +622,7 @@ void USART_InitAsync(USART_TypeDef *usart, const USART_InitAsync_TypeDef *init)
   usart->CMD = (uint32_t)init->enable;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Init USART for synchronous mode.
  *
@@ -696,7 +696,7 @@ void USART_InitSync(USART_TypeDef *usart, const USART_InitSync_TypeDef *init)
   usart->CMD = (uint32_t)init->enable;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Init USART for asynchronous IrDA mode.
  *
@@ -750,7 +750,7 @@ void USARTn_InitIrDA(USART_TypeDef *usart, const USART_InitIrDA_TypeDef *init)
 }
 
 #if defined(_USART_I2SCTRL_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Init USART for I2S mode.
  *
@@ -807,7 +807,7 @@ void USART_InitI2s(USART_TypeDef *usart, USART_InitI2s_TypeDef *init)
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Initialize automatic transmissions using PRS channel as trigger
  * @note
@@ -845,7 +845,7 @@ void USART_InitPrsTrigger(USART_TypeDef *usart, const USART_PrsTriggerInit_TypeD
   usart->TRIGCTRL = trigctrl;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Reset USART/UART to same state as after a HW reset.
  *
@@ -892,7 +892,7 @@ void USART_Reset(USART_TypeDef *usart)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Receive one 4-8 bit frame, (or part of 10-16 bit frame).
  *
@@ -924,7 +924,7 @@ uint8_t USART_Rx(USART_TypeDef *usart)
   return (uint8_t)usart->RXDATA;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Receive two 4-8 bit frames, or one 10-16 bit frame.
  *
@@ -956,7 +956,7 @@ uint16_t USART_RxDouble(USART_TypeDef *usart)
   return (uint16_t)usart->RXDOUBLE;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Receive two 4-9 bit frames, or one 10-16 bit frame with extended
  *   information.
@@ -988,7 +988,7 @@ uint32_t USART_RxDoubleExt(USART_TypeDef *usart)
   return usart->RXDOUBLEX;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Receive one 4-9 bit frame, (or part of 10-16 bit frame) with extended
  *   information.
@@ -1020,7 +1020,7 @@ uint16_t USART_RxExt(USART_TypeDef *usart)
   return (uint16_t)usart->RXDATAX;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Perform one 8 bit frame SPI transfer.
  *
@@ -1049,7 +1049,7 @@ uint8_t USART_SpiTransfer(USART_TypeDef *usart, uint8_t data)
   return (uint8_t)usart->RXDATA;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Transmit one 4-9 bit frame.
  *
@@ -1080,7 +1080,7 @@ void USART_Tx(USART_TypeDef *usart, uint8_t data)
   usart->TXDATA = (uint32_t)data;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Transmit two 4-9 bit frames, or one 10-16 bit frame.
  *
@@ -1115,7 +1115,7 @@ void USART_TxDouble(USART_TypeDef *usart, uint16_t data)
   usart->TXDOUBLE = (uint32_t)data;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Transmit two 4-9 bit frames, or one 10-16 bit frame with extended control.
  *
@@ -1150,7 +1150,7 @@ void USART_TxDoubleExt(USART_TypeDef *usart, uint32_t data)
   usart->TXDOUBLEX = data;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Transmit one 4-9 bit frame with extended control.
  *

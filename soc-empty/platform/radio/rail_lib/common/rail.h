@@ -1,4 +1,4 @@
-/**************************************************************************//**
+/**************************************************************************
  * @file rail.h
  * @brief The main header file for the RAIL library. It describes the external
  *        APIs available to a RAIL user

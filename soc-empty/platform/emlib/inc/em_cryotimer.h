@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file em_cryotimer.h
  * @brief Ultra Low Energy Timer/Counter (CRYOTIMER) peripheral API
  * @version 5.4.0
@@ -43,12 +43,12 @@
 extern "C" {
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emlib
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup CRYOTIMER
  * @brief Ultra Low Energy Timer/Counter (CRYOTIMER) Peripheral API
  *
@@ -215,7 +215,7 @@ typedef struct {
  *****************************   PROTOTYPES   **********************************
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Clear the CRYOTIMER period interrupt.
  *
@@ -227,7 +227,7 @@ __STATIC_INLINE void CRYOTIMER_IntClear(uint32_t flags)
   CRYOTIMER->IFC = flags & _CRYOTIMER_IFC_MASK;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the CRYOTIMER interrupt flag.
  *
@@ -243,7 +243,7 @@ __STATIC_INLINE uint32_t CRYOTIMER_IntGet(void)
   return CRYOTIMER->IF;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get enabled and pending CRYOTIMER interrupt flags.
  *   Useful for handling more interrupt sources in the same interrupt handler.
@@ -265,7 +265,7 @@ __STATIC_INLINE uint32_t CRYOTIMER_IntGetEnabled(void)
   return CRYOTIMER->IF & ien;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable one or more CRYOTIMER interrupts.
  *
@@ -277,7 +277,7 @@ __STATIC_INLINE void CRYOTIMER_IntEnable(uint32_t flags)
   CRYOTIMER->IEN |= (flags & _CRYOTIMER_IEN_MASK);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Disable one or more CRYOTIMER interrupts.
  *
@@ -289,7 +289,7 @@ __STATIC_INLINE void CRYOTIMER_IntDisable(uint32_t flags)
   CRYOTIMER->IEN &= ~(flags & _CRYOTIMER_IEN_MASK);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set the CRYOTIMER period interrupt flag.
  *
@@ -305,7 +305,7 @@ __STATIC_INLINE void CRYOTIMER_IntSet(uint32_t flags)
   CRYOTIMER->IFS = flags & _CRYOTIMER_IFS_MASK;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set the CRYOTIMER period select
  *
@@ -323,7 +323,7 @@ __STATIC_INLINE void CRYOTIMER_PeriodSet(uint32_t period)
   CRYOTIMER->PERIODSEL = period & _CRYOTIMER_PERIODSEL_MASK;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the CRYOTIMER period select value
  *
@@ -341,7 +341,7 @@ __STATIC_INLINE uint32_t CRYOTIMER_PeriodGet(void)
   return CRYOTIMER->PERIODSEL;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the CRYOTIMER counter value
  *
@@ -353,7 +353,7 @@ __STATIC_INLINE uint32_t CRYOTIMER_CounterGet(void)
   return CRYOTIMER->CNT;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable/disable EM4 wakeup capability.
  *
@@ -367,7 +367,7 @@ __STATIC_INLINE void CRYOTIMER_EM4WakeupEnable(bool enable)
                   (uint32_t)enable);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable/disable the CRYOTIMER.
  *

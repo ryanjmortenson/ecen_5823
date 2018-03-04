@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file rail_assert_error_codes.h
  * @brief Definition of error codes that occur in rail for use in
  *   RAILCb_AssertFailed. This file is purely informational and optional -

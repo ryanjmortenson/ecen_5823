@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file em_usart.h
  * @brief Universal synchronous/asynchronous receiver/transmitter (USART/UART)
  *   peripheral API
@@ -43,12 +43,12 @@
 extern "C" {
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emlib
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup USART
  * @brief Universal Synchronous/Asynchronous Receiver/Transmitter
  *   Peripheral API
@@ -806,7 +806,7 @@ void USART_InitI2s(USART_TypeDef *usart, USART_InitI2s_TypeDef *init);
 void USART_InitPrsTrigger(USART_TypeDef *usart, const USART_PrsTriggerInit_TypeDef *init);
 
 #if defined(DEFAULT_IRDA_USART) || defined(USART0) || ((USART_COUNT == 1) && defined(USART1))
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Init DEFAULT_IRDA_USART for asynchronous IrDA mode.
  *
@@ -846,7 +846,7 @@ __STATIC_INLINE void USART_InitIrDA(const USART_InitIrDA_TypeDef *init)
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Clear one or more pending USART interrupts.
  *
@@ -862,7 +862,7 @@ __STATIC_INLINE void USART_IntClear(USART_TypeDef *usart, uint32_t flags)
   usart->IFC = flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Disable one or more USART interrupts.
  *
@@ -878,7 +878,7 @@ __STATIC_INLINE void USART_IntDisable(USART_TypeDef *usart, uint32_t flags)
   usart->IEN &= ~flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable one or more USART interrupts.
  *
@@ -899,7 +899,7 @@ __STATIC_INLINE void USART_IntEnable(USART_TypeDef *usart, uint32_t flags)
   usart->IEN |= flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get pending USART interrupt flags.
  *
@@ -918,7 +918,7 @@ __STATIC_INLINE uint32_t USART_IntGet(USART_TypeDef *usart)
   return usart->IF;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get enabled and pending USART interrupt flags.
  *   Useful for handling more interrupt sources in the same interrupt handler.
@@ -949,7 +949,7 @@ __STATIC_INLINE uint32_t USART_IntGetEnabled(USART_TypeDef *usart)
   return usart->IF & ien;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set one or more pending USART interrupts from SW.
  *
@@ -965,7 +965,7 @@ __STATIC_INLINE void USART_IntSet(USART_TypeDef *usart, uint32_t flags)
   usart->IFS = flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get USART STATUS register.
  *
@@ -987,7 +987,7 @@ uint16_t USART_RxDouble(USART_TypeDef *usart);
 uint32_t USART_RxDoubleExt(USART_TypeDef *usart);
 uint16_t USART_RxExt(USART_TypeDef *usart);
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Receive one 4-8 bit frame, (or part of 10-16 bit frame).
  *
@@ -1020,7 +1020,7 @@ __STATIC_INLINE uint8_t USART_RxDataGet(USART_TypeDef *usart)
   return (uint8_t)usart->RXDATA;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Receive two 4-8 bit frames, or one 10-16 bit frame.
  *
@@ -1057,7 +1057,7 @@ __STATIC_INLINE uint16_t USART_RxDoubleGet(USART_TypeDef *usart)
   return (uint16_t)usart->RXDOUBLE;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Receive two 4-9 bit frames, or one 10-16 bit frame with extended
  *   information.
@@ -1092,7 +1092,7 @@ __STATIC_INLINE uint32_t USART_RxDoubleXGet(USART_TypeDef *usart)
   return usart->RXDOUBLEX;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Receive one 4-9 bit frame, (or part of 10-16 bit frame) with extended
  *   information.

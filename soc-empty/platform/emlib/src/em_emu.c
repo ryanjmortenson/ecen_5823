@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file em_emu.c
  * @brief Energy Management Unit (EMU) Peripheral API
  * @version 5.4.0
@@ -40,12 +40,12 @@
 #include "em_common.h"
 #include "em_system.h"
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emlib
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup EMU
  * @brief Energy Management Unit (EMU) Peripheral API
  * @details
@@ -254,7 +254,7 @@ static void __attribute__ ((noinline)) ramWFI(void)
 SL_RAMFUNC_DEFINITION_END
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Save/restore/update oscillator, core clock and voltage scaling configuration on
  *   EM2 or EM3 entry/exit.
@@ -464,7 +464,7 @@ static void vScaleDownEM23Setup(void)
  **************************   GLOBAL FUNCTIONS   *******************************
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enter energy mode 2 (EM2).
  *
@@ -590,7 +590,7 @@ void EMU_EnterEM2(bool restore)
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enter energy mode 3 (EM3).
  *
@@ -726,7 +726,7 @@ void EMU_EnterEM3(bool restore)
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Save CMU HF clock select state, oscillator enable and voltage scaling
  *   (if available) before @ref EMU_EnterEM2() or @ref EMU_EnterEM3() are called
@@ -741,7 +741,7 @@ void EMU_Save(void)
   emState(emState_Save);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Restore CMU HF clock select state, oscillator enable and voltage scaling
  *   (if available) after @ref EMU_EnterEM2() or @ref EMU_EnterEM3() are called
@@ -755,7 +755,7 @@ void EMU_Restore(void)
   emState(emState_Restore);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enter energy mode 4 (EM4).
  *
@@ -854,7 +854,7 @@ void EMU_EnterEM4(void)
 }
 
 #if defined(_EMU_EM4CTRL_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enter energy mode 4 hibernate (EM4H).
  *
@@ -868,7 +868,7 @@ void EMU_EnterEM4H(void)
   EMU_EnterEM4();
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enter energy mode 4 shutoff (EM4S).
  *
@@ -883,7 +883,7 @@ void EMU_EnterEM4S(void)
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Power down memory block.
  *
@@ -911,7 +911,7 @@ void EMU_MemPwrDown(uint32_t blocks)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Power down RAM memory blocks.
  *
@@ -1008,7 +1008,7 @@ void EMU_RamPowerDown(uint32_t start, uint32_t end)
 }
 
 #if defined(_EMU_EM23PERNORETAINCTRL_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set EM2 3 peripheral retention control.
  *
@@ -1031,7 +1031,7 @@ void EMU_PeripheralRetention(EMU_PeripheralRetention_TypeDef periMask, bool enab
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Update EMU module with CMU oscillator selection/enable status.
  *
@@ -1044,7 +1044,7 @@ void EMU_UpdateOscConfig(void)
 }
 
 #if defined(_EMU_CMD_EM01VSCALE0_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Voltage scale in EM0 and 1 by clock frequency.
  *
@@ -1082,7 +1082,7 @@ void EMU_VScaleEM01ByClock(uint32_t clockFrequency, bool wait)
 #endif
 
 #if defined(_EMU_CMD_EM01VSCALE0_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Force voltage scaling in EM0 and 1 to a specific voltage level.
  *
@@ -1135,7 +1135,7 @@ void EMU_VScaleEM01(EMU_VScaleEM01_TypeDef voltage, bool wait)
 #endif
 
 #if defined(_EMU_CMD_EM01VSCALE0_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Update EMU module with Energy Mode 0 and 1 configuration
  *
@@ -1150,7 +1150,7 @@ void EMU_EM01Init(const EMU_EM01Init_TypeDef *em01Init)
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Update EMU module with Energy Mode 2 and 3 configuration
  *
@@ -1176,7 +1176,7 @@ void EMU_EM23Init(const EMU_EM23Init_TypeDef *em23Init)
 }
 
 #if defined(_EMU_EM4CONF_MASK) || defined(_EMU_EM4CTRL_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Update EMU module with Energy Mode 4 configuration
  *
@@ -1235,7 +1235,7 @@ void EMU_EM4Init(const EMU_EM4Init_TypeDef *em4Init)
 #endif
 
 #if defined(BU_PRESENT) && defined(_SILICON_LABS_32B_SERIES_0)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Configure Backup Power Domain settings
  *
@@ -1292,7 +1292,7 @@ void EMU_BUPDInit(const EMU_BUPDInit_TypeDef *bupdInit)
   BUS_RegBitWrite(&(RMU->CTRL), _RMU_CTRL_BURSTEN_SHIFT, !bupdInit->enable);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Configure Backup Power Domain BOD Threshold value
  * @note
@@ -1317,7 +1317,7 @@ void EMU_BUThresholdSet(EMU_BODMode_TypeDef mode, uint32_t value)
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *  Configure Backup Power Domain BOD Threshold Range
  * @note
@@ -1370,7 +1370,7 @@ typedef enum {
   dcdcTrimMode_LN,
 } dcdcTrimMode_TypeDef;
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Load DCDC calibration constants from DI page. Const means calibration
  *   data that does not change depending on other configuration parameters.
@@ -1428,7 +1428,7 @@ static bool dcdcConstCalibrationLoad(void)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set recommended and validated current optimization and timing settings
  *
@@ -1491,7 +1491,7 @@ static void dcdcValidatedConfigSet(void)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Compute current limiters:
  *     LNCLIMILIMSEL: LN current limiter threshold
@@ -1567,7 +1567,7 @@ static void currentLimitersUpdate(void)
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set static variables that hold the user set maximum peak current
  *   and reverse current. Update limiters.
@@ -1585,7 +1585,7 @@ static void userCurrentLimitsSet(uint32_t maxCurrent_mA,
   dcdcReverseCurrentControl = reverseCurrentControl;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set DCDC low noise compensator control register
  *
@@ -1609,7 +1609,7 @@ static void compCtrlSet(EMU_DcdcLnCompCtrl_TypeDef comp)
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Load EMU_DCDCLPCTRL_LPCMPHYSSEL depending on LP bias, LP feedback
  *   attenuation and DEVINFOREV.
@@ -1706,7 +1706,7 @@ static bool lpCmpHystCalibrationLoad(bool lpAttenuation,
   return true;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Load LPVREF low and high from DEVINFO.
  *
@@ -1805,7 +1805,7 @@ static void lpGetDevinfoVrefLowHigh(uint32_t *vrefL,
 
 /** @endcond */
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set DCDC regulator operating mode
  *
@@ -1874,7 +1874,7 @@ void EMU_DCDCModeSet(EMU_DcdcMode_TypeDef dcdcMode)
                   dcdcMode == emuDcdcMode_Bypass ? 0U : 1U);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set DCDC LN regulator conduction mode
  *
@@ -1923,7 +1923,7 @@ void EMU_DCDCConductionModeSet(EMU_DcdcConductionMode_TypeDef conductionMode,
   EMU_DCDCOptimizeSlice(dcdcEm01LoadCurrent_mA);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Configure DCDC regulator
  *
@@ -2072,7 +2072,7 @@ bool EMU_DCDCInit(const EMU_DCDCInit_TypeDef *dcdcInit)
   return true;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set DCDC output voltage
  *
@@ -2225,7 +2225,7 @@ bool EMU_DCDCOutputVoltageSet(uint32_t mV,
   return true;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Optimize DCDC slice count based on the estimated average load current
  *   in EM0
@@ -2285,7 +2285,7 @@ void EMU_DCDCOptimizeSlice(uint32_t em0LoadCurrentmA)
   currentLimitersUpdate();
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set DCDC Low-noise RCO band.
  *
@@ -2308,7 +2308,7 @@ void EMU_DCDCLnRcoBandSet(EMU_DcdcLnRcoBand_TypeDef band)
   EMU_DCDCOptimizeSlice(dcdcEm01LoadCurrent_mA);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Power off the DCDC regulator.
  *
@@ -2353,7 +2353,7 @@ bool EMU_DCDCPowerOff(void)
 #if defined(EMU_STATUS_VMONRDY)
 /** @cond DO_NOT_INCLUDE_WITH_DOXYGEN */
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get calibrated threshold value.
  *
@@ -2480,7 +2480,7 @@ static uint32_t vmonCalibratedThreshold(EMU_VmonChannel_TypeDef channel,
 
 /** @endcond */
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Initialize VMON channel.
  *
@@ -2567,7 +2567,7 @@ void EMU_VmonInit(const EMU_VmonInit_TypeDef *vmonInit)
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Initialize VMON channel with hysteresis (separate rise and fall triggers).
  *
@@ -2610,7 +2610,7 @@ void EMU_VmonHystInit(const EMU_VmonHystInit_TypeDef *vmonInit)
   }
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable or disable a VMON channel
  *
@@ -2662,7 +2662,7 @@ void EMU_VmonEnable(EMU_VmonChannel_TypeDef channel, bool enable)
   BUS_RegBitWrite(reg, bit, (uint32_t)enable);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get the status of a voltage monitor channel.
  *
@@ -2709,7 +2709,7 @@ bool EMU_VmonChannelStatusGet(EMU_VmonChannel_TypeDef channel)
 #endif /* EMU_STATUS_VMONRDY */
 
 #if defined(_SILICON_LABS_GECKO_INTERNAL_SDID_80)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Adjust the bias refresh rate
  *

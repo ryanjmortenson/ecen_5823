@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file em_gpio.h
  * @brief General Purpose IO (GPIO) peripheral API
  * @version 5.4.0
@@ -44,12 +44,12 @@
 extern "C" {
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emlib
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup GPIO
  * @{
  ******************************************************************************/
@@ -552,7 +552,7 @@ typedef enum {
 
 void GPIO_DbgLocationSet(unsigned int location);
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable/disable serial wire clock pin.
  *
@@ -575,7 +575,7 @@ __STATIC_INLINE void GPIO_DbgSWDClkEnable(bool enable)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable/disable serial wire data I/O pin.
  *
@@ -599,7 +599,7 @@ __STATIC_INLINE void GPIO_DbgSWDIOEnable(bool enable)
 }
 
 #if defined(_GPIO_ROUTE_SWOPEN_MASK) || defined(_GPIO_ROUTEPEN_SWVPEN_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable/Disable serial wire output pin.
  *
@@ -633,7 +633,7 @@ void GPIO_DriveStrengthSet(GPIO_Port_TypeDef port, GPIO_DriveStrength_TypeDef st
 #endif
 
 # if defined(_GPIO_EM4WUEN_MASK)
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Disable GPIO pin wake-up from EM4.
  *
@@ -654,7 +654,7 @@ void GPIO_EM4EnablePinWakeup(uint32_t pinmask, uint32_t polaritymask);
 #endif
 
 #if defined(_GPIO_EM4WUCAUSE_MASK) || defined(_GPIO_IF_EM4WU_MASK)
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Check which GPIO pin(s) that caused a wake-up from EM4.
  *
@@ -673,7 +673,7 @@ __STATIC_INLINE uint32_t GPIO_EM4GetPinWakeupCause(void)
 #endif
 
 #if defined(GPIO_CTRL_EM4RET) || defined(_EMU_EM4CTRL_EM4IORETMODE_MASK)
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Enable GPIO pin retention of output enable, output value, pull enable and
  *   pull direction in EM4.
@@ -714,7 +714,7 @@ void GPIO_ExtIntConfig(GPIO_Port_TypeDef port,
                        bool fallingEdge,
                        bool enable);
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable/disable input sensing.
  *
@@ -735,7 +735,7 @@ __STATIC_INLINE void GPIO_InputSenseSet(uint32_t val, uint32_t mask)
   GPIO->INSENSE = (GPIO->INSENSE & ~mask) | (val & mask);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Clear one or more pending GPIO interrupts.
  *
@@ -747,7 +747,7 @@ __STATIC_INLINE void GPIO_IntClear(uint32_t flags)
   GPIO->IFC = flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Disable one or more GPIO interrupts.
  *
@@ -759,7 +759,7 @@ __STATIC_INLINE void GPIO_IntDisable(uint32_t flags)
   GPIO->IEN &= ~flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable one or more GPIO interrupts.
  *
@@ -776,7 +776,7 @@ __STATIC_INLINE void GPIO_IntEnable(uint32_t flags)
   GPIO->IEN |= flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get pending GPIO interrupts.
  *
@@ -788,7 +788,7 @@ __STATIC_INLINE uint32_t GPIO_IntGet(void)
   return GPIO->IF;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get enabled and pending GPIO interrupt flags.
  *   Useful for handling more interrupt sources in the same interrupt handler.
@@ -815,7 +815,7 @@ __STATIC_INLINE uint32_t GPIO_IntGetEnabled(void)
   return GPIO->IF & tmp;
 }
 
-/**************************************************************************//**
+/**************************************************************************
  * @brief
  *   Set one or more pending GPIO interrupts from SW.
  *
@@ -827,7 +827,7 @@ __STATIC_INLINE void GPIO_IntSet(uint32_t flags)
   GPIO->IFS = flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Locks the GPIO configuration.
  ******************************************************************************/
@@ -836,7 +836,7 @@ __STATIC_INLINE void GPIO_Lock(void)
   GPIO->LOCK = GPIO_LOCK_LOCKKEY_LOCK;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Read the pad value for a single pin in a GPIO port.
  *
@@ -864,7 +864,7 @@ void GPIO_PinModeSet(GPIO_Port_TypeDef port,
                      GPIO_Mode_TypeDef mode,
                      unsigned int out);
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set a single pin in GPIO data out port register to 0.
  *
@@ -889,7 +889,7 @@ __STATIC_INLINE void GPIO_PinOutClear(GPIO_Port_TypeDef port, unsigned int pin)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get current setting for a pin in a GPIO port data out register.
  *
@@ -909,7 +909,7 @@ __STATIC_INLINE unsigned int GPIO_PinOutGet(GPIO_Port_TypeDef port,
   return BUS_RegBitRead(&GPIO->P[port].DOUT, pin);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set a single pin in GPIO data out register to 1.
  *
@@ -934,7 +934,7 @@ __STATIC_INLINE void GPIO_PinOutSet(GPIO_Port_TypeDef port, unsigned int pin)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Toggle a single pin in GPIO port data out register.
  *
@@ -956,7 +956,7 @@ __STATIC_INLINE void GPIO_PinOutToggle(GPIO_Port_TypeDef port, unsigned int pin)
   GPIO->P[port].DOUTTGL = 1 << pin;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Read the pad values for GPIO port.
  *
@@ -970,7 +970,7 @@ __STATIC_INLINE uint32_t GPIO_PortInGet(GPIO_Port_TypeDef port)
   return GPIO->P[port].DIN;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set bits in DOUT register for a port to 0.
  *
@@ -995,7 +995,7 @@ __STATIC_INLINE void GPIO_PortOutClear(GPIO_Port_TypeDef port, uint32_t pins)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get current setting for a GPIO port data out register.
  *
@@ -1012,7 +1012,7 @@ __STATIC_INLINE uint32_t GPIO_PortOutGet(GPIO_Port_TypeDef port)
   return GPIO->P[port].DOUT;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set bits GPIO data out register to 1.
  *
@@ -1037,7 +1037,7 @@ __STATIC_INLINE void GPIO_PortOutSet(GPIO_Port_TypeDef port, uint32_t pins)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set GPIO port data out register.
  *
@@ -1064,7 +1064,7 @@ __STATIC_INLINE void GPIO_PortOutSetVal(GPIO_Port_TypeDef port,
   GPIO->P[port].DOUT = (GPIO->P[port].DOUT & ~mask) | (val & mask);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Toggle pins in GPIO port data out register.
  *
@@ -1087,7 +1087,7 @@ __STATIC_INLINE void GPIO_PortOutToggle(GPIO_Port_TypeDef port, uint32_t pins)
 }
 
 #if defined(_GPIO_P_CTRL_SLEWRATE_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set slewrate for pins on a GPIO port.
  *
@@ -1118,7 +1118,7 @@ __STATIC_INLINE void GPIO_SlewrateSet(GPIO_Port_TypeDef port,
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Unlocks the GPIO configuration.
  ******************************************************************************/
@@ -1132,7 +1132,7 @@ __STATIC_INLINE void GPIO_Unlock(void)
  ***********************     (will be removed)     *****************************
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Configure GPIO interrupt.
  *

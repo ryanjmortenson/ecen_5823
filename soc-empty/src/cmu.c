@@ -36,4 +36,7 @@ void cmu_init (void)
 
   // Enable the COREELE
   CMU_ClockEnable (cmuClock_CORELE, true);
+
+  // Peripheral clocks enabled
+  CMU_ClockEnable (cmuClock_ADC0, true);
 }

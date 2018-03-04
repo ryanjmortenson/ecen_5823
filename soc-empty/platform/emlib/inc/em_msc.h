@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/***************************************************************************
  * @file em_msc.h
  * @brief Flash controller (MSC) peripheral API
  * @version 5.4.0
@@ -45,12 +45,12 @@
 extern "C" {
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup emlib
  * @{
  ******************************************************************************/
 
-/***************************************************************************//**
+/***************************************************************************
  * @addtogroup MSC
  * @brief Memory System Controller API
  * @details
@@ -202,7 +202,7 @@ typedef struct {
 #define msc_Return_TypeDef MSC_Status_TypeDef
 /** @endcond */
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *    Clear one or more pending MSC interrupts.
  *
@@ -215,7 +215,7 @@ __STATIC_INLINE void MSC_IntClear(uint32_t flags)
   MSC->IFC = flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Disable one or more MSC interrupts.
  *
@@ -228,7 +228,7 @@ __STATIC_INLINE void MSC_IntDisable(uint32_t flags)
   MSC->IEN &= ~(flags);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable one or more MSC interrupts.
  *
@@ -246,7 +246,7 @@ __STATIC_INLINE void MSC_IntEnable(uint32_t flags)
   MSC->IEN |= flags;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get pending MSC interrupt flags.
  *
@@ -262,7 +262,7 @@ __STATIC_INLINE uint32_t MSC_IntGet(void)
   return(MSC->IF);
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Get enabled and pending MSC interrupt flags.
  *   Useful for handling more interrupt sources in the same interrupt handler.
@@ -284,7 +284,7 @@ __STATIC_INLINE uint32_t MSC_IntGetEnabled(void)
   return MSC->IF & ien;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Set one or more pending MSC interrupts from SW.
  *
@@ -298,7 +298,7 @@ __STATIC_INLINE void MSC_IntSet(uint32_t flags)
 }
 
 #if defined(MSC_IF_CHOF) && defined(MSC_IF_CMOF)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Starts measuring cache hit ratio.
  * @details
@@ -318,7 +318,7 @@ __STATIC_INLINE void MSC_StartCacheMeasurement(void)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Stops measuring the hit rate.
  * @note
@@ -390,7 +390,7 @@ __STATIC_INLINE int32_t MSC_GetCacheMeasurement(void)
   return (hits * 100) / total;
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Flush the contents of the instruction cache.
  ******************************************************************************/
@@ -403,7 +403,7 @@ __STATIC_INLINE void MSC_FlushCache(void)
 #endif
 }
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable or disable instruction cache functionality
  * @param[in] enable
@@ -415,7 +415,7 @@ __STATIC_INLINE void MSC_EnableCache(bool enable)
 }
 
 #if defined(MSC_READCTRL_ICCDIS)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable or disable instruction cache functionality in IRQs
  * @param[in] enable
@@ -427,7 +427,7 @@ __STATIC_INLINE void MSC_EnableCacheIRQs(bool enable)
 }
 #endif
 
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Enable or disable instruction cache flushing when writing to flash
  * @param[in] enable
@@ -440,7 +440,7 @@ __STATIC_INLINE void MSC_EnableAutoCacheFlush(bool enable)
 #endif /* defined( MSC_IF_CHOF ) && defined( MSC_IF_CMOF ) */
 
 #if defined(_MSC_READCTRL_BUSSTRATEGY_MASK)
-/***************************************************************************//**
+/***************************************************************************
  * @brief
  *   Configure which unit should get priority on system bus.
  * @param[in] mode
