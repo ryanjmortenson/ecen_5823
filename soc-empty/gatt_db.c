@@ -54,11 +54,11 @@ GATT_DATA(const uint8_t bg_gattdb_data_uuidtable_128_map [])=
 
 
 
-uint8_t bg_gattdb_data_attribute_field_28_data[1]={0x00,};
+uint8_t bg_gattdb_data_attribute_field_28_data[4]={0x00,0x00,0x00,0x00,};
 GATT_DATA(const struct bg_gattdb_attribute_chrvalue	bg_gattdb_data_attribute_field_28 ) = {
 	.properties=0x02,
 	.index=5,
-	.max_len=1,
+	.max_len=4,
 	.data=bg_gattdb_data_attribute_field_28_data,
 };
 

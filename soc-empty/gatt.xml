@@ -95,7 +95,7 @@
     <!--Soil Moisture Measurement-->
     <characteristic id="soil_moisture_measurement" name="Soil Moisture Measurement" sourceId="custom.type" uuid="83c77eb6-35af-4dd9-8851-87d0a92ea404">
       <informativeText>Custom characteristic</informativeText>
-      <value length="1" type="hex" variable_length="false"/>
+      <value length="4" type="hex" variable_length="false"/>
       <properties read="true" read_requirement="mandatory"/>
     </characteristic>
   </service>
