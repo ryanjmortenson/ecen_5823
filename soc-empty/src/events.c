@@ -65,6 +65,11 @@ void handle_events (uint8_t * events)
     buf_start = buffer;
     UINT32_TO_BITSTREAM (buf_start, get_soil_moisture());
     gecko_cmd_gatt_server_write_attribute_value (gattdb_soil_moisture_measurement, 0, 4, buffer);
+
+    buf_start = buffer;
+    UINT32_TO_BITSTREAM (buf_start, utemp);
+    gecko_cmd_gatt_server_write_attribute_value (gattdb_temperature, 0, 2, buffer);
+
   }
 }
 
