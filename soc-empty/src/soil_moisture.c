@@ -83,3 +83,8 @@ void soil_moisture_init (void)
   ADC_Start(ADC0, adcStartSingle);
 }
 
+uint32_t get_soil_moisture()
+{
+  return adcBuffer[0];
+}
+

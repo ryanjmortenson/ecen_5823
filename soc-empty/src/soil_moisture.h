@@ -19,4 +19,6 @@
 
 void soil_moisture_init ();
 
+uint32_t get_soil_moisture();
+
 #endif /* SRC_SOIL_MOISTURE_H_ */
