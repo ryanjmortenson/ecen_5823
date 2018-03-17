@@ -5,20 +5,21 @@
 #include "src/soil_moisture.h"
 
 uint32_t adcBuffer[ADC_BUFFER_SIZE];
+uint8_t measurement_count = 0;
+uint32_t sum = 0;
 
 void ADC0_IRQHandler(void)
 {
   CORE_ATOMIC_IRQ_DISABLE ();
 
-  /* Single or scan DVL trigger */
-  if ((ADC0->IEN & ADC_IEN_SINGLE) && (ADC0->IF & ADC_IF_SINGLE))
-  {
+
     /* Read SINGLEDATA will clear SINGLE IF flag */
     adcBuffer[0] = ADC_DataSingleGet(ADC0);
+    sum += adcBuffer[0];
     adcBuffer[1] = ADC_DataSingleGet(ADC0);
     adcBuffer[2] = ADC_DataSingleGet(ADC0);
     adcBuffer[3] = ADC_DataSingleGet(ADC0);
-  }
+
 
 #if 0
   /* SINGLECMP or SCANCMP trigger */
@@ -35,12 +36,19 @@ void ADC0_IRQHandler(void)
   }
 #endif
 
-  // Set input and output pins for soil moisture sensor
-  GPIO_PinModeSet (SOIL_MOISTURE_POWER_PORT, POWER_PIN, gpioModeDisabled, false);
-  GPIO_PinModeSet (SOIL_MOISTURE_SIG_PORT, SIGNAL_PIN, gpioModeDisabled, false);
+  measurement_count++;
+  if (measurement_count == 255)
+  {
+    // Set input and output pins for soil moisture sensor
+    GPIO_PinModeSet (SOIL_MOISTURE_POWER_PORT, POWER_PIN, gpioModeDisabled, false);
+    GPIO_PinModeSet (SOIL_MOISTURE_SIG_PORT, SIGNAL_PIN, gpioModeDisabled, false);
 
-  ADC_Reset(ADC0);
-
+    ADC_Reset(ADC0);
+  }
+  else
+  {
+    ADC_Start(ADC0, adcStartSingle);
+  }
   CORE_ATOMIC_IRQ_ENABLE ();
 }
 
@@ -80,11 +88,13 @@ void soil_moisture_init (void)
   GPIO_PinModeSet (SOIL_MOISTURE_POWER_PORT, POWER_PIN, gpioModePushPull, true);
   GPIO_PinModeSet (SOIL_MOISTURE_SIG_PORT, SIGNAL_PIN, gpioModeInput, true);
 
+  sum = measurement_count = 0;
+
   ADC_Start(ADC0, adcStartSingle);
 }
 
 uint32_t get_soil_moisture()
 {
-  return adcBuffer[0];
+  return sum / 255;
 }
 
