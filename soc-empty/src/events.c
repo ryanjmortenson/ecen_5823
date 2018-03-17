@@ -63,23 +63,20 @@ void handle_events (uint8_t * events)
       GPIO_PinModeSet (LED0_port, LED0_pin, gpioModePushPull, false);
     }
 
-    // Convert temp to a bitstream and sned
-    utemp = FLT_TO_UINT32 ((uint32_t) (temp * 1000), -3);
-    UINT8_TO_BITSTREAM (buf_start, 0);
-    UINT32_TO_BITSTREAM (buf_start, utemp);
-    gecko_cmd_gatt_server_send_characteristic_notification (0xFF,
-                                                            gattdb_temp_measurement,
-                                                            5, buffer);
+    // Convert soil moisture into bit-stream and send
     buf_start = buffer;
     UINT32_TO_BITSTREAM (buf_start, get_soil_moisture());
     gecko_cmd_gatt_server_write_attribute_value (gattdb_soil_moisture_measurement, 0, 4, buffer);
 
+    // Convert temperature to a bit-stream and send
     buf_start = buffer;
+    utemp = FLT_TO_UINT32 ((uint32_t) (temp * 1000), -3);
     UINT32_TO_BITSTREAM (buf_start, utemp);
     gecko_cmd_gatt_server_write_attribute_value (gattdb_temperature, 0, 2, buffer);
 
+    // Convert irradiance to bit stream and send
     buf_start = buffer;
-    utemp = FLT_TO_UINT32 ((uint32_t) (lux * 1000), -3);
+    utemp = FLT_TO_UINT32 (lux, 0);
     UINT32_TO_BITSTREAM (buf_start, utemp);
     gecko_cmd_gatt_server_write_attribute_value (gattdb_irradiance, 0, 2, buffer);
   }
