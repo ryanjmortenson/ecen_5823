@@ -78,6 +78,10 @@ void handle_events (uint8_t * events)
     UINT32_TO_BITSTREAM (buf_start, utemp);
     gecko_cmd_gatt_server_write_attribute_value (gattdb_temperature, 0, 2, buffer);
 
+    buf_start = buffer;
+    utemp = FLT_TO_UINT32 ((uint32_t) (lux * 1000), -3);
+    UINT32_TO_BITSTREAM (buf_start, utemp);
+    gecko_cmd_gatt_server_write_attribute_value (gattdb_irradiance, 0, 2, buffer);
   }
 }
 
