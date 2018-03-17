@@ -12,6 +12,7 @@
 
 #include "src/main.h"
 #include "src/i2c.h"
+#include "src/lightsens.h"
 #include "src/gpio.h"
 #include "src/soil_moisture.h"
 
@@ -19,6 +20,7 @@
 void handle_events (uint8_t * events)
 {
   float temp = 0.0f;
+  float lux = 0;
   uint32_t utemp = 0;
   uint8_t buffer[5] = { 0 };
   uint8_t *buf_start = buffer;
@@ -32,6 +34,9 @@ void handle_events (uint8_t * events)
 
     // Initialize soil moisture sensor
     soil_moisture_init ();
+
+    // Set the light sensor to continuous
+    LIGHTSENS_SetContinuous(I2C0);
   }
 
   if (*events & CREATE_EVENT (READ_TEMPERATURE))
@@ -39,7 +44,10 @@ void handle_events (uint8_t * events)
     // Read temperature
     TEMPSENS_TemperatureGet (I2C0, TEMPSENS_DVK_ADDR, &temp);
 
-    // Shutdown I2C temp sensor
+    // Read ambient light
+    LIGHTSENS_GetLux(I2C0, &lux);
+
+    // Shutdown I2C sensors
     I2C_Tempsens_Dest ();
 
     // Clear temperature event

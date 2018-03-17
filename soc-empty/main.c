@@ -62,12 +62,12 @@ uint8_t events = 0;
  * @{
  **************************************************************************************************/
 
-#define SAMPLE_PERIOD (1.0f)
-#define SENSOR_INIT_TIME (.080f)
+#define SAMPLE_PERIOD (4.0f)
+#define SENSOR_INIT_TIME (.200f)
 #define CALCULATE_INIT_DUTY_CYCLE(init_time) ((SAMPLE_PERIOD - init_time) / SAMPLE_PERIOD)
-#define ADV_INT (10)
-#define CONN_INTERVAL (10)  // 75 / 1.25
-#define SLAVE_LATENCY (1) // 5 * 75 + 75 = 450
+#define ADV_INT (2000)
+#define CONN_INTERVAL (60)  // 75 / 1.25
+#define SLAVE_LATENCY (450) // 5 * 75 + 75 = 450
 #define TIMEOUT (1000)
 
 #ifndef MAX_CONNECTIONS
@@ -150,7 +150,7 @@ int main (void)
   // Initialize stack
   gecko_init (&config);
 
-  if (letimer_init (SAMPLE_PERIOD, DUTY_CYCLE))
+  if (letimer_init (SAMPLE_PERIOD, CALCULATE_INIT_DUTY_CYCLE (SENSOR_INIT_TIME)))
   {
     // Hold current temperature reading
     uint8_t conn;

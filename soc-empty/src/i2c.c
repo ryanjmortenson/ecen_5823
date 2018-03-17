@@ -94,6 +94,10 @@ void I2C_Tempsens_Init (void)
   GPIO_DriveStrengthSet (gpioPortD, gpioDriveStrengthWeakAlternateWeak);
   GPIO_PinModeSet (gpioPortD, 15, gpioModePushPull, true);
 
+  // Turn on I2C device
+  GPIO_DriveStrengthSet (gpioPortA, gpioDriveStrengthWeakAlternateWeak);
+  GPIO_PinModeSet (gpioPortA, 2, gpioModePushPull, true);
+
   // Turn on clock for I2C0
   CMU_ClockEnable (cmuClock_HFPER, true);
   CMU_ClockEnable (cmuClock_I2C0, true);
@@ -153,8 +157,10 @@ void I2C_Tempsens_Dest (void)
   GPIO_PinModeSet (gpioPortC, 11, gpioModeDisabled, false);
 
   // Turn off I2C device
-  GPIO_PinModeSet (gpioPortD, 9, gpioModePushPull, false);
-  GPIO_PinModeSet (gpioPortD, 9, gpioModeDisabled, false);
+  GPIO_PinModeSet (gpioPortD, 15, gpioModePushPull, false);
+  GPIO_PinModeSet (gpioPortD, 15, gpioModeDisabled, false);
+  GPIO_PinModeSet (gpioPortA, 2, gpioModePushPull, false);
+  GPIO_PinModeSet (gpioPortA, 2, gpioModeDisabled, false);
 
   // Turn off clocks
   CMU_ClockEnable (cmuClock_HFPER, false);
