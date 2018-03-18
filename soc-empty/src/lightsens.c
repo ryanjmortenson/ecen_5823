@@ -27,10 +27,13 @@ extern I2C_TransferReturn_TypeDef I2C_Status;
  ******************************************************************************/
 void LIGHTSENS_GetLux (I2C_TypeDef * i2c, float * lux)
 {
+  const uint8_t MAX_RETRIES = 10;
+  uint8_t retries = 0;
   uint16_t val = 0;
-  while ((val & (1 << 7)) == 0)
+  while ((val & (1 << 7)) == 0 && retries < 10)
   {
     LIGHTSENS_RegisterGet (I2C0, LIGHTSENS_ADDR, lightsensRegConfig, &val);
+    retries++;
   }
   LIGHTSENS_RegisterGet (I2C0, LIGHTSENS_ADDR, lightsensRegResult, &val);
   *lux = CONV_SCALE_FACTOR * pow(CONV_MANTISSA, ((val & EXPONENT_MASK) >> EXPONENT_SHIFT)) * (val & FRACTIONAL_MASK);
