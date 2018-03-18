@@ -36,7 +36,7 @@ void handle_events (uint8_t * events)
     soil_moisture_init ();
 
     // Set the light sensor to continuous
-    LIGHTSENS_SetContinuous(I2C0);
+    LIGHTSENS_SetSingleShot(I2C0);
   }
 
   if (*events & CREATE_EVENT (READ_TEMPERATURE))

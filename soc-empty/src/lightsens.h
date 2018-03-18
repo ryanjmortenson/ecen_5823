@@ -11,6 +11,7 @@
 /** I2C device address for ambient light sensor */
 #define LIGHTSENS_ADDR      (0x44 << 1)
 #define CONTINUOUS_MODE ((1<<10)|(1<<9))
+#define SINGLE_SHOT (1<<9)
 
 
 /*******************************************************************************
@@ -36,7 +37,7 @@ typedef enum
 
 void LIGHTSENS_GetLux (I2C_TypeDef * i2c, float * lux);
 
-void LIGHTSENS_SetContinuous (I2C_TypeDef * i2c);
+void LIGHTSENS_SetSingleShot (I2C_TypeDef * i2c);
 
 int
 LIGHTSENS_RegisterGet (I2C_TypeDef * i2c, uint8_t addr,
