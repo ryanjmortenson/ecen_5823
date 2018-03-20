@@ -25,6 +25,8 @@ CHAR_SOIL_MOISTURE_UUID = "83c77eb6-35af-4dd9-8851-87d0a92ea404"
 
 log = None
 client = None
+current_connection_attempt = list()
+ble_lock = threading.Lock()
 
 class ConnectToDiscoveredDevice(btle.DefaultDelegate):
     def __init__(self):
@@ -38,30 +40,36 @@ class ConnectToDiscoveredDevice(btle.DefaultDelegate):
                 t.start()
 
 def handle_device_connection(addr):
-    log.info("Attempting to connect to: {}".format(addr))
     count = 0
     connection = False
 
-    while count < 5 and connection == False:
-        try:
-            dev = btle.Peripheral(addr)
-            temp_char = dev.getCharacteristics(uuid=CHAR_TEMP_UUID)[0]
-            soil_char = dev.getCharacteristics(uuid=CHAR_SOIL_MOISTURE_UUID)[0]
-            lux_char = dev.getCharacteristics(uuid=CHAR_LUX_UUID)[0]
-            temp = int(temp_char.read()[-1::-1].encode("hex"), 16)
-            lux = int(lux_char.read()[-1::-1].encode("hex"), 16)
-            soil = int(soil_char.read()[-1::-1].encode("hex"), 16)
-            client.celsiusWrite(hash(addr + " TEMP"), float(temp)/float(1000))
-            client.virtualWrite(hash(addr + " MOISTURE"), (float(soil)/float(4096) * 100), "Soil Moisture", "%")
-            client.virtualWrite(hash(addr + " LUX"), lux, "Illuminance", "Lux")
-            log.debug("TEMP: {}".format(temp))
-            log.debug("SOIL MOISTURE: {}".format(soil))
-            log.debug("LUX: {}".format(lux))
-            dev.disconnect()
-            connection = True
-        except Exception as e:
-            log.error("Reading characteristics failed on attempt: {}".format(count))
-            count += 1
+    if addr not in current_connection_attempt:
+        ble_lock.acquire()
+        log.debug("Adding {} to current connections".format(addr))
+        current_connection_attempt.append(addr)
+        while count < 5 and connection == False:
+            try:
+                dev = btle.Peripheral(addr)
+                temp_char = dev.getCharacteristics(uuid=CHAR_TEMP_UUID)[0]
+                soil_char = dev.getCharacteristics(uuid=CHAR_SOIL_MOISTURE_UUID)[0]
+                lux_char = dev.getCharacteristics(uuid=CHAR_LUX_UUID)[0]
+                temp = int(temp_char.read()[-1::-1].encode("hex"), 16)
+                lux = int(lux_char.read()[-1::-1].encode("hex"), 16)
+                soil = int(soil_char.read()[-1::-1].encode("hex"), 16)
+                dev.disconnect()
+                connection = True
+                client.celsiusWrite(hash(addr + " TEMP"), float(temp)/float(1000))
+                client.virtualWrite(hash(addr + " MOISTURE"), (float(soil)/float(4096) * 100), "Soil Moisture", "%")
+                client.virtualWrite(hash(addr + " LUX"), lux, "Illuminance", "Lux")
+                log.debug("TEMP: {}".format(temp))
+                log.debug("SOIL MOISTURE: {}".format(soil))
+                log.debug("LUX: {}".format(lux))
+            except Exception as e:
+                log.error("Reading characteristics failed on attempt: {}".format(count))
+                count += 1
+        log.debug("Removing {} to current connections".format(addr))
+        current_connection_attempt.remove(addr)
+        ble_lock.release()
 
 def on_message(message):
       print("message received: " + str(message))
