@@ -97,7 +97,7 @@ static const gecko_configuration_t config = {
 
 // Flag for indicating DFU Reset must be performed
 uint8_t boot_to_dfu = 0;
-uint16_t connections = 0;
+uint32_t connections = 0;
 
 void LETIMER0_IRQHandler (void)
 {
@@ -172,7 +172,7 @@ int main (void)
       /* Handle events */
       switch (BGLIB_MSG_ID (evt->header))
       {
-	extern uint16_t measurements;
+	extern uint32_t measurements;
 
         /* This boot event is generated when the system boots up after reset.
          * Do not call any stack commands before receiving the boot event. Here 
@@ -202,14 +202,14 @@ int main (void)
 
         buf_start = buffer;
         UINT16_TO_BITSTREAM (buf_start, connections);
-        gecko_cmd_gatt_server_write_attribute_value (gattdb_connection_count, 0, 2, buffer);
+        gecko_cmd_gatt_server_write_attribute_value (gattdb_connection_count, 0, 4, buffer);
 
         // Load or set the measurement in the boot, measurement counts will be handled in events.c
 	load_or_set_initial(MEASUREMENT_COUNT_KEY, 0, &measurements);
 
 	buf_start = buffer;
 	UINT16_TO_BITSTREAM (buf_start, measurements);
-	gecko_cmd_gatt_server_write_attribute_value (gattdb_measurement_count, 0, 2, buffer);
+	gecko_cmd_gatt_server_write_attribute_value (gattdb_measurement_count, 0, 4, buffer);
         break;
 
       case gecko_evt_le_connection_opened_id:
@@ -226,7 +226,7 @@ int main (void)
         save(CONNECTION_COUNT_KEY, connections);
         buf_start = buffer;
 	UINT16_TO_BITSTREAM (buf_start, connections);
-	gecko_cmd_gatt_server_write_attribute_value (gattdb_connection_count, 0, 2, buffer);
+	gecko_cmd_gatt_server_write_attribute_value (gattdb_connection_count, 0, 4, buffer);
         break;
 
       case gecko_evt_le_connection_closed_id:

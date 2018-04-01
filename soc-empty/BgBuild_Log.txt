@@ -7,7 +7,7 @@ Standard output
 ALL OK
 
 Error/Warning output
-WARNING: 7955671385bd4e5f944d7363449d1baa length attribute is 2 but actual value length is 1. 2 will be used.
-WARNING: 016d95b5006f4e869588bd551a6b1c6d length attribute is 2 but actual value length is 1. 2 will be used.
+WARNING: 7955671385bd4e5f944d7363449d1baa length attribute is 4 but actual value length is 1. 4 will be used.
+WARNING: 016d95b5006f4e869588bd551a6b1c6d length attribute is 4 but actual value length is 1. 4 will be used.
 
 

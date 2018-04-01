@@ -85,7 +85,7 @@ void handle_events (uint8_t * events)
     save(MEASUREMENT_COUNT_KEY, measurements);
     buf_start = buffer;
     UINT16_TO_BITSTREAM (buf_start, measurements);
-    gecko_cmd_gatt_server_write_attribute_value (gattdb_measurement_count, 0, 2, buffer);
+    gecko_cmd_gatt_server_write_attribute_value (gattdb_measurement_count, 0, 4, buffer);
   }
 }
 
