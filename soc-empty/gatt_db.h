@@ -36,5 +36,7 @@ extern const struct bg_gattdb_def bg_gattdb_data;
 #define gattdb_es_configuration_12             45
 #define gattdb_characteristic_user_description_12         46
 #define gattdb_valid_range_12                  47
+#define gattdb_connection_count                50
+#define gattdb_measurement_count               52
 
 #endif

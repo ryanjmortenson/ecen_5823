@@ -48,6 +48,7 @@
 #include "src/power_level.h"
 #include "src/events.h"
 #include "src/soil_moisture.h"
+#include "src/persistent_data.h"
 
 int led_state = LED0_default;
 uint8_t events = 0;
@@ -69,6 +70,7 @@ uint8_t events = 0;
 #define CONN_INTERVAL (60)  // 75 / 1.25
 #define SLAVE_LATENCY (450) // 5 * 75 + 75 = 450
 #define TIMEOUT (1000)
+
 
 #ifndef MAX_CONNECTIONS
 #define MAX_CONNECTIONS 4
@@ -95,6 +97,7 @@ static const gecko_configuration_t config = {
 
 // Flag for indicating DFU Reset must be performed
 uint8_t boot_to_dfu = 0;
+uint16_t connections = 0;
 
 void LETIMER0_IRQHandler (void)
 {
@@ -132,6 +135,9 @@ void LETIMER0_IRQHandler (void)
  */
 int main (void)
 {
+  uint8_t buffer[2] = {0};
+  uint8_t* buf_start = buffer;
+
   // Initialize device
   initMcu ();
 
@@ -166,6 +172,8 @@ int main (void)
       /* Handle events */
       switch (BGLIB_MSG_ID (evt->header))
       {
+	extern uint16_t measurements;
+
         /* This boot event is generated when the system boots up after reset.
          * Do not call any stack commands before receiving the boot event. Here 
          * the system is set to start advertising immediately after boot
@@ -181,8 +189,27 @@ int main (void)
         gecko_cmd_le_gap_set_mode (le_gap_general_discoverable,
                                    le_gap_undirected_connectable);
 
+        // Set tx power to 0
         gecko_cmd_system_set_tx_power (0);
 
+#ifdef ERASE_ALL_PERSISTENT_DATA
+        // Erase all persistent data (reset)
+        gecko_cmd_flash_ps_erase_all();
+#endif
+
+        // Load or set the connections persistent data
+        load_or_set_initial(CONNECTION_COUNT_KEY, 0, &connections);
+
+        buf_start = buffer;
+        UINT16_TO_BITSTREAM (buf_start, connections);
+        gecko_cmd_gatt_server_write_attribute_value (gattdb_connection_count, 0, 2, buffer);
+
+        // Load or set the measurement in the boot, measurement counts will be handled in events.c
+	load_or_set_initial(MEASUREMENT_COUNT_KEY, 0, &measurements);
+
+	buf_start = buffer;
+	UINT16_TO_BITSTREAM (buf_start, measurements);
+	gecko_cmd_gatt_server_write_attribute_value (gattdb_measurement_count, 0, 2, buffer);
         break;
 
       case gecko_evt_le_connection_opened_id:
@@ -193,6 +220,13 @@ int main (void)
                                                 TIMEOUT);
 
         conn = evt->data.evt_le_connection_opened.connection;
+
+        // Increment connections and set in gattdb
+        connections++;
+        save(CONNECTION_COUNT_KEY, connections);
+        buf_start = buffer;
+	UINT16_TO_BITSTREAM (buf_start, connections);
+	gecko_cmd_gatt_server_write_attribute_value (gattdb_connection_count, 0, 2, buffer);
         break;
 
       case gecko_evt_le_connection_closed_id:

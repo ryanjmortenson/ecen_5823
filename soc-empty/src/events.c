@@ -1,9 +1,4 @@
-/*
- * events.c
- *
- *  Created on: Feb 18, 2018
- *      Author: mortzula
- */
+#include <stdint.h>
 
 #include "infrastructure.h"
 #include "gatt_db.h"
@@ -15,6 +10,9 @@
 #include "src/lightsens.h"
 #include "src/gpio.h"
 #include "src/soil_moisture.h"
+#include "src/persistent_data.h"
+
+uint16_t measurements = 0;
 
 
 void handle_events (uint8_t * events)
@@ -79,6 +77,15 @@ void handle_events (uint8_t * events)
     utemp = FLT_TO_UINT32 (lux, 0);
     UINT32_TO_BITSTREAM (buf_start, utemp);
     gecko_cmd_gatt_server_write_attribute_value (gattdb_irradiance, 0, 2, buffer);
+
+
+    // Increment measurements and set for gattdb
+    buf_start = buffer;
+    measurements++;
+    save(MEASUREMENT_COUNT_KEY, measurements);
+    buf_start = buffer;
+    UINT16_TO_BITSTREAM (buf_start, measurements);
+    gecko_cmd_gatt_server_write_attribute_value (gattdb_measurement_count, 0, 2, buffer);
   }
 }
 
