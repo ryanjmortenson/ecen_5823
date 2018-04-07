@@ -98,6 +98,7 @@ static const gecko_configuration_t config = {
 // Flag for indicating DFU Reset must be performed
 uint8_t boot_to_dfu = 0;
 uint32_t connections = 0;
+extern uint32_t measurements;
 
 void LETIMER0_IRQHandler (void)
 {
@@ -172,13 +173,17 @@ int main (void)
       /* Handle events */
       switch (BGLIB_MSG_ID (evt->header))
       {
-	extern uint32_t measurements;
-
         /* This boot event is generated when the system boots up after reset.
          * Do not call any stack commands before receiving the boot event. Here 
          * the system is set to start advertising immediately after boot
          * procedure. */
       case gecko_evt_system_boot_id:
+#ifdef SECURITY_ON
+	gecko_cmd_sm_delete_bondings();
+	gecko_cmd_sm_configure(0x0F, sm_io_capability_displayonly);
+	gecko_cmd_sm_set_bondable_mode(1);
+#endif
+
         /* Set advertising parameters. 100ms advertisement interval. All
          * channels used. The first two parameters are minimum and maximum
          * advertising interval, both in units of (milliseconds * 1.6). The
@@ -227,6 +232,19 @@ int main (void)
         buf_start = buffer;
 	UINT16_TO_BITSTREAM (buf_start, connections);
 	gecko_cmd_gatt_server_write_attribute_value (gattdb_connection_count, 0, 4, buffer);
+
+#ifdef SECURITY_ON
+        /* The HTM service typically indicates and indications cannot be given an encrypted property so
+        force encryption immediately after connecting */
+        gecko_cmd_sm_increase_security(conn);
+#endif
+        break;
+
+      case gecko_evt_sm_passkey_display_id:
+	break;
+
+      case gecko_evt_sm_confirm_passkey_id:
+        gecko_cmd_sm_passkey_confirm(conn, 1);
         break;
 
       case gecko_evt_le_connection_closed_id:

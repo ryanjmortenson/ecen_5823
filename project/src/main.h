@@ -43,6 +43,9 @@ typedef enum events
 // LETIMER Duty Cycle
 #define DUTY_CYCLE (0.025f)
 
+// Turn on security
+// #define SECURITY_ON
+
 //***********************************************************************************
 // function prototypes
 //***********************************************************************************
