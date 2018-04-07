@@ -13,6 +13,9 @@
  * any purpose, you must agree to the terms of that agreement.
  **************************************************************************************************/
 
+#include <stdio.h>
+#include <inttypes.h>
+
 /* Board headers */
 #include "init_mcu.h"
 #include "init_board.h"
@@ -41,6 +44,9 @@
 #include "bspconfig.h"
 #endif
 
+#include "graphics.h"
+#include "sleep.h"
+
 #include "src/gpio.h"
 #include "src/letimer.h"
 #include "src/cmu.h"
@@ -66,9 +72,9 @@ uint8_t events = 0;
 #define SAMPLE_PERIOD (4.0f)
 #define SENSOR_INIT_TIME (.120f)
 #define CALCULATE_INIT_DUTY_CYCLE(init_time) ((SAMPLE_PERIOD - init_time) / SAMPLE_PERIOD)
-#define ADV_INT (2000)
-#define CONN_INTERVAL (60)  // 75 / 1.25
-#define SLAVE_LATENCY (450) // 5 * 75 + 75 = 450
+#define ADV_INT (100)
+#define CONN_INTERVAL (1)  // 75 / 1.25
+#define SLAVE_LATENCY (2) // 5 * 75 + 75 = 450
 #define TIMEOUT (1000)
 
 
@@ -161,6 +167,8 @@ int main (void)
   {
     // Hold current temperature reading
     uint8_t conn;
+    char passbuffer[32] = {0};
+
 
     while (1)
     {
@@ -241,11 +249,24 @@ int main (void)
         break;
 
       case gecko_evt_sm_passkey_display_id:
+	snprintf(passbuffer, 32, "PK: %06"PRIu32, evt->data.evt_sm_passkey_display.passkey);
+        GRAPHICS_Init();
+	GRAPHICS_Clear();
+	GRAPHICS_AppendString(passbuffer);
+	GRAPHICS_Update();
+	memset(passbuffer, 0, 32);
 	break;
 
-      case gecko_evt_sm_confirm_passkey_id:
-        gecko_cmd_sm_passkey_confirm(conn, 1);
-        break;
+      case gecko_evt_sm_bonded_id:
+	GRAPHICS_Clear();
+	GRAPHICS_Sleep();
+	break;
+
+      case gecko_evt_sm_bonding_failed_id:
+	GRAPHICS_AppendString("\nBond Failed");
+	GRAPHICS_Update();
+	gecko_cmd_endpoint_close(conn);
+	break;
 
       case gecko_evt_le_connection_closed_id:
         // Reset the connection

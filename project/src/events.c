@@ -12,6 +12,8 @@
 #include "src/soil_moisture.h"
 #include "src/persistent_data.h"
 
+#include "graphics.h"
+
 uint16_t measurements = 0;
 
 
@@ -28,30 +30,31 @@ void handle_events (uint8_t * events)
       && !(*events & CREATE_EVENT (READ_TEMPERATURE)))
   {
     // Initialize I2C
-    I2C_Tempsens_Init ();
+    //I2C_Tempsens_Init ();
 
     // Initialize soil moisture sensor
-    soil_moisture_init ();
+    //soil_moisture_init ();
 
     // Set the light sensor to continuous
-    LIGHTSENS_SetSingleShot(I2C0);
+    // LIGHTSENS_SetSingleShot(I2C0);
   }
 
   if (*events & CREATE_EVENT (READ_TEMPERATURE))
   {
     // Read temperature
-    TEMPSENS_TemperatureGet (I2C0, TEMPSENS_DVK_ADDR, &temp);
+    //TEMPSENS_TemperatureGet (I2C0, TEMPSENS_DVK_ADDR, &temp);
 
     // Read ambient light
-    LIGHTSENS_GetLux(I2C0, &lux);
+    //LIGHTSENS_GetLux(I2C0, &lux);
 
     // Shutdown I2C sensors
-    I2C_Tempsens_Dest ();
+    //I2C_Tempsens_Dest ();
 
     // Clear temperature event
     *events &= ~(CREATE_EVENT (READ_TEMPERATURE));
     *events &= ~(CREATE_EVENT (START_TEMP_SENSOR));
 
+#if 0
     if (temp < MINIMUM_TEMP)
     {
       GPIO_PinModeSet (LED0_port, LED0_pin, gpioModePushPull, true);
@@ -60,6 +63,7 @@ void handle_events (uint8_t * events)
     {
       GPIO_PinModeSet (LED0_port, LED0_pin, gpioModePushPull, false);
     }
+#endif
 
     // Convert soil moisture into bit-stream and send
     buf_start = buffer;

@@ -43,6 +43,7 @@
 #define LCD_PORT_SCS                  BSP_SPIDISPLAY_CS_PORT
 #define LCD_PIN_SCS                   BSP_SPIDISPLAY_CS_PIN
 
+#define HAL_SPIDISPLAY_FREQUENCY      (100000)
 #define PAL_SPI_BAUDRATE              HAL_SPIDISPLAY_FREQUENCY
 
 #if defined(BSP_SPIDISPLAY_ENABLE_PORT)
