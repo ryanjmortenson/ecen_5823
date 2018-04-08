@@ -157,13 +157,17 @@ void I2C_Tempsens_Dest (void)
   GPIO_PinModeSet (gpioPortC, 11, gpioModeDisabled, false);
 
   // Turn off I2C device
+#if 0
   GPIO_PinModeSet (gpioPortD, 15, gpioModePushPull, false);
   GPIO_PinModeSet (gpioPortD, 15, gpioModeDisabled, false);
+#endif
   GPIO_PinModeSet (gpioPortA, 2, gpioModePushPull, false);
   GPIO_PinModeSet (gpioPortA, 2, gpioModeDisabled, false);
 
+#if 0
   // Turn off clocks
   CMU_ClockEnable (cmuClock_HFPER, false);
+#endif
   CMU_ClockEnable (cmuClock_I2C0, false);
 }
 
