@@ -16,7 +16,6 @@
 
 uint16_t measurements = 0;
 
-
 void handle_events (uint8_t * events)
 {
   float temp = 0.0f;
@@ -53,17 +52,6 @@ void handle_events (uint8_t * events)
     // Clear temperature event
     *events &= ~(CREATE_EVENT (READ_TEMPERATURE));
     *events &= ~(CREATE_EVENT (START_TEMP_SENSOR));
-
-#if 0
-    if (temp < MINIMUM_TEMP)
-    {
-      GPIO_PinModeSet (LED0_port, LED0_pin, gpioModePushPull, true);
-    }
-    else
-    {
-      GPIO_PinModeSet (LED0_port, LED0_pin, gpioModePushPull, false);
-    }
-#endif
 
     // Convert soil moisture into bit-stream and send
     buf_start = buffer;
