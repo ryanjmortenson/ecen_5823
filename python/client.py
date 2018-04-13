@@ -14,21 +14,37 @@ def on_message(message):
       print("message received: " + str(message))
 
 class CayenneClient(object):
+    '''
+    Pushes data the MyDevice Cayenne Service
+    '''
 
     def __init__(self, queue):
+        '''
+        Constructor
+        '''
         self.log = logging.getLogger("ble_test")
         self.log.info("Initializing Cayenne Client")
         self.queue = queue
         self.client = cayenne.client.CayenneMQTTClient()
         self.client.on_message = on_message
-        self.client.begin(MQTT_USERNAME, MQTT_PASSWORD, MQTT_CLIENT_ID, logname="ble_test", loglevel=logging.CRITICAL)
+        self.client.begin(MQTT_USERNAME, 
+                          MQTT_PASSWORD, 
+                          MQTT_CLIENT_ID, 
+                          logname="ble_test", 
+                          loglevel=logging.CRITICAL)
         self.shutdown = threading.Event()
 
     def begin(self):
+        '''
+        Start thread to pull data off the queue
+        '''
         t = threading.Thread(target=self.main_function)
         t.start()
 
     def main_function(self):
+        '''
+        Pull data off from queue and push to MyDevice Cayenne Service
+        '''
         self.client.loop()
         while not self.shutdown.is_set():
             self.client.loop()
@@ -43,10 +59,16 @@ class CayenneClient(object):
         self.log.info("Shutting down")
 
     def end(self):
+        '''
+        Kill the queue reading thread
+        '''
         self.log.info("Setting shutdown")
         self.shutdown.set()
 
     def post_measurement(self, measurement):
+        '''
+        Get the integer representations of the data write Cayenne service
+        '''
         temp = measurement.get_temp()
         soil = measurement.get_soil_moisture()
         lux = measurement.get_lux()
