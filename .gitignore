@@ -82,3 +82,5 @@ compile_commands.json
 *.bin
 *.ld
 *.s37
+
+*.pyc
