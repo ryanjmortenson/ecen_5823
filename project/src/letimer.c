@@ -3,7 +3,6 @@
 //***********************************************************************************
 #include "em_letimer.h"
 #include "cmu.h"
-#include "sleep_mode.h"
 
 //***********************************************************************************
 // defined files
@@ -45,24 +44,13 @@ bool letimer_init (float period_sec, float duty_cycle)
   bool valid = true;
   uint32_t total_cycles = 0;
   int8_t prescaler = -1;
-  uint32_t osc_freq = 0;
   uint32_t power_of_two = 0;
 
   // Validate inputs and that the timer can be achieved
   do
   {
-    // Select the correct oscillator frequency based on EM
-    if (EM_CANT_ENTER > EM3)
-    {
-      osc_freq = LETIMER_ULFRCO_FREQ;
-    }
-    else
-    {
-      osc_freq = LETIMER_LFXO_FREQ;
-    }
-
     // Validate the the period is not less than 1 cycle of the oscillator
-    if (period_sec < (float) (1.0f / osc_freq))
+    if (period_sec < (float) (1.0f / LETIMER_ULFRCO_FREQ))
     {
       valid = false;
       break;
@@ -73,7 +61,7 @@ bool letimer_init (float period_sec, float duty_cycle)
     {
       // Calculate total cycles needed at current pre-scaler and frequency then
       // check to see if that is greater than the 65536 count
-      total_cycles = (period_sec * osc_freq) / power_of_two;
+      total_cycles = (period_sec * LETIMER_ULFRCO_FREQ) / power_of_two;
       if (total_cycles < LETIMER_MAX)
       {
         // Success set the pre-scaler and break out of the loop

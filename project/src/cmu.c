@@ -3,7 +3,6 @@
 //***********************************************************************************
 #include "cmu.h"
 #include "main.h"
-#include "sleep_mode.h"
 
 //***********************************************************************************
 // defined files
@@ -18,15 +17,8 @@
 //***********************************************************************************
 void cmu_init (void)
 {
-  // Select the ULRFCO for the LFA branch
-  if (EM_CANT_ENTER > EM3)
-  {
-    CMU_ClockSelectSet (cmuClock_LFA, cmuSelect_ULFRCO);
-  }
-  else
-  {
-    CMU_ClockSelectSet (cmuClock_LFA, cmuSelect_LFXO);
-  }
+  // Use ULRFCO for timer
+  CMU_ClockSelectSet (cmuClock_LFA, cmuSelect_ULFRCO);
 
   // Peripheral clocks enabled
   CMU_ClockEnable (cmuClock_GPIO, true);

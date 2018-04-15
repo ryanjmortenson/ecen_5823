@@ -69,12 +69,12 @@ uint8_t events = 0;
  * @{
  **************************************************************************************************/
 
-#define SAMPLE_PERIOD (120.0f)
-#define SENSOR_INIT_TIME (.120f)
+#define SAMPLE_PERIOD (120.0f) // 2 minutes
+#define SENSOR_INIT_TIME (.120f) // 120 milliseconds for sensors to fully initialize
 #define CALCULATE_INIT_DUTY_CYCLE(init_time) ((SAMPLE_PERIOD - init_time) / SAMPLE_PERIOD)
-#define ADV_INT (6500)
-#define CONN_INTERVAL (1)
-#define SLAVE_LATENCY (0)
+#define ADV_INT (6500) // 4 seconds
+#define CONN_INTERVAL (0x06) // Minimum
+#define SLAVE_LATENCY (0) // Minimum Minimum
 #define TIMEOUT (1000)
 
 

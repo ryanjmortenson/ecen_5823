@@ -6,10 +6,10 @@
 #include "em_gpio.h"
 #include "bsp.h"
 #include "lightsens.h"
-#include "sleep_mode.h"
+#include "sleep.h"
 
-#define LOWEST_ENERGY_STATE_TRANSMISSION (EM2)
-#define LOWEST_ENERGY_STATE_I2C (EM4)
+#define LOWEST_ENERGY_STATE_TRANSMISSION (sleepEM2)
+#define LOWEST_ENERGY_STATE_I2C (sleepEM3)
 
 #define EXPONENT_MASK (0xf000)
 #define EXPONENT_SHIFT (12)
@@ -66,16 +66,16 @@ LIGHTSENS_RegisterGet (I2C_TypeDef * i2c, uint8_t addr,
   seq.buf[1].data = data;
   seq.buf[1].len = 2;
 
-  block_sleep_mode (LOWEST_ENERGY_STATE_TRANSMISSION);
+  SLEEP_SleepBlockBegin (LOWEST_ENERGY_STATE_TRANSMISSION);
   /* Do a polled transfer */
   I2C_Status = I2C_TransferInit (i2c, &seq);
   while (I2C_Status == i2cTransferInProgress)
   {
-    // Sleep while waiting for an interrupt
-    sleep ();
+    // Sleep while waiting for an interruptLETIMER_ULFRCO_FREQ
+    SLEEP_Sleep ();
   }
 
-  unblock_sleep_mode (LOWEST_ENERGY_STATE_TRANSMISSION);
+  SLEEP_SleepBlockEnd (LOWEST_ENERGY_STATE_TRANSMISSION);
   if (I2C_Status != i2cTransferDone)
   {
     return ((int) I2C_Status);

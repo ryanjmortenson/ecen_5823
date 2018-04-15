@@ -40,11 +40,11 @@
 #include "em_gpio.h"
 #include "bsp.h"
 #include "i2c.h"
-#include "sleep_mode.h"
+#include "sleep.h"
 
 // ADDED TO ORIGINAL SOURCE!!!!!!!!!!!!!
-#define LOWEST_ENERGY_STATE_TRANSMISSION (EM2)
-#define LOWEST_ENERGY_STATE_I2C (EM4)
+#define LOWEST_ENERGY_STATE_TRANSMISSION (sleepEM2)
+#define LOWEST_ENERGY_STATE_I2C (sleepEM3)
 
 /*******************************************************************************
  **************************   GLOBAL VARIABLES   *******************************
@@ -131,7 +131,7 @@ void I2C_Tempsens_Init (void)
   NVIC_EnableIRQ (I2C0_IRQn);
 
   // For this assignment test block_sleep_mode by calling here
-  block_sleep_mode (LOWEST_ENERGY_STATE_I2C);
+  SLEEP_SleepBlockBegin (LOWEST_ENERGY_STATE_I2C);
 }
 
 // CHANGED FROM ORIGINAL SOURCE!!!!!!!!!!!!
@@ -146,7 +146,7 @@ void I2C_Tempsens_Init (void)
 void I2C_Tempsens_Dest (void)
 {
   // Unblock the sleep mode
-  unblock_sleep_mode (LOWEST_ENERGY_STATE_I2C);
+  SLEEP_SleepBlockEnd (LOWEST_ENERGY_STATE_I2C);
 
   /* Clear and enable interrupt from I2C module */
   NVIC_ClearPendingIRQ (I2C0_IRQn);
@@ -238,16 +238,16 @@ TEMPSENS_RegisterGet (I2C_TypeDef * i2c, uint8_t addr,
   seq.buf[1].data = data;
   seq.buf[1].len = 2;
 
-  block_sleep_mode (LOWEST_ENERGY_STATE_TRANSMISSION);
+  SLEEP_SleepBlockBegin (LOWEST_ENERGY_STATE_TRANSMISSION);
   /* Do a polled transfer */
   I2C_Status = I2C_TransferInit (i2c, &seq);
   while (I2C_Status == i2cTransferInProgress)
   {
     // Sleep while waiting for an interrupt
-    sleep ();
+    SLEEP_Sleep ();
   }
 
-  unblock_sleep_mode (LOWEST_ENERGY_STATE_TRANSMISSION);
+  SLEEP_SleepBlockEnd (LOWEST_ENERGY_STATE_TRANSMISSION);
   if (I2C_Status != i2cTransferDone)
   {
     return ((int) I2C_Status);
