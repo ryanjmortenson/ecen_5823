@@ -50,7 +50,7 @@
 #include "src/gpio.h"
 #include "src/letimer.h"
 #include "src/cmu.h"
-#include "src/i2c.h"
+#include "src/tempsense.h"
 #include "src/power_level.h"
 #include "src/events.h"
 #include "src/soil_moisture.h"

@@ -40,11 +40,9 @@
 #include "em_gpio.h"
 #include "bsp.h"
 #include "i2c.h"
+#include "tempsense.h"
 #include "sleep.h"
 
-// ADDED TO ORIGINAL SOURCE!!!!!!!!!!!!!
-#define LOWEST_ENERGY_STATE_TRANSMISSION (sleepEM2)
-#define LOWEST_ENERGY_STATE_I2C (sleepEM3)
 
 /*******************************************************************************
  **************************   GLOBAL VARIABLES   *******************************

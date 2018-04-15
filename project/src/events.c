@@ -6,7 +6,7 @@
 #include "em_adc.h"
 
 #include "src/main.h"
-#include "src/i2c.h"
+#include "src/tempsense.h"
 #include "src/lightsens.h"
 #include "src/gpio.h"
 #include "src/soil_moisture.h"

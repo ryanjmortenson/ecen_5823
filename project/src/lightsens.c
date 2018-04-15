@@ -5,11 +5,9 @@
 #include "em_emu.h"
 #include "em_gpio.h"
 #include "bsp.h"
+#include "i2c.h"
 #include "lightsens.h"
 #include "sleep.h"
-
-#define LOWEST_ENERGY_STATE_TRANSMISSION (sleepEM2)
-#define LOWEST_ENERGY_STATE_I2C (sleepEM3)
 
 #define EXPONENT_MASK (0xf000)
 #define EXPONENT_SHIFT (12)
