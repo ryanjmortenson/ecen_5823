@@ -74,7 +74,7 @@ uint8_t events = 0;
 #define CALCULATE_INIT_DUTY_CYCLE(init_time) ((SAMPLE_PERIOD - init_time) / SAMPLE_PERIOD)
 #define ADV_INT (6500) // 4 seconds
 #define CONN_INTERVAL (6) // Minimum
-#define SLAVE_LATENCY (0) // Minimum Minimum
+#define SLAVE_LATENCY (0) // Minimum
 #define TIMEOUT (1000)
 
 

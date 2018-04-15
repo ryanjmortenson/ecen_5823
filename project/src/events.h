@@ -1,10 +1,3 @@
-/*
- * events.h
- *
- *  Created on: Feb 18, 2018
- *      Author: mortzula
- */
-
 #ifndef SRC_EVENTS_H_
 #define SRC_EVENTS_H_
 
