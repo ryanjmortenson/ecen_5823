@@ -19,24 +19,9 @@ extern const struct bg_gattdb_def bg_gattdb_data;
 #define gattdb_tx_power_level                  22
 #define gattdb_soil_moisture_measurement         25
 #define gattdb_humidity                        28
-#define gattdb_es_measurement_7                29
-#define gattdb_es_trigger_setting_7            30
-#define gattdb_es_configuration_7              31
-#define gattdb_characteristic_user_description_7         32
-#define gattdb_valid_range_7                   33
-#define gattdb_irradiance                      35
-#define gattdb_es_measurement_8                36
-#define gattdb_es_trigger_setting_8            37
-#define gattdb_es_configuration_8              38
-#define gattdb_characteristic_user_description_8         39
-#define gattdb_valid_range_8                   40
-#define gattdb_temperature                     42
-#define gattdb_es_measurement_12               43
-#define gattdb_es_trigger_setting_12           44
-#define gattdb_es_configuration_12             45
-#define gattdb_characteristic_user_description_12         46
-#define gattdb_valid_range_12                  47
-#define gattdb_connection_count                50
-#define gattdb_measurement_count               52
+#define gattdb_irradiance                      30
+#define gattdb_temperature                     32
+#define gattdb_connection_count                35
+#define gattdb_measurement_count               37
 
 #endif
