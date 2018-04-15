@@ -5,7 +5,7 @@ class Measurement(object):
     Class for holding and converting measurements
     '''
 
-    def __init__(self, addr, temp, lux, soil):
+    def __init__(self, addr, temp, lux, soil, conn, meas):
         '''
         Constructor
         '''
@@ -13,6 +13,8 @@ class Measurement(object):
         self.lux = lux
         self.soil = soil
         self.addr = addr
+        self.conn = conn
+        self.meas = meas
 
     def get_temp(self):
         '''
@@ -31,6 +33,18 @@ class Measurement(object):
         Transform bytes to int
         '''
         return struct.unpack("<i", self.lux)[0]
+
+    def get_connection_count(self):
+        '''
+        Transform bytes to int
+        '''
+        return struct.unpack("<i", self.conn)[0]
+
+    def get_measurement_count(self):
+        '''
+        Transform bytes to int
+        '''
+        return struct.unpack("<i", self.meas)[0]
 
     def get_address(self):
         '''
