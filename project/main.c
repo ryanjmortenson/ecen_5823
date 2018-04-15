@@ -230,7 +230,7 @@ int main (void)
 #ifdef SECURITY_ON
         /* The HTM service typically indicates and indications cannot be given an encrypted property so
         force encryption immediately after connecting */
-        gecko_cmd_sm_increase_security(conn);
+        gecko_cmd_sm_increase_security(evt->data.evt_le_connection_opened.connection);
 #endif
         break;
 
