@@ -232,6 +232,7 @@ int main (void)
 #endif
         break;
 
+#ifdef SECURITY_ON
       case gecko_evt_sm_passkey_display_id:
 	snprintf(passbuffer, 32, "PK: %06"PRIu32, evt->data.evt_sm_passkey_display.passkey);
         GRAPHICS_Init();
@@ -250,6 +251,7 @@ int main (void)
 	GRAPHICS_AppendString("\nBond Failed");
 	GRAPHICS_Update();
 	break;
+#endif
 
       case gecko_evt_le_connection_closed_id:
         // Reset the connection
