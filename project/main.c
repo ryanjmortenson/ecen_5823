@@ -73,7 +73,7 @@ uint8_t events = 0;
 #define SENSOR_INIT_TIME (.120f) // 120 milliseconds for sensors to fully initialize
 #define CALCULATE_INIT_DUTY_CYCLE(init_time) ((SAMPLE_PERIOD - init_time) / SAMPLE_PERIOD)
 #define ADV_INT (6500) // 4 seconds
-#define CONN_INTERVAL (0x06) // Minimum
+#define CONN_INTERVAL (6) // Minimum
 #define SLAVE_LATENCY (0) // Minimum Minimum
 #define TIMEOUT (1000)
 
@@ -151,9 +151,7 @@ int main (void)
   if (letimer_init (SAMPLE_PERIOD, CALCULATE_INIT_DUTY_CYCLE (SENSOR_INIT_TIME)))
   {
     // Hold current temperature reading
-    uint8_t conn;
     char passbuffer[32] = {0};
-
 
     while (1)
     {
@@ -217,7 +215,8 @@ int main (void)
                                                 CONN_INTERVAL, SLAVE_LATENCY,
                                                 TIMEOUT);
 
-        conn = evt->data.evt_le_connection_opened.connection;
+        // Set connection power
+        gecko_cmd_le_connection_get_rssi (evt->data.evt_le_connection_opened.connection);
 
         // Increment connections and set in gattdb
         connections++;
@@ -250,12 +249,10 @@ int main (void)
       case gecko_evt_sm_bonding_failed_id:
 	GRAPHICS_AppendString("\nBond Failed");
 	GRAPHICS_Update();
-	gecko_cmd_endpoint_close(conn);
 	break;
 
       case gecko_evt_le_connection_closed_id:
         // Reset the connection
-        conn = 0;
         gecko_cmd_system_set_tx_power (0);
 
         /* Check if need to boot to dfu mode */
@@ -301,15 +298,8 @@ int main (void)
         break;
 
       case gecko_evt_system_external_signal_id:
-        // If connection is active set rssi
-        if (conn)
-        {
-          gecko_cmd_le_connection_get_rssi (conn);
-        }
-
         // Handle set of events
         handle_events (&events);
-
         break;
 
       case gecko_evt_le_connection_rssi_id:
