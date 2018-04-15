@@ -113,21 +113,6 @@ void LETIMER0_IRQHandler (void)
   // Clear interrupt
   LETIMER_IntClear (LETIMER0, LETIMER_INTERRUPTS);
 
-#if LIGHT_LED_ON_TEMP_READ
-  // Set or clear pin based on led_state
-  if (led_state)
-  {
-    GPIO_PinOutClear (LED0_port, LED0_pin);
-  }
-  else
-  {
-    GPIO_PinOutSet (LED0_port, LED0_pin);
-  }
-
-  // Switch led state
-  led_state = led_state ? false : true;
-#endif
-
   // Set the events
   set_events (&events);
 
@@ -214,14 +199,14 @@ int main (void)
         load_or_set_initial(CONNECTION_COUNT_KEY, 0, &connections);
 
         buf_start = buffer;
-        UINT16_TO_BITSTREAM (buf_start, connections);
+        UINT32_TO_BITSTREAM (buf_start, connections);
         gecko_cmd_gatt_server_write_attribute_value (gattdb_connection_count, 0, 4, buffer);
 
         // Load or set the measurement in the boot, measurement counts will be handled in events.c
 	load_or_set_initial(MEASUREMENT_COUNT_KEY, 0, &measurements);
 
 	buf_start = buffer;
-	UINT16_TO_BITSTREAM (buf_start, measurements);
+	UINT32_TO_BITSTREAM (buf_start, measurements);
 	gecko_cmd_gatt_server_write_attribute_value (gattdb_measurement_count, 0, 4, buffer);
         break;
 
@@ -238,7 +223,7 @@ int main (void)
         connections++;
         save(CONNECTION_COUNT_KEY, connections);
         buf_start = buffer;
-	UINT16_TO_BITSTREAM (buf_start, connections);
+	UINT32_TO_BITSTREAM (buf_start, connections);
 	gecko_cmd_gatt_server_write_attribute_value (gattdb_connection_count, 0, 4, buffer);
 
 #ifdef SECURITY_ON
