@@ -127,6 +127,10 @@ void LETIMER0_IRQHandler (void)
  */
 int main (void)
 {
+#ifdef SECURITY_ON
+  // Buffer for holding PK print statement
+  char passbuffer[32] = {0};
+#endif
   uint8_t buffer[2] = {0};
   uint8_t* buf_start = buffer;
 
@@ -150,9 +154,6 @@ int main (void)
 
   if (letimer_init (SAMPLE_PERIOD, CALCULATE_INIT_DUTY_CYCLE (SENSOR_INIT_TIME)))
   {
-    // Hold current temperature reading
-    char passbuffer[32] = {0};
-
     while (1)
     {
       /* Event pointer for handling events */
@@ -170,11 +171,16 @@ int main (void)
          * procedure. */
       case gecko_evt_system_boot_id:
 #ifdef SECURITY_ON
+	// Set up security features
 	gecko_cmd_sm_delete_bondings();
 	gecko_cmd_sm_configure(0x0F, sm_io_capability_displayonly);
 	gecko_cmd_sm_set_bondable_mode(1);
 #endif
 
+#ifdef ERASE_ALL_PERSISTENT_DATA
+        // Erase all persistent data (reset)
+        gecko_cmd_flash_ps_erase_all();
+#endif
         /* Set advertising parameters. 100ms advertisement interval. All
          * channels used. The first two parameters are minimum and maximum
          * advertising interval, both in units of (milliseconds * 1.6). The
@@ -188,10 +194,6 @@ int main (void)
         // Set tx power to 0
         gecko_cmd_system_set_tx_power (0);
 
-#ifdef ERASE_ALL_PERSISTENT_DATA
-        // Erase all persistent data (reset)
-        gecko_cmd_flash_ps_erase_all();
-#endif
 
         // Load or set the connections persistent data
         load_or_set_initial(CONNECTION_COUNT_KEY, 0, &connections);
