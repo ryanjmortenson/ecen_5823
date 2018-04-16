@@ -57,7 +57,7 @@
 #include "src/ble_settings.h"
 #include "src/setters.h"
 
-// #define SECURITY_ON
+#define SECURITY_ON
 
 /***********************************************************************************************
  * @addtogroup Application
@@ -188,7 +188,7 @@ int main (void)
         // Reset the connection
         gecko_cmd_system_set_tx_power (0);
 
-#if SECURITY_ON
+#ifdef SECURITY_ON
         // In case a pairing was in progress and the LCD is displaying information
 	shutdown_display();
 #endif
