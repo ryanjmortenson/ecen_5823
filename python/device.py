@@ -129,8 +129,8 @@ class SensorDevice(object):
                 ble_lock.release()
                 meas = Measurement(self.addr,
                                    temp_char,
-                                   soil_char,
                                    lux_char,
+                                   soil_char,
                                    conn_char,
                                    meas_char)
                 self.meas_queue.put(meas)

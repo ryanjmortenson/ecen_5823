@@ -26,13 +26,13 @@ class Measurement(object):
         '''
         Transform bytes to short
         '''
-        return float(struct.unpack("<h", self.soil)[0])/float(4096) * 100
+        return float(struct.unpack("<i", self.soil)[0])/float(4096) * 100
 
     def get_lux(self):
         '''
         Transform bytes to int
         '''
-        return struct.unpack("<i", self.lux)[0]
+        return struct.unpack("<h", self.lux)[0]
 
     def get_connection_count(self):
         '''
