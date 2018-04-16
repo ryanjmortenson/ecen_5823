@@ -43,7 +43,7 @@ typedef enum events
 #define DUTY_CYCLE (0.025f)
 
 // Turn on security
-//#define SECURITY_ON
+#define SECURITY_ON
 
 //***********************************************************************************
 // function prototypes

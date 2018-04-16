@@ -78,7 +78,7 @@
     <characteristic id="soil_moisture_measurement" name="Soil Moisture Measurement" sourceId="custom.type" uuid="83c77eb6-35af-4dd9-8851-87d0a92ea404">
       <informativeText>Custom characteristic</informativeText>
       <value length="4" type="hex" variable_length="false"/>
-      <properties read="true" read_requirement="mandatory"/>
+      <properties authenticated_read="true" authenticated_read_requirement="mandatory"/>
     </characteristic>
   </service>
   
@@ -90,21 +90,21 @@
     <characteristic id="humidity" name="Humidity" sourceId="org.bluetooth.characteristic.humidity" uuid="2A6F">
       <informativeText/>
       <value length="2" type="hex" variable_length="false"/>
-      <properties indicate="false" indicate_requirement="excluded" notify="false" notify_requirement="optional" read="true" read_requirement="mandatory" reliable_write="false" reliable_write_requirement="excluded" write="false" write_no_response="false" write_no_response_requirement="excluded" write_requirement="excluded"/>
+      <properties authenticated_read="true" authenticated_read_requirement="mandatory"/>
     </characteristic>
     
     <!--Irradiance-->
     <characteristic id="irradiance" name="Irradiance" sourceId="org.bluetooth.characteristic.irradiance" uuid="2A77">
       <informativeText/>
       <value length="2" type="hex" variable_length="false"/>
-      <properties indicate="false" indicate_requirement="excluded" notify="false" notify_requirement="optional" read="true" read_requirement="mandatory" reliable_write="false" reliable_write_requirement="excluded" write="false" write_no_response="false" write_no_response_requirement="excluded" write_requirement="excluded"/>
+      <properties authenticated_read="true" authenticated_read_requirement="mandatory"/>
     </characteristic>
     
     <!--Temperature-->
     <characteristic id="temperature" name="Temperature" sourceId="org.bluetooth.characteristic.temperature" uuid="2A6E">
       <informativeText/>
       <value length="2" type="hex" variable_length="false"/>
-      <properties indicate="false" indicate_requirement="excluded" notify="false" notify_requirement="optional" read="true" read_requirement="mandatory" reliable_write="false" reliable_write_requirement="excluded" write="false" write_no_response="false" write_no_response_requirement="excluded" write_requirement="excluded"/>
+      <properties authenticated_read="true" authenticated_read_requirement="mandatory"/>
     </characteristic>
   </service>
   
@@ -116,14 +116,14 @@
     <characteristic id="connection_count" name="Connection Count" sourceId="custom.type" uuid="79556713-85bd-4e5f-944d-7363449d1baa">
       <informativeText>Custom characteristic</informativeText>
       <value length="4" type="hex" variable_length="false">0x00</value>
-      <properties read="true" read_requirement="mandatory"/>
+      <properties authenticated_read="true" authenticated_read_requirement="mandatory"/>
     </characteristic>
     
     <!--Measurement Count-->
     <characteristic id="measurement_count" name="Measurement Count" sourceId="custom.type" uuid="016d95b5-006f-4e86-9588-bd551a6b1c6d">
       <informativeText>Custom characteristic</informativeText>
       <value length="4" type="hex" variable_length="false">0x00</value>
-      <properties read="true" read_requirement="mandatory"/>
+      <properties authenticated_read="true" authenticated_read_requirement="mandatory"/>
     </characteristic>
   </service>
 </gatt>

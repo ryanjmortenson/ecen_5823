@@ -194,7 +194,6 @@ int main (void)
         // Set tx power to 0
         gecko_cmd_system_set_tx_power (0);
 
-
         // Load or set the connections persistent data
         load_or_set_initial(CONNECTION_COUNT_KEY, 0, &connections);
 
@@ -246,7 +245,7 @@ int main (void)
 
       case gecko_evt_sm_bonded_id:
 	GRAPHICS_Clear();
-	GRAPHICS_Sleep();
+	GRAPHICS_Update();
 	break;
 
       case gecko_evt_sm_bonding_failed_id:
