@@ -55,6 +55,7 @@
 #include "src/events.h"
 #include "src/soil_moisture.h"
 #include "src/persistent_data.h"
+#include "src/shared_resources.h"
 
 int led_state = LED0_default;
 uint8_t events = 0;
@@ -236,6 +237,9 @@ int main (void)
 
 #ifdef SECURITY_ON
       case gecko_evt_sm_passkey_display_id:
+	// Turn on the shared resources GPIOD15 and HFPER
+	turn_on_shared_resources();
+
 	snprintf(passbuffer, 32, "PK: %06"PRIu32, evt->data.evt_sm_passkey_display.passkey);
         GRAPHICS_Init();
 	GRAPHICS_Clear();
@@ -247,6 +251,9 @@ int main (void)
       case gecko_evt_sm_bonded_id:
 	GRAPHICS_Clear();
 	GRAPHICS_Sleep();
+
+	// Turn off the shared resources GPIOD15 and HFPER
+	turn_off_shared_resources();
 	break;
 
       case gecko_evt_sm_bonding_failed_id:

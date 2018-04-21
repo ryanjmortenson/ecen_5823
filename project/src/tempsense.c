@@ -40,6 +40,7 @@
 #include "em_gpio.h"
 #include "bsp.h"
 #include "i2c.h"
+#include "shared_resources.h"
 #include "tempsense.h"
 #include "sleep.h"
 
@@ -89,16 +90,14 @@ void I2C_Tempsens_Init (void)
   I2C_Init_TypeDef i2cInit = I2C_INIT_DEFAULT;
 
   // Turn on I2C device
-  GPIO_DriveStrengthSet (gpioPortD, gpioDriveStrengthWeakAlternateWeak);
-  GPIO_PinModeSet (gpioPortD, 15, gpioModePushPull, true);
-
-  // Turn on I2C device
   GPIO_DriveStrengthSet (gpioPortA, gpioDriveStrengthWeakAlternateWeak);
   GPIO_PinModeSet (gpioPortA, 2, gpioModePushPull, true);
 
   // Turn on clock for I2C0
-  CMU_ClockEnable (cmuClock_HFPER, true);
   CMU_ClockEnable (cmuClock_I2C0, true);
+
+  // Turn off the shared resources GPIOD15 and HFPER
+  turn_on_shared_resources ();
 
   // Turn on SDA and SCL
   GPIO_PinModeSet (gpioPortC, 10, gpioModeWiredAnd, 1);
@@ -150,22 +149,16 @@ void I2C_Tempsens_Dest (void)
   NVIC_ClearPendingIRQ (I2C0_IRQn);
   NVIC_DisableIRQ (I2C0_IRQn);
 
+  // Turn off the shared resources GPIOD15 and HFPER
+  turn_off_shared_resources();
+
   // Turn off SDL and SCA
   GPIO_PinModeSet (gpioPortC, 10, gpioModeDisabled, false);
   GPIO_PinModeSet (gpioPortC, 11, gpioModeDisabled, false);
 
-  // Turn off I2C device
-#if 0
-  GPIO_PinModeSet (gpioPortD, 15, gpioModePushPull, false);
-  GPIO_PinModeSet (gpioPortD, 15, gpioModeDisabled, false);
-#endif
   GPIO_PinModeSet (gpioPortA, 2, gpioModePushPull, false);
   GPIO_PinModeSet (gpioPortA, 2, gpioModeDisabled, false);
 
-#if 0
-  // Turn off clocks
-  CMU_ClockEnable (cmuClock_HFPER, false);
-#endif
   CMU_ClockEnable (cmuClock_I2C0, false);
 }
 
