@@ -24,6 +24,8 @@ void handle_events (uint8_t * events)
   uint32_t utemp = 0;
   uint8_t buffer[5] = { 0 };
   uint8_t *buf_start = buffer;
+  int8_t temp_ret = 0;
+  int8_t lux_ret = 0;
 
   // Handle the device init
   if ((*events & CREATE_EVENT (START_TEMP_SENSOR)))
@@ -53,10 +55,10 @@ void handle_events (uint8_t * events)
     sensor_started = false;
 
     // Read temperature
-    TEMPSENS_TemperatureGet (I2C0, TEMPSENS_DVK_ADDR, &temp);
+    temp_ret = TEMPSENS_TemperatureGet (I2C0, TEMPSENS_DVK_ADDR, &temp);
 
     // Read ambient light
-    LIGHTSENS_GetLux(I2C0, &lux);
+    lux_ret = LIGHTSENS_GetLux(I2C0, &lux);
 
     // Shutdown I2C sensors
     I2C_Tempsens_Dest ();
@@ -70,16 +72,22 @@ void handle_events (uint8_t * events)
     gecko_cmd_gatt_server_write_attribute_value (gattdb_soil_moisture_measurement, 0, 4, buffer);
 
     // Convert temperature to a bit-stream and send
-    buf_start = buffer;
-    utemp = FLT_TO_UINT32 ((uint32_t) (temp * 1000), -3);
-    UINT32_TO_BITSTREAM (buf_start, utemp);
-    gecko_cmd_gatt_server_write_attribute_value (gattdb_temperature, 0, 2, buffer);
+    if (temp_ret == 0)
+    {
+      buf_start = buffer;
+      utemp = FLT_TO_UINT32 ((uint32_t) (temp * 1000), -3);
+      UINT32_TO_BITSTREAM (buf_start, utemp);
+      gecko_cmd_gatt_server_write_attribute_value (gattdb_temperature, 0, 2, buffer);
+    }
 
-    // Convert irradiance to bit stream and send
-    buf_start = buffer;
-    utemp = FLT_TO_UINT32 (lux, 0);
-    UINT32_TO_BITSTREAM (buf_start, utemp);
-    gecko_cmd_gatt_server_write_attribute_value (gattdb_irradiance, 0, 2, buffer);
+    if (lux_ret == 0)
+    {
+      // Convert irradiance to bit stream and send
+      buf_start = buffer;
+      utemp = FLT_TO_UINT32 (lux, 0);
+      UINT32_TO_BITSTREAM (buf_start, utemp);
+      gecko_cmd_gatt_server_write_attribute_value (gattdb_irradiance, 0, 2, buffer);
+    }
 
     // Increment measurements and set for gattdb
     buf_start = buffer;

@@ -195,7 +195,6 @@ int main (void)
         // Set tx power to 0
         gecko_cmd_system_set_tx_power (0);
 
-
         // Load or set the connections persistent data
         load_or_set_initial(CONNECTION_COUNT_KEY, 0, &connections);
 

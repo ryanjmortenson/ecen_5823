@@ -35,9 +35,9 @@ typedef enum
  *****************************   PROTOTYPES   **********************************
  ******************************************************************************/
 
-void LIGHTSENS_GetLux (I2C_TypeDef * i2c, float * lux);
+int LIGHTSENS_GetLux (I2C_TypeDef * i2c, float * lux);
 
-void LIGHTSENS_SetSingleShot (I2C_TypeDef * i2c);
+int LIGHTSENS_SetSingleShot (I2C_TypeDef * i2c);
 
 int
 LIGHTSENS_RegisterGet (I2C_TypeDef * i2c, uint8_t addr,

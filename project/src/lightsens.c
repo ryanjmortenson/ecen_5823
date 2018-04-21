@@ -24,19 +24,27 @@ extern I2C_TransferReturn_TypeDef I2C_Status;
 /*******************************************************************************
  **************************   GLOBAL FUNCTIONS   *******************************
  ******************************************************************************/
-void LIGHTSENS_GetLux (I2C_TypeDef * i2c, float * lux)
+int LIGHTSENS_GetLux (I2C_TypeDef * i2c, float * lux)
 {
   uint16_t val = 0;
-  LIGHTSENS_RegisterGet (I2C0, LIGHTSENS_ADDR, lightsensRegResult, &val);
+  int ret = 0;
+
+  ret = LIGHTSENS_RegisterGet (I2C0, LIGHTSENS_ADDR, lightsensRegResult, &val);
   *lux = CONV_SCALE_FACTOR * pow(CONV_MANTISSA, ((val & EXPONENT_MASK) >> EXPONENT_SHIFT)) * (val & FRACTIONAL_MASK);
+  return ret;
 }
 
-void LIGHTSENS_SetSingleShot (I2C_TypeDef * i2c)
+int LIGHTSENS_SetSingleShot (I2C_TypeDef * i2c)
 {
   uint16_t config;
+  int ret = 0;
 
   // Read the config to update
-  LIGHTSENS_RegisterGet(i2c, LIGHTSENS_ADDR, lightsensRegConfig, &config);
+  ret = LIGHTSENS_RegisterGet(i2c, LIGHTSENS_ADDR, lightsensRegConfig, &config);
+  if (ret < 0)
+  {
+    return ret;
+  }
 
   // Turn on continuous config
   config |= SINGLE_SHOT;
@@ -45,7 +53,7 @@ void LIGHTSENS_SetSingleShot (I2C_TypeDef * i2c)
   config &= ~(1 << 11);
 
   // Set the config
-  LIGHTSENS_RegisterSet(i2c, LIGHTSENS_ADDR, lightsensRegConfig, config);
+  return LIGHTSENS_RegisterSet(i2c, LIGHTSENS_ADDR, lightsensRegConfig, config);
 }
 
 int
@@ -55,6 +63,9 @@ LIGHTSENS_RegisterGet (I2C_TypeDef * i2c, uint8_t addr,
   I2C_TransferSeq_TypeDef seq;
   uint8_t regid[1];
   uint8_t data[2];
+  const uint8_t MAX_COUNT = 127;
+  uint8_t count = 0;
+  bool failed = false;
 
   seq.addr = addr;
   seq.flags = I2C_FLAG_WRITE_READ;
@@ -72,6 +83,12 @@ LIGHTSENS_RegisterGet (I2C_TypeDef * i2c, uint8_t addr,
   {
     // Sleep while waiting for an interruptLETIMER_ULFRCO_FREQ
     SLEEP_Sleep ();
+    if (count == MAX_COUNT)
+    {
+      failed = true;
+      break;
+    }
+    count++;
   }
 
   SLEEP_SleepBlockEnd (LOWEST_ENERGY_STATE_TRANSMISSION);
@@ -91,6 +108,9 @@ LIGHTSENS_RegisterSet (I2C_TypeDef * i2c, uint8_t addr,
 {
   I2C_TransferSeq_TypeDef seq;
   uint8_t data[3];
+  const uint8_t MAX_COUNT = 127;
+  uint8_t count = 0;
+  bool failed = false;
 
   seq.addr = addr;
   seq.flags = I2C_FLAG_WRITE;
@@ -101,14 +121,23 @@ LIGHTSENS_RegisterSet (I2C_TypeDef * i2c, uint8_t addr,
   data[2] = (uint8_t) val;
   seq.buf[0].len = 3;
 
+  SLEEP_SleepBlockBegin (LOWEST_ENERGY_STATE_TRANSMISSION);
   /* Do a polled transfer */
   I2C_Status = I2C_TransferInit (i2c, &seq);
   while (I2C_Status == i2cTransferInProgress)
   {
     /* Enter EM1 while waiting for I2C interrupt */
-    EMU_EnterEM1 ();
+    // Sleep while waiting for an interrupt
+    SLEEP_Sleep ();
+    if (count == MAX_COUNT)
+    {
+      failed = true;
+      break;
+    }
+    count++;
     /* Could do a timeout function here. */
   }
+  SLEEP_SleepBlockEnd (LOWEST_ENERGY_STATE_TRANSMISSION);
 
   return (I2C_Status);
 }

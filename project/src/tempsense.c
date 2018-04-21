@@ -219,6 +219,9 @@ TEMPSENS_RegisterGet (I2C_TypeDef * i2c, uint8_t addr,
   I2C_TransferSeq_TypeDef seq;
   uint8_t regid[1];
   uint8_t data[2];
+  const uint8_t MAX_COUNT = 127;
+  uint8_t count = 0;
+  bool failed = false;
 
   seq.addr = addr;
   seq.flags = I2C_FLAG_WRITE_READ | I2C_FLAG_MASTER_RELEASE;
@@ -236,10 +239,16 @@ TEMPSENS_RegisterGet (I2C_TypeDef * i2c, uint8_t addr,
   {
     // Sleep while waiting for an interrupt
     SLEEP_Sleep ();
+    if (count == MAX_COUNT)
+    {
+      failed = true;
+      break;
+    }
+    count++;
   }
 
   SLEEP_SleepBlockEnd (LOWEST_ENERGY_STATE_TRANSMISSION);
-  if (I2C_Status != i2cTransferDone)
+  if (I2C_Status != i2cTransferDone  || failed)
   {
     return ((int) I2C_Status);
   }
