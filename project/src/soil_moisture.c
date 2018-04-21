@@ -6,7 +6,8 @@
 
 #include "src/soil_moisture.h"
 
-#define MAX_CONVER_COUNT (32)
+#define MAX_CONVER_COUNT (512)
+#define START_SUM_COUNT (MAX_CONVER_COUNT >> 1)
 
 uint32_t measurement_count = 0;
 uint32_t sum = 0;
@@ -71,14 +72,21 @@ void soil_moisture_init (void)
 void soil_moisture_dest()
 {
   // Set input and output pins for soil moisture sensor
+  ADC_Reset(ADC0);
   GPIO_PinModeSet (SOIL_MOISTURE_POWER_PORT, POWER_PIN, gpioModeDisabled, false);
   GPIO_PinModeSet (SOIL_MOISTURE_SIG_PORT, SIGNAL_PIN, gpioModeDisabled, false);
-  ADC_Reset(ADC0);
 }
 
 void handle_soil_moisture_event()
 {
-  sum += ADC_DataSingleGet(ADC0);
+  if (measurement_count > START_SUM_COUNT)
+  {
+    sum += ADC_DataSingleGet(ADC0);
+  }
+  else
+  {
+    ADC_DataSingleGet(ADC0);
+  }
   measurement_count++;
 
   if (measurement_count < MAX_CONVER_COUNT)
@@ -93,9 +101,9 @@ void handle_soil_moisture_event()
 
 uint32_t get_soil_moisture()
 {
-  if (measurement_count > 0)
+  if (measurement_count > START_SUM_COUNT)
   {
-    return sum / measurement_count;
+    return sum / (measurement_count - START_SUM_COUNT);
   }
   else
   {

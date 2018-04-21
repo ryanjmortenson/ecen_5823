@@ -55,8 +55,8 @@ void soil_moisture_init (void)
   NVIC_EnableIRQ(ADC0_IRQn);
 
   // Set port D for soil moisture sensor
-  GPIO_DriveStrengthSet (SOIL_MOISTURE_POWER_PORT, gpioDriveStrengthWeakAlternateWeak);
-  GPIO_DriveStrengthSet (SOIL_MOISTURE_SIG_PORT, gpioDriveStrengthWeakAlternateWeak);
+  GPIO_DriveStrengthSet (SOIL_MOISTURE_POWER_PORT, gpioDriveStrengthStrongAlternateStrong);
+  GPIO_DriveStrengthSet (SOIL_MOISTURE_SIG_PORT, gpioDriveStrengthStrongAlternateStrong);
 
   // Set input and output pins for soil moisture sensor
   GPIO_PinModeSet (SOIL_MOISTURE_POWER_PORT, POWER_PIN, gpioModePushPull, true);
