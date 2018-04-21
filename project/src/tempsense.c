@@ -357,13 +357,29 @@ int TEMPSENS_TemperatureGet (I2C_TypeDef * i2c, uint8_t addr, float *temp)
   int ret;
   uint16_t val = 0;
 
-  ret = TEMPSENS_RegisterGet (i2c, addr, 0xf3, &val);
+  ret = TEMPSENS_RegisterGet (i2c, addr, 0xe0, &val);
   if (ret < 0)
   {
     return (ret);
   }
 
   *temp = ((175.72f * val) / 65536) - 46.85;
+
+  return (0);
+}
+
+int TEMPSENS_HumidityGet (I2C_TypeDef * i2c, uint8_t addr, float *humidity)
+{
+  int ret;
+  uint16_t val = 0;
+
+  ret = TEMPSENS_RegisterGet (i2c, addr, 0xe5, &val);
+  if (ret < 0)
+  {
+    return (ret);
+  }
+
+  *humidity = ((val * 125.0f) / 65536) - 6.0f;
 
   return (0);
 }

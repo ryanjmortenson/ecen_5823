@@ -22,9 +22,11 @@ void handle_events (uint8_t * events)
 {
   float temp = 0.0f;
   float lux = 0;
+  float humidity = 0;
 
   int8_t temp_ret = 0;
   int8_t lux_ret = 0;
+  int8_t humidity_ret = 0;
 
   // Handle the device init
   if ((*events & CREATE_EVENT (START_TEMP_SENSOR)))
@@ -54,6 +56,9 @@ void handle_events (uint8_t * events)
     sensor_started = false;
 
     // Read temperature
+    humidity_ret = TEMPSENS_HumidityGet (I2C0, TEMPSENS_DVK_ADDR, &humidity);
+
+    // Read temperature
     temp_ret = TEMPSENS_TemperatureGet (I2C0, TEMPSENS_DVK_ADDR, &temp);
 
     // Read ambient light
@@ -72,6 +77,11 @@ void handle_events (uint8_t * events)
     if (temp_ret == 0)
     {
       temp_setter(temp);
+    }
+
+    if (humidity_ret == 0)
+    {
+      humidity_setter(humidity);
     }
 
     if (lux_ret == 0)

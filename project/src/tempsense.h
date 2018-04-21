@@ -87,5 +87,6 @@ int
 TEMPSENS_RegisterSet (I2C_TypeDef * i2c, uint8_t addr,
                       TEMPSENS_Register_TypeDef reg, uint16_t val);
 int TEMPSENS_TemperatureGet (I2C_TypeDef * i2c, uint8_t addr, float *temp);
+int TEMPSENS_HumidityGet (I2C_TypeDef * i2c, uint8_t addr, float *humidity);
 
 #endif /* TEMPSENSE_H_ */

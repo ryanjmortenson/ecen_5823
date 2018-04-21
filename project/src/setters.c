@@ -36,9 +36,21 @@ void temp_setter(float temp)
   uint8_t * buf_start = buffer;
   uint32_t utemp = 0;
 
-  utemp = FLT_TO_UINT32 ((uint32_t) (temp * 1000), -3);
-  UINT32_TO_BITSTREAM (buf_start, utemp);
+  utemp = FLT_TO_UINT32 (temp, 0);
+  utemp = (utemp >> 8) | (utemp << 8);
+  UINT16_TO_BITSTREAM (buf_start, utemp);
   gecko_cmd_gatt_server_write_attribute_value (gattdb_temperature, 0, 2, buffer);
+}
+
+void humidity_setter(float humidity)
+{
+  uint8_t buffer[2] = {0};
+  uint8_t * buf_start = buffer;
+  uint32_t uhum = 0;
+
+  uhum = FLT_TO_UINT32 (humidity, 0);
+  UINT32_TO_BITSTREAM (buf_start, uhum);
+  gecko_cmd_gatt_server_write_attribute_value (gattdb_humidity, 0, 2, buffer);
 }
 
 void lux_setter(float lux)

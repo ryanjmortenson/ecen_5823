@@ -68,7 +68,6 @@ LIGHTSENS_RegisterGet (I2C_TypeDef * i2c, uint8_t addr,
   uint8_t data[2];
   const uint8_t MAX_COUNT = 127;
   uint8_t count = 0;
-  bool failed = false;
 
   seq.addr = addr;
   seq.flags = I2C_FLAG_WRITE_READ;
@@ -88,7 +87,6 @@ LIGHTSENS_RegisterGet (I2C_TypeDef * i2c, uint8_t addr,
     SLEEP_Sleep ();
     if (count == MAX_COUNT)
     {
-      failed = true;
       break;
     }
     count++;
@@ -113,7 +111,6 @@ LIGHTSENS_RegisterSet (I2C_TypeDef * i2c, uint8_t addr,
   uint8_t data[3];
   const uint8_t MAX_COUNT = 127;
   uint8_t count = 0;
-  bool failed = false;
 
   seq.addr = addr;
   seq.flags = I2C_FLAG_WRITE;
@@ -134,7 +131,6 @@ LIGHTSENS_RegisterSet (I2C_TypeDef * i2c, uint8_t addr,
     SLEEP_Sleep ();
     if (count == MAX_COUNT)
     {
-      failed = true;
       break;
     }
     count++;
