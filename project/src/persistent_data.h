@@ -15,7 +15,7 @@
 //***********************************************************************************
 // macros
 //***********************************************************************************
-// #define ERASE_ALL_PERSISTENT_DATA
+#define ERASE_ALL_PERSISTENT_DATA
 #define CONNECTION_COUNT_KEY (0x4000)
 #define MEASUREMENT_COUNT_KEY (0x4001)
 

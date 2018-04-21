@@ -11,6 +11,7 @@
 #include "src/gpio.h"
 #include "src/soil_moisture.h"
 #include "src/persistent_data.h"
+#include "src/setters.h"
 
 #include "graphics.h"
 
@@ -21,9 +22,7 @@ void handle_events (uint8_t * events)
 {
   float temp = 0.0f;
   float lux = 0;
-  uint32_t utemp = 0;
-  uint8_t buffer[5] = { 0 };
-  uint8_t *buf_start = buffer;
+
   int8_t temp_ret = 0;
   int8_t lux_ret = 0;
 
@@ -67,35 +66,23 @@ void handle_events (uint8_t * events)
     soil_moisture_dest();
 
     // Convert soil moisture into bit-stream and send
-    buf_start = buffer;
-    UINT32_TO_BITSTREAM (buf_start, get_soil_moisture());
-    gecko_cmd_gatt_server_write_attribute_value (gattdb_soil_moisture_measurement, 0, 4, buffer);
+    soil_moisture_setter(get_soil_moisture());
 
     // Convert temperature to a bit-stream and send
     if (temp_ret == 0)
     {
-      buf_start = buffer;
-      utemp = FLT_TO_UINT32 ((uint32_t) (temp * 1000), -3);
-      UINT32_TO_BITSTREAM (buf_start, utemp);
-      gecko_cmd_gatt_server_write_attribute_value (gattdb_temperature, 0, 2, buffer);
+      temp_setter(temp);
     }
 
     if (lux_ret == 0)
     {
-      // Convert irradiance to bit stream and send
-      buf_start = buffer;
-      utemp = FLT_TO_UINT32 (lux, 0);
-      UINT32_TO_BITSTREAM (buf_start, utemp);
-      gecko_cmd_gatt_server_write_attribute_value (gattdb_irradiance, 0, 2, buffer);
+      lux_setter(lux);
     }
 
     // Increment measurements and set for gattdb
-    buf_start = buffer;
     measurements++;
     save(MEASUREMENT_COUNT_KEY, measurements);
-    buf_start = buffer;
-    UINT32_TO_BITSTREAM (buf_start, measurements);
-    gecko_cmd_gatt_server_write_attribute_value (gattdb_measurement_count, 0, 4, buffer);
+    measurement_setter(measurements);
   }
 
   if (*events & CREATE_EVENT (READ_SOIL_MOISTURE))

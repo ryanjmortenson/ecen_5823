@@ -9,6 +9,7 @@
 //***********************************************************************************
 #include "letimer.h"
 #include "main.h"
+#include "events.h"
 
 //***********************************************************************************
 // macros
@@ -35,9 +36,27 @@ const LETIMER_Init_TypeDef le_init = {.enable = true, // Start counting when
   .repMode = letimerRepeatFree  // Let run forever
 };
 
+extern uint8_t events;
+
 //***********************************************************************************
 // functions
 //***********************************************************************************
+
+void LETIMER0_IRQHandler (void)
+{
+  CORE_ATOMIC_IRQ_DISABLE ();
+
+  // Clear interrupt
+  LETIMER_IntClear (LETIMER0, LETIMER_INTERRUPTS);
+
+  // Set the events
+  set_events (&events);
+
+  // Signal events with gecko system
+  gecko_external_signal (events);
+
+  CORE_ATOMIC_IRQ_ENABLE ();
+}
 
 bool letimer_init (float period_sec, float duty_cycle)
 {

@@ -56,6 +56,8 @@
 #include "src/soil_moisture.h"
 #include "src/persistent_data.h"
 #include "src/shared_resources.h"
+#include "src/ble_settings.h"
+#include "src/setters.h"
 
 int led_state = LED0_default;
 uint8_t events = 0;
@@ -70,58 +72,9 @@ uint8_t events = 0;
  * @{
  **************************************************************************************************/
 
-#define SAMPLE_PERIOD (120.0f) // 2 minutes
-#define SENSOR_INIT_TIME (.120f) // 120 milliseconds for sensors to fully initialize
-#define CALCULATE_INIT_DUTY_CYCLE(init_time) ((SAMPLE_PERIOD - init_time) / SAMPLE_PERIOD)
-#define ADV_INT (6500) // 4 seconds
-#define CONN_INTERVAL (6) // Minimum
-#define SLAVE_LATENCY (0) // Minimum
-#define TIMEOUT (1000)
 
-
-#ifndef MAX_CONNECTIONS
-#define MAX_CONNECTIONS 4
-#endif
-uint8_t bluetooth_stack_heap[DEFAULT_BLUETOOTH_HEAP (MAX_CONNECTIONS)];
-
-// Gecko configuration parameters (see gecko_configuration.h)
-static const gecko_configuration_t config = {
-  .config_flags = 0,
-  .sleep.flags = SLEEP_FLAGS_DEEP_SLEEP_ENABLE,
-  .bluetooth.max_connections = MAX_CONNECTIONS,
-  .bluetooth.heap = bluetooth_stack_heap,
-  .bluetooth.heap_size = sizeof (bluetooth_stack_heap),
-  .bluetooth.sleep_clock_accuracy = 100,  // ppm
-  .gattdb = &bg_gattdb_data,
-  .ota.flags = 0,
-  .ota.device_name_len = 3,
-  .ota.device_name_ptr = "OTA",
-#if (HAL_PA_ENABLE) && defined(FEATURE_PA_HIGH_POWER)
-  .pa.config_enable = 1,  // Enable high power PA
-  .pa.input = GECKO_RADIO_PA_INPUT_VBAT,  // Configure PA input to VBAT
-#endif // (HAL_PA_ENABLE) && defined(FEATURE_PA_HIGH_POWER)
-};
-
-// Flag for indicating DFU Reset must be performed
-uint8_t boot_to_dfu = 0;
 uint32_t connections = 0;
 extern uint32_t measurements;
-
-void LETIMER0_IRQHandler (void)
-{
-  CORE_ATOMIC_IRQ_DISABLE ();
-
-  // Clear interrupt
-  LETIMER_IntClear (LETIMER0, LETIMER_INTERRUPTS);
-
-  // Set the events
-  set_events (&events);
-
-  // Signal events with gecko system
-  gecko_external_signal (events);
-
-  CORE_ATOMIC_IRQ_ENABLE ();
-}
 
 /**
  * @brief  Main function
@@ -132,8 +85,8 @@ int main (void)
   // Buffer for holding PK print statement
   char passbuffer[32] = {0};
 #endif
-  uint8_t buffer[2] = {0};
-  uint8_t* buf_start = buffer;
+  // Flag for indicating DFU Reset must be performed
+  uint8_t boot_to_dfu = 0;
 
   // Initialize device
   initMcu ();
@@ -197,17 +150,11 @@ int main (void)
 
         // Load or set the connections persistent data
         load_or_set_initial(CONNECTION_COUNT_KEY, 0, &connections);
-
-        buf_start = buffer;
-        UINT32_TO_BITSTREAM (buf_start, connections);
-        gecko_cmd_gatt_server_write_attribute_value (gattdb_connection_count, 0, 4, buffer);
+	connection_setter(connections);
 
         // Load or set the measurement in the boot, measurement counts will be handled in events.c
 	load_or_set_initial(MEASUREMENT_COUNT_KEY, 0, &measurements);
-
-	buf_start = buffer;
-	UINT32_TO_BITSTREAM (buf_start, measurements);
-	gecko_cmd_gatt_server_write_attribute_value (gattdb_measurement_count, 0, 4, buffer);
+	measurement_setter(measurements);
         break;
 
       case gecko_evt_le_connection_opened_id:
@@ -223,10 +170,7 @@ int main (void)
         // Increment connections and set in gattdb
         connections++;
         save(CONNECTION_COUNT_KEY, connections);
-        buf_start = buffer;
-	UINT32_TO_BITSTREAM (buf_start, connections);
-	gecko_cmd_gatt_server_write_attribute_value (gattdb_connection_count, 0, 4, buffer);
-
+        connection_setter(connections);
 #ifdef SECURITY_ON
         /* The HTM service typically indicates and indications cannot be given an encrypted property so
         force encryption immediately after connecting */
