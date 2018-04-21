@@ -3,7 +3,7 @@
 
 #include "gecko_configuration.h"
 
-#define ADV_INT (1000) // 4 seconds
+#define ADV_INT (6500) // 4 seconds
 #define CONN_INTERVAL (6) // Minimum
 #define SLAVE_LATENCY (0) // Minimum
 #define TIMEOUT (1000)
