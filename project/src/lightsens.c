@@ -40,10 +40,13 @@ int LIGHTSENS_SetSingleShot (I2C_TypeDef * i2c)
   int ret = 0;
 
   // Read the config to update
-  ret = LIGHTSENS_RegisterGet(i2c, LIGHTSENS_ADDR, lightsensRegConfig, &config);
-  if (ret < 0)
+  for (uint8_t i = 0; i < 255; i++)
   {
-    return ret;
+    ret = LIGHTSENS_RegisterGet(i2c, LIGHTSENS_ADDR, lightsensRegConfig, &config);
+    if (ret == 0)
+    {
+      break;
+    }
   }
 
   // Turn on continuous config
