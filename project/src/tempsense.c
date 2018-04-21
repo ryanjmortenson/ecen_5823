@@ -96,7 +96,11 @@ void I2C_Tempsens_Init (void)
   // Turn on clock for I2C0
   CMU_ClockEnable (cmuClock_I2C0, true);
 
-  // Turn off the shared resources GPIOD15 and HFPER
+  // Turn off the shared resources HFPER
+#ifdef EFR32BG1B232F256GM56
+  GPIO_DriveStrengthSet (gpioPortD, gpioDriveStrengthWeakAlternateWeak);
+  GPIO_PinModeSet (gpioPortD, 9, gpioModePushPull, true);
+#endif
   turn_on_shared_resources ();
 
   // Turn on SDA and SCL
@@ -151,6 +155,9 @@ void I2C_Tempsens_Dest (void)
 
   // Turn off the shared resources GPIOD15 and HFPER
   turn_off_shared_resources();
+#ifdef EFR32BG1B232F256GM56
+  GPIO_PinModeSet (gpioPortD, 9, gpioModePushPull, false);
+#endif
 
   // Turn off SDL and SCA
   GPIO_PinModeSet (gpioPortC, 10, gpioModeDisabled, false);
