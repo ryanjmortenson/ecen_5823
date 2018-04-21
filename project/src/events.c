@@ -5,7 +5,7 @@
 #include "native_gecko.h"
 #include "em_adc.h"
 
-#include "src/main.h"
+#include "src/events.h"
 #include "src/tempsense.h"
 #include "src/lightsens.h"
 #include "src/gpio.h"

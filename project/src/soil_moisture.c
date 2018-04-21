@@ -2,7 +2,7 @@
 #include "em_gpio.h"
 #include "em_adc.h"
 #include "native_gecko.h"
-#include "main.h"
+#include "events.h"
 
 #include "src/soil_moisture.h"
 
