@@ -70,6 +70,7 @@ class CayenneClient(object):
         Get the integer representations of the data write Cayenne service
         '''
         temp = measurement.get_temp()
+        hum = measurement.get_hum()
         soil = measurement.get_soil_moisture()
         lux = measurement.get_lux()
         addr = measurement.get_address()
@@ -77,6 +78,7 @@ class CayenneClient(object):
         meas = measurement.get_measurement_count()
 
         self.log.debug("Temp: {}".format(temp))
+        self.log.debug("Humidity: {}".format(hum))
         self.log.debug("Soil Moisture: {}".format(soil))
         self.log.debug("Lux : {}".format(lux))
         self.log.debug("Connection Count: {}".format(conn))
@@ -84,6 +86,7 @@ class CayenneClient(object):
         self.log.debug("Address : {}".format(addr))
 
         self.client.celsiusWrite(hash(addr + " TEMP"), temp)
+        self.client.virtualWrite(hash(addr + " HUMIDITY"), hum, "RH", "%")
         self.client.virtualWrite(hash(addr + " MOISTURE"), soil, "Soil Moisture", "%")
         self.client.virtualWrite(hash(addr + " LUX"), lux, "Illuminance", "Lux")
         self.client.virtualWrite(hash(addr + " CONN"), conn, "Connection Count", "Count")

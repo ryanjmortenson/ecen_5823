@@ -11,6 +11,7 @@ from time import sleep
 # Characteristics to read
 CHAR_TEMP_UUID = "00002a6e-0000-1000-8000-00805f9b34fb"
 CHAR_LUX_UUID = "00002a77-0000-1000-8000-00805f9b34fb"
+CHAR_HUM_UUID = "00002a6f-0000-1000-8000-00805f9b34fb"
 CHAR_SOIL_MOISTURE_UUID = "83c77eb6-35af-4dd9-8851-87d0a92ea404"
 CHAR_CONN_COUNT_UUID = "79556713-85bd-4e5f-944d-7363449d1baa"
 CHAR_MEAS_COUNT_UUID = "016d95b5-006f-4e86-9588-bd551a6b1c6d"
@@ -62,6 +63,7 @@ class SensorDevice(object):
 
         # Required Handles for device
         self.temp_handle = None
+        self.hum_handle = None
         self.lux_handle = None
         self.soil_handle = None
         self.meas_handle = None
@@ -114,12 +116,13 @@ class SensorDevice(object):
         while not self.shutdown.is_set():
             dev = None
             try:
-                if not self.polling_sleep(60):
+                if not self.polling_sleep(10):
                     break
                 ble_lock.acquire()
                 self.log.info("Reading information from {}".format(self.addr))
                 dev = btle.Peripheral(self.addr)
                 temp_char = dev.readCharacteristic(self.temp_handle)
+                hum_char = dev.readCharacteristic(self.hum_handle)
                 soil_char = dev.readCharacteristic(self.soil_handle)
                 lux_char = dev.readCharacteristic(self.lux_handle)
                 conn_char = dev.readCharacteristic(self.conn_handle)
@@ -129,6 +132,7 @@ class SensorDevice(object):
                 ble_lock.release()
                 meas = Measurement(self.addr,
                                    temp_char,
+                                   hum_char,
                                    lux_char,
                                    soil_char,
                                    conn_char,
@@ -158,16 +162,19 @@ class SensorDevice(object):
         temp_char = dev.getCharacteristics(uuid=CHAR_TEMP_UUID)[0]
         soil_char = dev.getCharacteristics(uuid=CHAR_SOIL_MOISTURE_UUID)[0]
         lux_char = dev.getCharacteristics(uuid=CHAR_LUX_UUID)[0]
+        hum_char = dev.getCharacteristics(uuid=CHAR_HUM_UUID)[0]
         meas_char = dev.getCharacteristics(uuid=CHAR_MEAS_COUNT_UUID)[0]
         count_char = dev.getCharacteristics(uuid=CHAR_CONN_COUNT_UUID)[0]
         self.temp_handle = temp_char.getHandle()
         self.lux_handle = lux_char.getHandle()
+        self.hum_handle = hum_char.getHandle()
         self.soil_handle = soil_char.getHandle()
         self.meas_handle = meas_char.getHandle()
         self.conn_handle = count_char.getHandle()
 
         # Log handles
         self.log.debug("Temp handle: {}".format(self.temp_handle))
+        self.log.debug("Humidity handle: {}".format(self.hum_handle))
         self.log.debug("Lux handle: {}".format(self.lux_handle))
         self.log.debug("Soil Moisture handle: {}".format(self.soil_handle))
         self.log.debug("Measurement count handle: {}".format(self.meas_handle))

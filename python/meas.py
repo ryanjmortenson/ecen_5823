@@ -5,11 +5,12 @@ class Measurement(object):
     Class for holding and converting measurements
     '''
 
-    def __init__(self, addr, temp, lux, soil, conn, meas):
+    def __init__(self, addr, temp, hum, lux, soil, conn, meas):
         '''
         Constructor
         '''
         self.temp = temp
+        self.hum = hum
         self.lux = lux
         self.soil = soil
         self.addr = addr
@@ -20,7 +21,13 @@ class Measurement(object):
         '''
         Transform bytes to short
         '''
-        return float(struct.unpack("<h", self.temp)[0])/float(1000)
+        return float(struct.unpack(">h", self.temp)[0])
+
+    def get_hum(self):
+        '''
+        Transform bytes to short
+        '''
+        return float(struct.unpack("<h", self.hum)[0])
 
     def get_soil_moisture(self):
         '''
@@ -48,6 +55,6 @@ class Measurement(object):
 
     def get_address(self):
         '''
-        Return address where measurement is taken 
+        Return address where measurement is taken
         '''
         return self.addr
