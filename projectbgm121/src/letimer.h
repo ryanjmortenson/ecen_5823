@@ -22,7 +22,7 @@
 // macros
 //***********************************************************************************
 #define LETIMER_INTERRUPTS (LETIMER_IF_COMP0 | LETIMER_IF_COMP1)
-#define SAMPLE_PERIOD (1.0f) // 2 minutes
+#define SAMPLE_PERIOD (120.0f) // 2 minutes
 #define SENSOR_INIT_TIME (.120f) // 120 milliseconds for sensors to fully initialize
 #define CALCULATE_INIT_DUTY_CYCLE(init_time) ((SAMPLE_PERIOD - init_time) / SAMPLE_PERIOD)
 
