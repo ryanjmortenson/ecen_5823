@@ -96,7 +96,9 @@ void I2C_Tempsens_Init (void)
   // Turn on clock for I2C0
   CMU_ClockEnable (cmuClock_I2C0, true);
 
-  // Turn off the shared resources GPIOD15 and HFPER
+  // Turn off the shared resources HFPER
+  GPIO_DriveStrengthSet (gpioPortD, gpioDriveStrengthWeakAlternateWeak);
+  GPIO_PinModeSet (gpioPortD, 9, gpioModePushPull, true);
   turn_on_shared_resources ();
 
   // Turn on SDA and SCL
@@ -149,8 +151,9 @@ void I2C_Tempsens_Dest (void)
   NVIC_ClearPendingIRQ (I2C0_IRQn);
   NVIC_DisableIRQ (I2C0_IRQn);
 
-  // Turn off the shared resources GPIOD15 and HFPER
+  // Turn off the shared resources HFPER
   turn_off_shared_resources();
+  GPIO_PinModeSet (gpioPortD, 9, gpioModePushPull, false);
 
   // Turn off SDL and SCA
   GPIO_PinModeSet (gpioPortC, 10, gpioModeDisabled, false);
