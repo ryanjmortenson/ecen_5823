@@ -13,7 +13,7 @@ void display_pin(uint32_t pin);
 void display_bond_failure();
 
 /*
- * @brief Shutsdown the display
+ * @brief Shutdown the display
  */
 void shutdown_display(void);
 

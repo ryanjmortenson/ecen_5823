@@ -4,7 +4,6 @@
 #include <string.h>
 
 #include "graphics.h"
-#include "ustimer.h"
 
 #include "src/shared_resources.h"
 
@@ -50,11 +49,6 @@ void display_bond_failure()
   // Display bond failed
   GRAPHICS_AppendString("\nBond Failed");
   GRAPHICS_Update();
-
-  // Only display for 1 second
-  USTIMER_Init();
-  USTIMER_Delay(1000000);
-  USTIMER_DeInit();
 
   // Turn off power to display
   shutdown_display();
