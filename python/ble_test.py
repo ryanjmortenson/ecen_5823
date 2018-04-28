@@ -25,6 +25,8 @@ if __name__ == "__main__":
                         help="How man seconds to BLE scan")
     parser.add_argument("--scan_period", "-p", type=int, default=30,
                         help="Periodicity of BLE scan in seconds (doesn't include scan timeout")
+    parser.add_argument("--poll_period", "-l", type=int, default=300,
+                        help="Periodicity of BLE sensor reading")
     args = parser.parse_args()
 
     FORMAT = '[%(asctime)s %(filename)15s line: %(lineno)5s] %(message)s'
@@ -37,7 +39,7 @@ if __name__ == "__main__":
     try:
         while True:
             log.info("Starting Scan with timeout {} secs ...".format(args.scan_timeout))
-            find_devices(args.interface, meas_queue, args.scan_timeout)
+            find_devices(args.interface, meas_queue, args.scan_timeout, args.poll_period)
             log.info("Scan Complete, sleeping for {} seconds".format(args.scan_period))
             sleep(args.scan_period)
     except:

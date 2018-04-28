@@ -22,7 +22,7 @@ ble_lock = threading.Lock()
 # Keep a list of currently active devices
 valid_list = dict()
 
-def find_devices(intf, meas_queue, timeout=10):
+def find_devices(intf, meas_queue, timeout=10, poll_period=300):
     log = logging.getLogger("ble_test")
     scanner = btle.Scanner(intf)
     try:
@@ -31,7 +31,7 @@ def find_devices(intf, meas_queue, timeout=10):
         ble_lock.release()
         for dev in devices:
             if dev.addr not in valid_list.keys():
-                SensorDevice(dev.addr, meas_queue).initial_connection()
+                SensorDevice(dev.addr, meas_queue, poll_period).initial_connection()
     except KeyboardInterrupt as e:
         ble_lock.release()
         raise KeyboardInterrupt
@@ -51,7 +51,7 @@ class SensorDevice(object):
     Sensor device (Server) information
     '''
 
-    def __init__(self, addr, meas_queue):
+    def __init__(self, addr, meas_queue, sleep_time=300):
         '''
         Constructor
         '''
@@ -60,6 +60,7 @@ class SensorDevice(object):
         self.addr = addr
         self.meas_queue = meas_queue
         self.shutdown = threading.Event()
+        self.sleep_time = sleep_time
 
         # Required Handles for device
         self.temp_handle = None
@@ -98,6 +99,7 @@ class SensorDevice(object):
 
     def polling_sleep(self, time):
         count = 0
+        self.log.debug("Sleeping for {}".format(time))
         while count < time and not self.shutdown.is_set():
             sleep(1)
             count += 1
@@ -113,10 +115,11 @@ class SensorDevice(object):
         '''
 
         failures = 0
+        sleep_time = self.sleep_time
         while not self.shutdown.is_set():
             dev = None
             try:
-                if not self.polling_sleep(10):
+                if not self.polling_sleep(sleep_time):
                     break
                 ble_lock.acquire()
                 self.log.info("Reading information from {}".format(self.addr))
@@ -139,6 +142,7 @@ class SensorDevice(object):
                                    meas_char)
                 self.meas_queue.put(meas)
                 failures = 0
+                sleep_time = self.sleep_time
             except:
                 failures += 1
                 if dev is not None:
@@ -146,6 +150,7 @@ class SensorDevice(object):
                 ble_lock.release()
                 self.log.error("Could not get sensor info from {}".format(self.addr))
                 self.log.error("Current failures count is {}".format(failures))
+                sleep_time = 10
             finally:
                 if failures == 5:
                     msg = "Device {} could not connect 5 times in a row"
