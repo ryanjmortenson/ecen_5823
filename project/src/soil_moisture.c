@@ -96,6 +96,9 @@ void handle_soil_moisture_event()
   {
     sum += ADC_DataSingleGet(ADC0);
   }
+
+  // Done with soil moisture sensor shut everything down
+  soil_moisture_dest();
 }
 
 uint32_t get_soil_moisture()

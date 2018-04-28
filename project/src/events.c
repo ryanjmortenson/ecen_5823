@@ -67,9 +67,6 @@ void handle_events (uint8_t * events)
     // Shutdown I2C sensors
     I2C_Tempsens_Dest ();
 
-    // Shutdown soil moisture adc
-    soil_moisture_dest();
-
     // Convert soil moisture into bit-stream and send
     soil_moisture_setter(get_soil_moisture());
 
