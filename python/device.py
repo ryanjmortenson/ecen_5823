@@ -16,6 +16,9 @@ CHAR_SOIL_MOISTURE_UUID = "83c77eb6-35af-4dd9-8851-87d0a92ea404"
 CHAR_CONN_COUNT_UUID = "79556713-85bd-4e5f-944d-7363449d1baa"
 CHAR_MEAS_COUNT_UUID = "016d95b5-006f-4e86-9588-bd551a6b1c6d"
 
+# Device Name
+DEVICE_NAME = "BLE IOP"
+
 # Locking mechanism to sequentialize access to BTLE devices
 ble_lock = threading.Lock()
 
@@ -30,8 +33,12 @@ def find_devices(intf, meas_queue, timeout=10, poll_period=300):
         devices = scanner.scan(timeout)
         ble_lock.release()
         for dev in devices:
-            if dev.addr not in valid_list.keys():
-                SensorDevice(dev.addr, meas_queue, poll_period).initial_connection()
+            for item in dev.getScanData():
+                is_device_name = (str(item[2]).find(DEVICE_NAME) != -1)
+                if is_device_name and dev.addr not in valid_list.keys():
+                    SensorDevice(dev.addr,
+                                 meas_queue,
+                                 poll_period).initial_connection()
     except KeyboardInterrupt as e:
         ble_lock.release()
         raise KeyboardInterrupt

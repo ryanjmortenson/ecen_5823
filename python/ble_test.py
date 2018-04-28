@@ -45,3 +45,4 @@ if __name__ == "__main__":
     except:
         new_client.end()
         cleanup_devices()
+        log.error(traceback.format_exc())
