@@ -57,10 +57,7 @@
 #include "src/ble_settings.h"
 #include "src/setters.h"
 
-int led_state = LED0_default;
-uint8_t events = 0;
-
-#define SECURITY_ON
+// #define SECURITY_ON
 
 /***********************************************************************************************
  * @addtogroup Application
@@ -72,7 +69,7 @@ uint8_t events = 0;
  * @{
  **************************************************************************************************/
 
-
+uint8_t events = 0;
 uint32_t connections = 0;
 extern uint32_t measurements;
 
@@ -81,9 +78,6 @@ extern uint32_t measurements;
  */
 int main (void)
 {
-#ifdef SECURITY_ON
-
-#endif
   // Flag for indicating DFU Reset must be performed
   uint8_t boot_to_dfu = 0;
 
@@ -193,6 +187,11 @@ int main (void)
       case gecko_evt_le_connection_closed_id:
         // Reset the connection
         gecko_cmd_system_set_tx_power (0);
+
+#if SECURITY_ON
+        // In case a pairing was in progress and the LCD is displaying information
+	shutdown_display();
+#endif
 
         /* Check if need to boot to dfu mode */
         if (boot_to_dfu)

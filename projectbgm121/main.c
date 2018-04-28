@@ -13,7 +13,6 @@
  * any purpose, you must agree to the terms of that agreement.
  **************************************************************************************************/
 
-#include <stdio.h>
 #include <inttypes.h>
 
 /* Board headers */
@@ -44,10 +43,10 @@
 #include "bspconfig.h"
 #endif
 
-#include "graphics.h"
 #include "sleep.h"
 
 #include "src/gpio.h"
+#include "src/security_display.h"
 #include "src/letimer.h"
 #include "src/cmu.h"
 #include "src/tempsense.h"
@@ -55,12 +54,10 @@
 #include "src/events.h"
 #include "src/soil_moisture.h"
 #include "src/persistent_data.h"
-#include "src/shared_resources.h"
 #include "src/ble_settings.h"
 #include "src/setters.h"
 
-int led_state = LED0_default;
-uint8_t events = 0;
+// #define SECURITY_ON
 
 /***********************************************************************************************
  * @addtogroup Application
@@ -72,7 +69,7 @@ uint8_t events = 0;
  * @{
  **************************************************************************************************/
 
-
+uint8_t events = 0;
 uint32_t connections = 0;
 extern uint32_t measurements;
 
@@ -81,10 +78,6 @@ extern uint32_t measurements;
  */
 int main (void)
 {
-#ifdef SECURITY_ON
-  // Buffer for holding PK print statement
-  char passbuffer[32] = {0};
-#endif
   // Flag for indicating DFU Reset must be performed
   uint8_t boot_to_dfu = 0;
 
@@ -171,43 +164,34 @@ int main (void)
         connections++;
         save(CONNECTION_COUNT_KEY, connections);
         connection_setter(connections);
+
 #ifdef SECURITY_ON
-        /* The HTM service typically indicates and indications cannot be given an encrypted property so
-        force encryption immediately after connecting */
         gecko_cmd_sm_increase_security(evt->data.evt_le_connection_opened.connection);
 #endif
         break;
 
 #ifdef SECURITY_ON
       case gecko_evt_sm_passkey_display_id:
-	// Turn on the shared resources GPIOD15 and HFPER
-	turn_on_shared_resources();
-
-	snprintf(passbuffer, 32, "PK: %06"PRIu32, evt->data.evt_sm_passkey_display.passkey);
-        GRAPHICS_Init();
-	GRAPHICS_Clear();
-	GRAPHICS_AppendString(passbuffer);
-	GRAPHICS_Update();
-	memset(passbuffer, 0, 32);
+	display_pin(evt->data.evt_sm_passkey_display.passkey);
 	break;
 
       case gecko_evt_sm_bonded_id:
-	GRAPHICS_Clear();
-	GRAPHICS_Sleep();
-
-	// Turn off the shared resources GPIOD15 and HFPER
-	turn_off_shared_resources();
+	shutdown_display();
 	break;
 
       case gecko_evt_sm_bonding_failed_id:
-	GRAPHICS_AppendString("\nBond Failed");
-	GRAPHICS_Update();
+	display_bond_failure();
 	break;
 #endif
 
       case gecko_evt_le_connection_closed_id:
         // Reset the connection
         gecko_cmd_system_set_tx_power (0);
+
+#if SECURITY_ON
+        // In case a pairing was in progress and the LCD is displaying information
+	shutdown_display();
+#endif
 
         /* Check if need to boot to dfu mode */
         if (boot_to_dfu)
