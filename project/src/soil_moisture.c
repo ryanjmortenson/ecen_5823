@@ -6,7 +6,7 @@
 
 #include "src/soil_moisture.h"
 
-#define MAX_CONVER_COUNT (512)
+#define MAX_CONVER_COUNT (1)
 #define START_SUM_COUNT (MAX_CONVER_COUNT >> 1)
 
 uint32_t measurement_count = 0;
@@ -17,14 +17,24 @@ void ADC0_IRQHandler(void)
 {
   CORE_ATOMIC_IRQ_DISABLE ();
 
-  // Disable interrupts until event can be processed
-  ADC_IntDisable(ADC0, ADC_IEN_SINGLE | ADC_IEN_SINGLECMP);
+  if (ADC0->SINGLEFIFOCOUNT > MAX_CONVER_COUNT)
+  {
+    // Disable the interrupts
+    ADC_IntDisable(ADC0, ADC_IEN_SINGLE | ADC_IEN_SINGLECMP);
 
-  // Set soil moisture read event
-  SET_EVENT(events, READ_SOIL_MOISTURE);
+    // Set soil moisture read event
+    SET_EVENT(events, READ_SOIL_MOISTURE);
 
-  // Signal events with gecko system
-  gecko_external_signal (events);
+    // Signal events with gecko system
+    gecko_external_signal (events);
+  }
+  else
+  {
+    ADC_IntClear(ADC0, 0xFFFFFFFF);
+
+    // Restart the ADC calculation
+    ADC_Start(ADC0, adcStartSingle);
+  }
 
   CORE_ATOMIC_IRQ_ENABLE ();
 }
@@ -34,19 +44,22 @@ void soil_moisture_init (void)
   ADC_Init_TypeDef init = ADC_INIT_DEFAULT;
   ADC_InitSingle_TypeDef singleInit = ADC_INITSINGLE_DEFAULT;
 
+  // Set the over sample to 4096
+  init.ovsRateSel = adcOvsRateSel4096;
+
   /* Initialize for single conversion */
   singleInit.reference = adcRefVDD;
   singleInit.posSel = ADC_INPUT0;
   singleInit.negSel = adcNegSelVSS;
-  singleInit.fifoOverwrite = true;
-  singleInit.acqTime = adcAcqTime16;
+  singleInit.fifoOverwrite = false;
+  singleInit.acqTime = adcAcqTime256;
   ADC_InitSingle(ADC0, &singleInit);
 
   /* Enable single window compare */
   ADC0->SINGLECTRL |= ADC_SINGLECTRL_CMPEN;
 
   /* Enable ADC Interrupt when reaching DVL and window compare */
-  ADC_IntEnable(ADC0, ADC_IEN_SINGLE | ADC_IEN_SINGLECMP);
+  ADC_IntEnable(ADC0, ADC_IEN_SINGLE);
   ADC_Init(ADC0, &init);
 
   /* Clear the FIFOs and pending interrupt */
@@ -79,35 +92,14 @@ void soil_moisture_dest()
 
 void handle_soil_moisture_event()
 {
-  if (measurement_count > START_SUM_COUNT)
+  for (int i = 0; i < MAX_CONVER_COUNT; i++)
   {
     sum += ADC_DataSingleGet(ADC0);
-  }
-  else
-  {
-    ADC_DataSingleGet(ADC0);
-  }
-  measurement_count++;
-
-  if (measurement_count < MAX_CONVER_COUNT)
-  {
-    // Turn interrupts back on
-    ADC_IntEnable(ADC0, ADC_IEN_SINGLE | ADC_IEN_SINGLECMP);
-
-    // Restart the ADC calculation
-    ADC_Start(ADC0, adcStartSingle);
   }
 }
 
 uint32_t get_soil_moisture()
 {
-  if (measurement_count > START_SUM_COUNT)
-  {
-    return sum / (measurement_count - START_SUM_COUNT);
-  }
-  else
-  {
-    return 0;
-  }
+  return sum / MAX_CONVER_COUNT;
 }
 
