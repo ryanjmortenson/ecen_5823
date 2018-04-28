@@ -67,9 +67,6 @@ void handle_events (uint8_t * events)
     // Shutdown I2C sensors
     I2C_Tempsens_Dest ();
 
-    // Convert soil moisture into bit-stream and send
-    soil_moisture_setter(get_soil_moisture());
-
     // Convert temperature to a bit-stream and send
     if (temp_ret == 0)
     {
@@ -97,6 +94,9 @@ void handle_events (uint8_t * events)
     // Reset event and handle
     *events &= ~(CREATE_EVENT (READ_SOIL_MOISTURE));
     handle_soil_moisture_event();
+
+    // Convert soil moisture into bit-stream and send
+    soil_moisture_setter(get_soil_moisture());
   }
 }
 
