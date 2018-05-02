@@ -131,9 +131,12 @@ class SensorDevice(object):
                 ble_lock.acquire()
                 self.log.info("Reading information from {}".format(self.addr))
                 dev = btle.Peripheral(self.addr)
+                # Hackery so the Authentication process is completed before trying to read
+                # the first characteristic
+                sleep(2)
+                soil_char = dev.readCharacteristic(self.soil_handle)
                 temp_char = dev.readCharacteristic(self.temp_handle)
                 hum_char = dev.readCharacteristic(self.hum_handle)
-                soil_char = dev.readCharacteristic(self.soil_handle)
                 lux_char = dev.readCharacteristic(self.lux_handle)
                 conn_char = dev.readCharacteristic(self.conn_handle)
                 meas_char = dev.readCharacteristic(self.meas_handle)
